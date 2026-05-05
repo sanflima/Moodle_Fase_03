@@ -54,7 +54,7 @@
   header.top nav{display:flex;align-items:center;gap:4px;}
   header.top nav a{color:#fff;text-decoration:none;padding:6px 14px;border-radius:3px;font-size:13px;opacity:.88;transition:.2s;font-weight:600;}
   header.top nav a:hover{opacity:1;background:rgba(255,255,255,.12);}
-  header.top nav a.active{background:var(--green);opacity:1;}
+  .access-card.adm{border-top-color:#e53935;}een);opacity:1;}
 
   /* ── BREADCRUMB ── */
   .breadcrumb{background:#e4ecf5;padding:9px 28px;font-size:12px;color:#555;border-bottom:1px solid #cdd6e0;}
@@ -234,7 +234,7 @@
   .mock-sidebar{background:#eef4fa;padding:14px 10px;border-right:1px solid var(--border);}
   .mock-sb-title{font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px;letter-spacing:.5px;}
   .mock-sb-item{
-    background:#fff;border-radius:5px;padding:7px 10px;font-size:10px;color:#444;
+  @media(max-width:1050px){.chooser-grid{grid-template-columns:1fr 1fr;}}or:#444;
     margin-bottom:5px;border-left:3px solid transparent;display:flex;align-items:center;gap:6px;
   }
   .mock-sb-item.active{border-left-color:var(--orange);font-weight:600;color:var(--ink);}
@@ -264,7 +264,7 @@
     border:1px solid var(--border);transition:.25s;
   }
   .role-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(0,0,0,.08);}
-  .role-head{
+  <div class="chooser-grid" style="max-width:1100px;margin:0 auto;">
     padding:28px;color:#fff;display:flex;align-items:center;gap:18px;
     background:linear-gradient(135deg,var(--blue),var(--blue-dark));
   }

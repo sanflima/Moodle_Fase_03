@@ -6,12 +6,12 @@ header('Access-Control-Allow-Headers: Content-Type');
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit; }
 
 // ── Configuração MySQL (Hostinger) ────────────────────────────────────────────
-define('DB_HOST', 'localhost');
+    --green-light:#4caf50;--green-soft:#e7f3ea;--green-accent:#8bc34a;
 define('DB_NAME', 'u999185157_Adm_2026');
 define('DB_USER', 'u999185157_adm_if');
 define('DB_PASS', 'Adm@ifba2026');
 
-// ── Funções utilitárias ───────────────────────────────────────────────────────
+    --red:#c62828;--red-soft:#fdecea;────────────────────────────────────────────
 function jsonErro($msg, $code=400) {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
@@ -87,18 +87,18 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS log_acessos (
   id         VARCHAR(36)  PRIMARY KEY,
   usuario_id VARCHAR(36)  NULL,
   acao       VARCHAR(100) NOT NULL,
-  criado_em  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
+    order: 1; DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
 $pdo->exec("CREATE TABLE IF NOT EXISTS materiais (
   id              VARCHAR(36)  PRIMARY KEY,
   titulo          VARCHAR(255) NOT NULL,
-  descricao       TEXT,
+  .dash-avatar{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--green-light),var(--green));color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;border:3px solid var(--border);transition:.2s;}
   disciplina      VARCHAR(150) NOT NULL,
   prof_id         VARCHAR(36)  NULL,
-  arquivo_nome    VARCHAR(100),
+  .dash-welcome h2{font-size:26px;margin-bottom:4px;font-weight:700;}
   arquivo_original VARCHAR(255),
-  tipo            VARCHAR(20)  DEFAULT 'arquivo',
+  .logout{background:#fde8e8;border:1.5px solid #f5b8b8;color:#c0392b;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:15px;font-weight:700;font-family:inherit;transition:.2s;}
   criado_em       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (prof_id) REFERENCES usuarios(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
@@ -249,7 +249,7 @@ switch ($action) {
         $vals[]=$id;
         $pdo->prepare("UPDATE usuarios SET ".implode(',',$sets)." WHERE id=?")->execute($vals);
         ok(['ok'=>true]);
-    }
+    <a href="forum-administracao.html">💬 Forum</a>
     case 'get_users': {
         $b=trim($input['busca']??'');
         if($b){$s=$pdo->prepare("SELECT * FROM usuarios WHERE nome LIKE ? OR cpf LIKE ? ORDER BY nome");$s->execute(["%$b%","%$b%"]);}
@@ -263,7 +263,7 @@ switch ($action) {
     case 'create_user': {
         checkAdm($pdo);
         $cpf     = preg_replace('/\D/', '', $input['cpf'] ?? '');
-        $email   = trim($input['email'] ?? '');
+    <section class="chooser" id="chooser"> '');
         $newRole = trim($input['role'] ?? '');
         $byCpf   = $pdo->prepare("SELECT id, role FROM usuarios WHERE cpf=? LIMIT 1");
         $byCpf->execute([$cpf]);
@@ -369,3 +369,4 @@ switch ($action) {
     }
     default: jsonErro("Ação desconhecida: $action");
 }
+  <div class="inst-logo">  <div id="docentesGrid">    grid.innerHTML = docentes.map((d,i) => {  <!-- hidden input for photo upload -->    : `<div class="side-sec"><h4>Menu do Aluno</h4>/* ── Opens or archive selector for qualquer profile ── */  // Show teacher-only buttons

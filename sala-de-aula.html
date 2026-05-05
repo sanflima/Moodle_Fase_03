@@ -37,8 +37,8 @@
   .hero p{font-size:15px;opacity:.9;max-width:640px;margin:0 auto;}
   .kicker{display:inline-block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,.15);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.3);margin-bottom:18px;font-weight:700;}
   /* ── CHOOSER ── */
-  .chooser{max-width:1100px;margin:-40px auto 0;padding:0 28px;position:relative;z-index:2;}
-  .chooser-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .chooser{max-width:1200px;margin:-40px auto 0;padding:0 28px;position:relative;z-index:2;}
+  .chooser-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
   .access-card{background:#fff;border-radius:18px;padding:34px 30px;box-shadow:0 20px 50px rgba(13,64,25,.15);border-top:6px solid var(--green);transition:.25s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
   .access-card.prof{border-top-color:var(--orange);}
   .access-card:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(13,64,25,.22);}
@@ -54,6 +54,10 @@
   .access-card.prof .access-body li::before{color:var(--orange);}
   .access-btn{margin-top:16px;display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;padding:12px 22px;border-radius:8px;font-weight:700;font-size:13px;}
   .access-card.prof .access-btn{background:var(--orange);}
+  .access-card.adm{border-top-color:#e53935;}
+  .access-card.adm .access-icon{background:linear-gradient(135deg,#ef5350,#c62828);}
+  .access-card.adm .access-body li::before{color:#e53935;}
+  .access-card.adm .access-btn{background:#e53935;}
 
   /* ── MODAIS GERAIS ── */
   .modal-bg{display:none;position:fixed;inset:0;background:rgba(13,64,25,.6);z-index:200;align-items:center;justify-content:center;padding:16px;}
@@ -229,8 +233,9 @@
   .prog-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;margin-top:8px;}
   .prog-fill{height:100%;background:var(--green);width:0;transition:width .3s;}
 
-  @media(max-width:880px){.chooser-grid{grid-template-columns:1fr;}.dash-grid{grid-template-columns:1fr;}.stat-row{grid-template-columns:repeat(2,1fr);}.adm-stats{grid-template-columns:repeat(2,1fr);}.cal-grid{grid-template-columns:repeat(7,1fr);}}
-  @media(max-width:560px){.inst-bar{flex-wrap:wrap;padding:14px 16px;gap:14px;}.inst-txt h1.inst-title{font-size:24px;}.inst-search{width:100%;}.header.top{padding:0 14px;}.adm-table{font-size:11px;}.cal-grid{grid-template-columns:repeat(7,1fr);font-size:10px;}}
+  @media(max-width:880px){.chooser-grid{grid-template-columns:repeat(2,1fr);}.dash-grid{grid-template-columns:1fr;}.stat-row{grid-template-columns:repeat(2,1fr);}.adm-stats{grid-template-columns:repeat(2,1fr);}.cal-grid{grid-template-columns:repeat(7,1fr);}}
+  @media(max-width:700px){.chooser-grid{grid-template-columns:1fr;}}
+  @media(max-width:560px){.inst-bar{flex-wrap:wrap;padding:14px 16px;gap:14px;}.inst-txt h1.inst-title{font-size:24px;}.inst-search{width:100%;}.header.top{padding:0 14px;}.adm-table{font-size:11px;}.cal-grid{grid-template-columns:repeat(7,1fr);font-size:10px;}.chooser-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -249,9 +254,7 @@
 </div>
 <header class="top">
   <nav class="topnav">
-    <a href="forum-administracao.html">💬 Fórum</a>
-    <a href="index.html#corpo-docente">👨‍🏫 Docentes</a>
-    <a href="perfil.html">👤 Perfil</a>
+    <a href="index.html">← Voltar para Página Principal</a>
   </nav>
 </header>
 <div class="breadcrumb"><strong>IF Baiano · Bonfim</strong> › <strong>Sala de Aula Virtual</strong></div>
@@ -264,7 +267,8 @@
 </section>
 
     <section class="chooser" id="chooser">
-  <div style="max-width:480px;margin:0 auto;">
+  <div class="chooser-grid" style="max-width:1100px;margin:0 auto;">
+    <!-- CARD ALUNO -->
     <a class="access-card" onclick="abrirLogin('aluno');return false;" href="#" style="border-top-width:8px;">
       <div class="access-head">
         <div class="access-icon" style="width:84px;height:84px;font-size:42px;">🎓</div>
@@ -284,11 +288,49 @@
       </div>
       <span class="access-btn" style="font-size:15px;padding:14px 28px;">Entrar na Sala de Aula →</span>
     </a>
+
+    <!-- CARD PROFESSOR -->
+    <a class="access-card prof" onclick="abrirLogin('professor');return false;" href="#" style="border-top-width:8px;">
+      <div class="access-head">
+        <div class="access-icon" style="width:84px;height:84px;font-size:42px;">👨‍🏫</div>
+        <div>
+          <h2 style="font-size:24px;">Acesso do Professor</h2>
+          <p>Docente do Curso de Administração · IF Baiano Bonfim</p>
+        </div>
+      </div>
+      <div class="access-body">
+        <ul>
+          <li>Gerenciar disciplinas e turmas</li>
+          <li>Publicar materiais e atividades</li>
+          <li>Avaliar e lançar notas dos alunos</li>
+          <li>Acompanhar frequência e desempenho</li>
+          <li>Interagir em fóruns com alunos</li>
+        </ul>
+      </div>
+      <span class="access-btn" style="font-size:15px;padding:14px 28px;">Entrar na Sala de Aula →</span>
+    </a>
+
+    <!-- CARD ADM SENIO -->
+    <a class="access-card" onclick="abrirAdmLogin();return false;" href="#" style="border-top-width:8px;border-top-color:#e53935;">
+      <div class="access-head">
+        <div class="access-icon" style="width:84px;height:84px;font-size:42px;background:linear-gradient(135deg,#ef5350,#c62828);">🛡️</div>
+        <div>
+          <h2 style="font-size:24px;">Acesso ADM SENIO</h2>
+          <p>Administração Sênior do Campus Senhor do Bonfim</p>
+        </div>
+      </div>
+      <div class="access-body">
+        <ul>
+          <li>Gerenciar usuários e permissões</li>
+          <li>Monitorar plataforma e relatórios</li>
+          <li>Configurar disciplinas e cursos</li>
+          <li>Visualizar estatísticas e análises</li>
+          <li>Manutenção do sistema Moodle</li>
+        </ul>
+      </div>
+      <span class="access-btn" style="font-size:15px;padding:14px 28px;background:#e53935;">Entrar no painel →</span>
+    </a>
   </div>
-  <p style="text-align:center;margin-top:18px;font-size:11px;color:var(--muted);">
-    🔐 Acesso restrito:
-    <a href="#" onclick="abrirAdmLogin();return false;" style="color:var(--green-dark);font-weight:700;">ADM_SENIO</a>
-  </p>
 </section>
 
 <!-- ══════════════════════════════════════════
