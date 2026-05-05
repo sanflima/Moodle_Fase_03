@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IF Baiano · Bonfim — Fórum do Curso de Administração</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --green:#1e7e34;--green-dark:#155d27;--green-deep:#0d4019;
+    --green-light:#4caf50;--green-soft:#e7f3ea;--green-accent:#8bc34a;
+    --blue:#1565c0;--blue-soft:#e3f0fb;
+    --orange:#e67e22;--orange-soft:#fdf2e6;
+    --red:#c62828;--red-soft:#fdecea;
+    --ink:#1c2a1f;--muted:#5c6b5f;--bg:#f4f8f4;--card:#fff;--border:#d8e2d9;
+  }
+  body{font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+
+  .inst-bar{
+    background:linear-gradient(180deg,var(--green) 0%,var(--green-dark) 100%);
+    color:#fff;padding:18px 40px;display:flex;align-items:center;gap:26px;
+    border-bottom:4px solid var(--green-deep);
+  }
+  .inst-logo{background:#fff;padding:10px 14px;border-radius:4px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.12);}
+  .inst-logo img{height:72px;display:block;}
+  .inst-txt{flex:1;min-width:0;}
+  .inst-txt .small{font-size:12px;opacity:.9;margin-bottom:4px;letter-spacing:.3px;}
+  .inst-txt h1.inst-title{font-size:34px;font-weight:700;line-height:1.05;margin-bottom:6px;letter-spacing:-.3px;}
+  .inst-txt .tag{font-size:11px;opacity:.85;letter-spacing:2px;font-weight:700;}
+  .inst-search{background:#fff;border-radius:3px;padding:6px 10px;display:flex;align-items:center;width:240px;align-self:flex-start;margin-top:4px;}
+  .inst-search input{flex:1;border:none;outline:none;font-size:12px;font-family:inherit;color:#333;min-width:0;}
+  .inst-search button{background:none;border:none;cursor:pointer;color:var(--green);font-size:14px;}
+
+  header.top{background:var(--green-deep);color:#fff;padding:0 40px;display:flex;align-items:center;justify-content:flex-end;height:44px;}
+  nav.topnav a{color:#fff;text-decoration:none;padding:6px 14px;border-radius:3px;font-size:13px;opacity:.88;margin:0 2px;font-weight:600;}
+  nav.topnav a:hover,nav.topnav a.active{background:var(--green);opacity:1;}
+
+  .breadcrumb{background:var(--green-soft);padding:9px 28px;font-size:12px;color:var(--green-dark);border-bottom:1px solid var(--border);}
+  .breadcrumb a{color:var(--green-dark);text-decoration:none;font-weight:600;}
+
+  .forum-hero{
+    background:radial-gradient(circle at 85% 20%,rgba(139,195,74,.22),transparent 50%),
+      linear-gradient(135deg,var(--green-deep),var(--green-dark) 60%,var(--green));
+    color:#fff;padding:40px 28px 50px;
+  }
+  .forum-hero-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+  .forum-hero h1{font-size:30px;margin-bottom:6px;}
+  .forum-hero p{font-size:14px;opacity:.9;max-width:560px;}
+  .forum-hero .kicker{display:inline-block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,.15);padding:5px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.3);margin-bottom:12px;font-weight:700;}
+  .forum-stats{display:flex;gap:18px;margin-left:auto;}
+  .fh-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:14px 20px;text-align:center;}
+  .fh-stat .n{font-size:22px;font-weight:700;}
+  .fh-stat .l{font-size:11px;opacity:.85;text-transform:uppercase;letter-spacing:.5px;}
+
+  .wrap{max-width:1200px;margin:26px auto;padding:0 28px;display:grid;grid-template-columns:260px 1fr;gap:22px;}
+
+  /* SIDEBAR */
+  .side{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;height:fit-content;position:sticky;top:18px;}
+  .side-head{background:var(--green);color:#fff;padding:12px 16px;font-size:12px;font-weight:700;letter-spacing:.5px;}
+  .side-body{padding:10px;}
+  .side-cat{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:#333;margin-bottom:3px;transition:.15s;border-left:3px solid transparent;}
+  .side-cat:hover{background:var(--green-soft);}
+  .side-cat.active{background:var(--green-soft);color:var(--green-dark);font-weight:700;border-left-color:var(--green);}
+  .side-cat .ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .side-cat .cnt{margin-left:auto;background:#eee;color:#666;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+  .side-cat.active .cnt{background:var(--green);color:#fff;}
+
+  /* MAIN */
+  .main{display:flex;flex-direction:column;gap:18px;}
+
+  /* NEW BAR */
+  .new-bar{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 18px;order:1;display:flex;flex-direction:column;gap:12px;}
+  .new-bar-top{display:flex;align-items:center;gap:12px;}
+  .new-bar-top input{flex:1;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;font-family:inherit;outline:none;background:var(--bg);}
+  .new-bar-top input:focus{border-color:var(--green);background:#fff;}
+  .role-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:10px;}
+  .role-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .role-btn{padding:5px 14px;border-radius:14px;border:1.5px solid var(--border);background:#f5f5f5;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:5px;}
+  .role-btn:hover:not(.active){background:#e8e8e8;}
+  .role-btn.active.prof{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .role-btn.active.aluno{background:var(--green);color:#fff;border-color:var(--green);}
+
+  /* BANNER MODO ALUNO */
+  .aluno-banner{
+    display:none;order:0;
+    background:var(--green-soft);border:1px solid var(--border);border-radius:10px;
+    padding:11px 16px;font-size:13px;color:var(--green-dark);
+    align-items:center;gap:10px;
+  }
+  .aluno-banner.show{display:flex;}
+
+  .btn{padding:10px 18px;border-radius:8px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:.15s;}
+  .btn-green{background:var(--green);color:#fff;}
+  .btn-green:hover{background:var(--green-dark);}
+  .btn-ghost{background:#fff;color:#333;border:1px solid var(--border);}
+  .btn-ghost:hover{background:#f5f5f5;}
+
+  .filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;order:2;}
+  .filter-bar .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+  .filter-bar .chip{padding:5px 12px;border-radius:14px;background:#f2f2f2;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:.15s;}
+  .filter-bar .chip:hover{background:#e0e0e0;}
+  .filter-bar .chip.active{background:var(--green);color:#fff;}
+
+  #no-result{display:none;order:50;background:#fff;border:1px solid var(--border);border-radius:12px;padding:48px 20px;text-align:center;color:var(--muted);}
+  #no-result .nr-icon{font-size:36px;margin-bottom:10px;}
+  #no-result p{font-size:14px;}
+
+  /* TÓPICOS */
+  .topic{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:.2s;}
+  .topic:hover{border-color:var(--green);box-shadow:0 6px 18px rgba(30,126,52,.08);}
+  .topic-head{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;cursor:pointer;}
+  .topic-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff;font-weight:700;}
+  .topic-av.g{background:linear-gradient(135deg,var(--green-light),var(--green));}
+  .topic-av.o{background:linear-gradient(135deg,var(--orange),#c0630f);}
+  .topic-av.b{background:linear-gradient(135deg,var(--blue),#0d47a1);}
+  .topic-av.a{background:linear-gradient(135deg,var(--green-accent),var(--green));}
+  .topic-info{flex:1;min-width:0;}
+  .topic-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .topic-title .pin{font-size:11px;background:var(--orange);color:#fff;padding:2px 7px;border-radius:8px;margin-right:6px;font-weight:700;}
+  .topic-title .new{font-size:11px;background:var(--green);color:#fff;padding:2px 7px;border-radius:8px;margin-right:6px;font-weight:700;}
+  .topic-title .prof{font-size:11px;background:var(--blue);color:#fff;padding:2px 7px;border-radius:8px;margin-right:6px;font-weight:700;}
+  .topic-meta{font-size:12px;color:var(--muted);}
+  .topic-meta strong{color:var(--green-dark);}
+  .topic-tag{display:inline-block;font-size:10px;background:var(--green-soft);color:var(--green-dark);padding:2px 9px;border-radius:10px;margin-right:5px;margin-top:6px;font-weight:700;}
+  .topic-stats{text-align:right;font-size:12px;color:var(--muted);flex-shrink:0;min-width:110px;}
+  .topic-stats .sn{font-size:18px;font-weight:700;color:var(--green-dark);display:block;}
+
+  /* PRAZO — linha de data exibida no card */
+  .topic-prazo{display:flex;align-items:center;gap:6px;margin-top:7px;font-size:11px;color:var(--muted);}
+  .topic-prazo .prazo-txt{display:flex;align-items:center;gap:4px;}
+  .status-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;}
+  .status-badge.ativo{background:var(--green-soft);color:var(--green-dark);}
+  .status-badge.encerrado{background:var(--red-soft);color:var(--red);}
+  .status-badge.em-breve{background:var(--orange-soft);color:#c0630f;}
+
+  .topic-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border);margin-top:0;}
+  .topic.open .topic-body{display:block;padding-top:14px;}
+  .topic.open .topic-head{border-bottom:1px dashed var(--border);}
+
+  .post{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f0f2f5;}
+  .post:last-child{border-bottom:none;}
+  .post-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;font-weight:700;}
+  .post-body{flex:1;}
+  .post-author{font-size:13px;font-weight:700;color:var(--ink);}
+  .post-author .role{font-size:10px;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:700;}
+  .post-author .role.p{background:var(--orange-soft);color:#c0630f;}
+  .post-author .role.a{background:var(--green-soft);color:var(--green-dark);}
+  .post-time{font-size:11px;color:#aaa;margin-left:6px;font-weight:500;}
+  .post-text{font-size:13px;color:#444;margin-top:5px;line-height:1.6;}
+  .post-actions{display:flex;gap:10px;margin-top:6px;font-size:12px;color:var(--muted);}
+  .post-actions span{cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+  .post-actions span:hover{color:var(--green-dark);}
+
+  .reply-box{background:var(--green-soft);border-radius:8px;padding:12px;margin-top:12px;display:flex;gap:10px;align-items:flex-start;}
+  .reply-box textarea{flex:1;border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:12px;font-family:inherit;resize:vertical;min-height:60px;outline:none;}
+  .reply-box textarea:focus{border-color:var(--green);}
+
+  /* MENSAGEM DE PRAZO NO BODY */
+  .lock-msg{
+    padding:12px 16px;border-radius:8px;font-size:13px;font-weight:600;
+    margin-top:12px;display:flex;align-items:center;gap:8px;
+  }
+  .lock-msg.encerrado{background:var(--red-soft);color:var(--red);border:1px solid #f5c6cb;}
+  .lock-msg.em-breve{background:var(--orange-soft);color:#c0630f;border:1px solid #f5c6a0;}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:580px;box-shadow:0 24px 70px rgba(0,0,0,.3);overflow:hidden;max-height:92vh;display:flex;flex-direction:column;animation:modalIn .2s ease;}
+  @keyframes modalIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+  .modal-head{background:var(--green);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .modal-head h3{font-size:16px;font-weight:700;margin:0;}
+  .modal-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;opacity:.8;line-height:1;padding:0 2px;}
+  .modal-close:hover{opacity:1;}
+  .modal-body{padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;}
+  .modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;background:#fafafa;}
+  .field label.lbl{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .field input[type=text],.field input[type=date],.field select,.field textarea{
+    width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;
+    font-size:13px;font-family:inherit;outline:none;background:#fafafa;color:var(--ink);transition:.15s;
+  }
+  .field input[type=text]:focus,.field input[type=date]:focus,.field select:focus,.field textarea:focus{
+    border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(30,126,52,.08);
+  }
+  .field textarea{resize:vertical;min-height:90px;}
+  .field-row{display:flex;align-items:stretch;gap:12px;}
+  .field-row > div{flex:1;}
+  .field-row .lbl-sub{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;}
+  .check-lbl{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;font-weight:600;color:var(--ink);}
+  .check-lbl input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--green);}
+  .date-hint{font-size:11px;color:var(--muted);margin-top:6px;padding:8px 12px;background:var(--blue-soft);border-radius:6px;display:flex;align-items:center;gap:6px;}
+
+  footer.bottom{background:var(--green-deep);color:#aac4ad;padding:28px;text-align:center;font-size:12px;margin-top:40px;}
+  footer.bottom a{color:var(--green-accent);text-decoration:none;}
+
+  @media(max-width:880px){
+    .wrap{grid-template-columns:1fr;}
+    .side{position:static;}
+    nav.topnav{display:none;}
+    .forum-stats{margin-left:0;width:100%;}
+  }
+  @media(max-width:560px){
+    .inst-bar{flex-wrap:wrap;padding:14px 16px;gap:14px;}
+    .inst-logo img{height:54px;}
+    .inst-txt h1.inst-title{font-size:24px;}
+    .inst-search{width:100%;}
+    header.top{padding:0 14px;}
+    nav.topnav{overflow-x:auto;}
+    .field-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="inst-bar">
+  <div class="inst-txt">
+    <div class="small">Instituto Federal de Educação, Ciência e Tecnologia Baiano</div>
+    <h1 class="inst-title">Instituto Federal Baiano</h1>
+    <div class="tag">CAMPUS SENHOR DO BONFIM · CURSO DE ADMINISTRAÇÃO</div>
+  </div>
+  <div class="inst-search">
+    <input type="text" placeholder="Digite sua pesquisa"/>
+    <button type="button" aria-label="Buscar">🔍</button>
+  </div>
+</div>
+
+<header class="top">
+  <nav class="topnav">
+    <a href="sobre-moodle.html">Página Principal</a>
+    <a href="sala-de-aula.html">Sala de Aula</a>
+    <a href="forum-administracao.html" class="active">Fórum</a>
+    <a href="sobre-moodle.html#corpo-docente">Docentes</a>
+    <a href="perfil.html">Perfil</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="sobre-moodle.html">Início</a> › <strong>Fórum do Curso de Administração</strong>
+</div>
+
+<section class="forum-hero">
+  <div class="forum-hero-inner">
+    <div>
+      <span class="kicker">💬 Espaço de discussão · Administração</span>
+      <h1>Fórum do Curso</h1>
+      <p>Dúvidas, debates e trocas entre alunos e professores do Curso de Administração do IF Baiano · Campus Senhor do Bonfim.</p>
+    </div>
+    <div class="forum-stats">
+      <div class="fh-stat"><div class="n" id="stat-topicos">7</div><div class="l">Tópicos</div></div>
+      <div class="fh-stat"><div class="n">187</div><div class="l">Mensagens</div></div>
+      <div class="fh-stat"><div class="n">62</div><div class="l">Participantes</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <aside class="side">
+    <div class="side-head">📂 Categorias</div>
+    <div class="side-body">
+      <div class="side-cat active" onclick="filtrarCat(this,'todos')">
+        <div class="ic" style="background:var(--green-soft);color:var(--green-dark);">📢</div>
+        Todos os tópicos <span class="cnt" id="cnt-todos">7</span>
+      </div>
+      <div class="side-cat" onclick="filtrarCat(this,'avisos')">
+        <div class="ic" style="background:var(--orange-soft);color:#c0630f;">📌</div>
+        Avisos da Coordenação <span class="cnt" id="cnt-avisos">2</span>
+      </div>
+      <div class="side-cat" onclick="filtrarCat(this,'admin')">
+        <div class="ic" style="background:var(--green-soft);color:var(--green-dark);">📘</div>
+        Teoria Administrativa <span class="cnt" id="cnt-admin">1</span>
+      </div>
+      <div class="side-cat" onclick="filtrarCat(this,'pessoas')">
+        <div class="ic" style="background:var(--green-soft);color:var(--green-dark);">👥</div>
+        Gestão de Pessoas <span class="cnt" id="cnt-pessoas">1</span>
+      </div>
+      <div class="side-cat" onclick="filtrarCat(this,'finan')">
+        <div class="ic" style="background:var(--blue-soft);color:var(--blue);">💰</div>
+        Finanças e Contábil <span class="cnt" id="cnt-finan">1</span>
+      </div>
+      <div class="side-cat" onclick="filtrarCat(this,'mkt')">
+        <div class="ic" style="background:var(--green-soft);color:var(--green-dark);">📣</div>
+        Marketing <span class="cnt" id="cnt-mkt">1</span>
+      </div>
+      <div class="side-cat" onclick="filtrarCat(this,'empre')">
+        <div class="ic" style="background:var(--orange-soft);color:#c0630f;">🚀</div>
+        Empreendedorismo <span class="cnt" id="cnt-empre">1</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- Banner modo aluno -->
+    <div class="aluno-banner" id="aluno-banner" style="order:0;">
+      👩‍🎓 Você está navegando como <strong>Aluno</strong> — apenas professores podem criar novos tópicos. As respostas seguem o prazo definido pelo professor.
+    </div>
+
+    <!-- Barra de busca + perfil -->
+    <div class="new-bar" style="order:1;">
+      <div class="new-bar-top">
+        <input type="text" id="busca" placeholder="🔍 Buscar por tópico, autor ou disciplina..." oninput="buscar(this.value)"/>
+        <button class="btn btn-green" id="btn-novo-topico" onclick="abrirModal()">➕ Novo Tópico</button>
+      </div>
+      <div class="role-row">
+        <span class="role-lbl">👤 Perfil atual:</span>
+        <button class="role-btn prof active" id="rbtn-prof" onclick="setRole('professor')">👨‍🏫 Professor</button>
+        <button class="role-btn aluno" id="rbtn-aluno" onclick="setRole('aluno')">👩‍🎓 Aluno</button>
+      </div>
+    </div>
+
+    <div class="filter-bar" style="order:2;">
+      <span class="lbl">Ordenar:</span>
+      <span class="chip active" onclick="ordenar(this,'recentes')">🔥 Recentes</span>
+      <span class="chip" onclick="ordenar(this,'comentados')">💬 Mais comentados</span>
+      <span class="chip" onclick="ordenar(this,'vistos')">👀 Mais vistos</span>
+      <span class="chip" onclick="ordenar(this,'fixados')">📌 Fixados</span>
+    </div>
+
+    <div id="no-result">
+      <div class="nr-icon">🔍</div>
+      <p>Nenhum tópico encontrado para este filtro.</p>
+    </div>
+
+    <!-- TÓPICO 1 · ATIVO -->
+    <div class="topic"
+         data-cat="avisos" data-replies="18" data-views="342" data-date="2026-04-15" data-pinned="1"
+         data-inicio="2026-04-15" data-fim="2026-05-30">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av o">📌</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            <span class="pin">FIXADO</span>
+            <span class="prof">PROFESSOR</span>
+            Semana de Provas — calendário oficial 2026.1
+          </div>
+          <div class="topic-meta">
+            Por <strong>Prof. Dr. Carlos Menezes</strong> · 15/04/2026 · Categoria: <em>Avisos da Coordenação</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>15/04/2026</strong> a <strong>30/05/2026</strong></span>
+            <span class="status-badge" id="sb-0"></span>
+          </div>
+          <div>
+            <span class="topic-tag">#calendário</span>
+            <span class="topic-tag">#provas</span>
+            <span class="topic-tag">#2026.1</span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">18</span> respostas<br/>
+          <small>342 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--orange),#c0630f);">CM</div>
+          <div class="post-body">
+            <div class="post-author">Prof. Dr. Carlos Menezes <span class="role p">PROFESSOR</span> <span class="post-time">15/04 às 09:32</span></div>
+            <div class="post-text">Pessoal, segue o calendário consolidado das avaliações do 1º semestre de 2026. As provas presenciais acontecem no auditório do Campus. Quem precisar de segunda chamada deve abrir solicitação até 48h após a prova.</div>
+            <div class="post-actions"><span>👍 12</span><span>💬 Responder</span><span>🔗 Compartilhar</span></div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--green-light),var(--green));">MR</div>
+          <div class="post-body">
+            <div class="post-author">Mariana Rocha <span class="role a">ALUNA</span> <span class="post-time">15/04 às 14:11</span></div>
+            <div class="post-text">Professor, a prova de Gestão de Pessoas vai cair toda a matéria ou só a partir da Unidade 2? 🤔</div>
+            <div class="post-actions"><span>👍 3</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÓPICO 2 · ATIVO -->
+    <div class="topic"
+         data-cat="pessoas" data-replies="7" data-views="89" data-date="2026-04-16" data-pinned="0"
+         data-inicio="2026-04-16" data-fim="2026-05-16">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av g">👥</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            <span class="new">NOVO</span>
+            Diferença entre liderança situacional e liderança transformacional
+          </div>
+          <div class="topic-meta">
+            Por <strong>João Pedro Costa</strong> · 16/04/2026 · Categoria: <em>Gestão de Pessoas</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>16/04/2026</strong> a <strong>16/05/2026</strong></span>
+            <span class="status-badge" id="sb-1"></span>
+          </div>
+          <div>
+            <span class="topic-tag">#liderança</span>
+            <span class="topic-tag">#gestao-pessoas</span>
+            <span class="topic-tag">#dúvida</span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">7</span> respostas<br/>
+          <small>89 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--green-light),var(--green));">JC</div>
+          <div class="post-body">
+            <div class="post-author">João Pedro Costa <span class="role a">ALUNO</span> <span class="post-time">16/04 às 10:20</span></div>
+            <div class="post-text">Estou com dificuldade para diferenciar os dois modelos na prática. Alguém pode dar um exemplo do contexto empresarial em que cada um se encaixa melhor?</div>
+            <div class="post-actions"><span>👍 5</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--orange),#c0630f);">AR</div>
+          <div class="post-body">
+            <div class="post-author">Profa. Ma. Ana Lúcia Ribeiro <span class="role p">PROFESSORA</span> <span class="post-time">16/04 às 12:45</span></div>
+            <div class="post-text">Ótima pergunta, João! A <strong>situacional</strong> (Hersey &amp; Blanchard) muda o estilo conforme a maturidade do liderado — boa em equipes heterogêneas. A <strong>transformacional</strong> (Bass) foca em inspirar mudança e propósito — mais comum em momentos de transformação organizacional.</div>
+            <div class="post-actions"><span>👍 14</span><span>💬 Responder</span><span>⭐ Destacar</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÓPICO 3 · ENCERRADO (demonstra prazo expirado) -->
+    <div class="topic"
+         data-cat="finan" data-replies="12" data-views="156" data-date="2026-04-14" data-pinned="0"
+         data-inicio="2026-04-10" data-fim="2026-04-25">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av b">💰</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            Dúvida sobre VPL com fluxos desiguais — Lista 03
+          </div>
+          <div class="topic-meta">
+            Por <strong>Amanda Ferreira</strong> · 14/04/2026 · Categoria: <em>Finanças e Contábil</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>10/04/2026</strong> a <strong>25/04/2026</strong></span>
+            <span class="status-badge" id="sb-2"></span>
+          </div>
+          <div>
+            <span class="topic-tag">#vpl</span>
+            <span class="topic-tag">#exercicio</span>
+            <span class="topic-tag">#lista-03</span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">12</span> respostas<br/>
+          <small>156 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--blue),#0d47a1);">AF</div>
+          <div class="post-body">
+            <div class="post-author">Amanda Ferreira <span class="role a">ALUNA</span> <span class="post-time">14/04 às 16:45</span></div>
+            <div class="post-text">Estou resolvendo a Lista 03 e travei na questão do VPL com fluxos desiguais. Como devo tratar cada período separadamente na fórmula?</div>
+            <div class="post-actions"><span>👍 8</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÓPICO 4 · ATIVO -->
+    <div class="topic"
+         data-cat="empre" data-replies="9" data-views="210" data-date="2026-04-12" data-pinned="0"
+         data-inicio="2026-04-12" data-fim="2026-05-15">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av a">🚀</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            Pitch Day 2026 — inscrições abertas para equipes da turma 2026.1
+          </div>
+          <div class="topic-meta">
+            Por <strong>Prof. Me. Fernando Oliveira</strong> · 12/04/2026 · Categoria: <em>Empreendedorismo</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>12/04/2026</strong> a <strong>15/05/2026</strong></span>
+            <span class="status-badge" id="sb-3"></span>
+          </div>
+          <div>
+            <span class="topic-tag">#pitchday</span>
+            <span class="topic-tag">#inovação</span>
+            <span class="topic-tag">#inscrições</span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">9</span> respostas<br/>
+          <small>210 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--orange),#c0630f);">FO</div>
+          <div class="post-body">
+            <div class="post-author">Prof. Me. Fernando Oliveira <span class="role p">PROFESSOR</span> <span class="post-time">12/04 às 10:00</span></div>
+            <div class="post-text">Pessoal, as inscrições para o Pitch Day 2026 estão abertas. Cada equipe deve ter de 3 a 5 integrantes e apresentar uma ideia de negócio inovadora. Inscrições até 15/05!</div>
+            <div class="post-actions"><span>👍 21</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÓPICO 5 · ATIVO -->
+    <div class="topic"
+         data-cat="mkt" data-replies="15" data-views="178" data-date="2026-04-11" data-pinned="0"
+         data-inicio="2026-04-11" data-fim="2026-05-11">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av g">📣</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            Sugestões de campanhas para a Feira de Bonfim — atividade de Marketing I
+          </div>
+          <div class="topic-meta">
+            Por <strong>Lucas Andrade</strong> · 11/04/2026 · Categoria: <em>Marketing</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>11/04/2026</strong> a <strong>11/05/2026</strong></span>
+            <span class="status-badge" id="sb-4"></span>
+          </div>
+          <div>
+            <span class="topic-tag">#campanha</span>
+            <span class="topic-tag">#marketing-local</span>
+            <span class="topic-tag">#bonfim</span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">15</span> respostas<br/>
+          <small>178 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--green-light),var(--green));">LA</div>
+          <div class="post-body">
+            <div class="post-author">Lucas Andrade <span class="role a">ALUNO</span> <span class="post-time">11/04 às 09:10</span></div>
+            <div class="post-text">Minha sugestão é criar uma campanha nas redes sociais destacando os produtos locais da Feira. Podemos usar reels curtos mostrando os artesãos e produtores.</div>
+            <div class="post-actions"><span>👍 10</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÓPICO 6 · ATIVO -->
+    <div class="topic"
+         data-cat="admin" data-replies="21" data-views="298" data-date="2026-04-09" data-pinned="0"
+         data-inicio="2026-04-09" data-fim="2026-05-30">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av g">📘</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            Discussão — qual escola administrativa mais influencia a gestão pública hoje?
+          </div>
+          <div class="topic-meta">
+            Por <strong>Beatriz Silva</strong> · 09/04/2026 · Categoria: <em>Teoria Administrativa</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>09/04/2026</strong> a <strong>30/05/2026</strong></span>
+            <span class="status-badge" id="sb-5"></span>
+          </div>
+          <div>
+            <span class="topic-tag">#debate</span>
+            <span class="topic-tag">#tga</span>
+            <span class="topic-tag">#setor-publico</span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">21</span> respostas<br/>
+          <small>298 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--green-light),var(--green));">BS</div>
+          <div class="post-body">
+            <div class="post-author">Beatriz Silva <span class="role a">ALUNA</span> <span class="post-time">09/04 às 14:20</span></div>
+            <div class="post-text">Na minha opinião, a Nova Gestão Pública (NGP) ainda é a mais influente, especialmente com o foco em eficiência e resultados. O que vocês acham?</div>
+            <div class="post-actions"><span>👍 17</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÓPICO 7 · ATIVO (permanente) -->
+    <div class="topic"
+         data-cat="avisos" data-replies="4" data-views="520" data-date="2026-03-02" data-pinned="1"
+         data-inicio="2026-03-02" data-fim="2026-12-31">
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av o">📌</div>
+        <div class="topic-info">
+          <div class="topic-title">
+            <span class="pin">FIXADO</span>
+            <span class="prof">PROFESSOR</span>
+            Regras de convivência e boas práticas do Fórum
+          </div>
+          <div class="topic-meta">
+            Por <strong>Coordenação do Curso</strong> · 02/03/2026 · Categoria: <em>Avisos da Coordenação</em>
+          </div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>02/03/2026</strong> a <strong>31/12/2026</strong></span>
+            <span class="status-badge" id="sb-6"></span>
+          </div>
+        </div>
+        <div class="topic-stats">
+          <span class="sn">4</span> respostas<br/>
+          <small>520 visualizações</small>
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--orange),#c0630f);">CC</div>
+          <div class="post-body">
+            <div class="post-author">Coordenação do Curso <span class="role p">PROFESSOR</span> <span class="post-time">02/03 às 08:00</span></div>
+            <div class="post-text">Bem-vindos ao Fórum! Por favor, mantenham o respeito mútuo, utilizem linguagem adequada e citem as fontes ao compartilhar conteúdos externos. Dúvidas sobre as regras podem ser postadas aqui.</div>
+            <div class="post-actions"><span>👍 32</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL NOVO TÓPICO (Professor) -->
+<div id="modal-overlay" class="modal-overlay" onclick="if(event.target===this)fecharModal()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-head">
+      <h3 id="modal-titulo">📝 Novo Tópico — Professor</h3>
+      <button class="modal-close" onclick="fecharModal()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="field">
+        <label class="lbl" for="nt-titulo">Título do tópico *</label>
+        <input type="text" id="nt-titulo" placeholder="Ex: Discussão sobre fluxo de caixa descontado..."/>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="nt-cat">Categoria *</label>
+        <select id="nt-cat">
+          <option value="">— Selecione uma categoria —</option>
+          <option value="avisos">📌 Avisos da Coordenação</option>
+          <option value="admin">📘 Teoria Administrativa</option>
+          <option value="pessoas">👥 Gestão de Pessoas</option>
+          <option value="finan">💰 Finanças e Contábil</option>
+          <option value="mkt">📣 Marketing</option>
+          <option value="empre">🚀 Empreendedorismo</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="nt-conteudo">Descrição / Enunciado *</label>
+        <textarea id="nt-conteudo" rows="4" placeholder="Descreva a proposta, dúvida ou aviso com detalhes..."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Período de participação dos alunos *</label>
+        <div class="field-row">
+          <div>
+            <span class="lbl-sub">Data de início</span>
+            <input type="date" id="nt-inicio"/>
+          </div>
+          <div>
+            <span class="lbl-sub">Data de encerramento</span>
+            <input type="date" id="nt-fim"/>
+          </div>
+        </div>
+        <div class="date-hint">
+          ℹ️ Fora deste período, alunos poderão <strong>ler</strong> mas não poderão <strong>responder</strong>.
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="nt-tags">Tags <small style="text-transform:none;letter-spacing:0;">(separadas por vírgula)</small></label>
+        <input type="text" id="nt-tags" placeholder="Ex: debate, exercício, lista-03"/>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <label class="check-lbl">
+          <input type="checkbox" id="nt-fixado"/>
+          📌 Fixar tópico no topo
+        </label>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-green" onclick="publicarTopico()">📤 Publicar Tópico</button>
+    </div>
+  </div>
+</div>
+
+<footer class="bottom">
+  © 2026 <strong>IF Baiano · Campus Senhor do Bonfim</strong> — Moodle · Fórum do Curso de Administração
+  · <a href="sobre-moodle.html">Página Principal</a>
+</footer>
+
+<button id="toTop" aria-label="Voltar ao topo" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+<style>
+  #toTop{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;background:var(--green);color:#fff;border:none;font-size:18px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:999;font-weight:700;}
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{background:var(--green-dark);transform:translateY(-2px);}
+</style>
+
+<script>
+  /* ── Scroll to top ── */
+  const _toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', () => { _toTop.classList.toggle('show', scrollY > 400); });
+
+  /* ── Estado global ── */
+  let currentCat  = 'todos';
+  let currentSort = 'recentes';
+  let searchQuery = '';
+  let roleAtual   = 'professor'; // 'professor' | 'aluno'
+
+  const CAT_NAMES = {
+    todos:   'Todos os tópicos',
+    avisos:  'Avisos da Coordenação',
+    admin:   'Teoria Administrativa',
+    pessoas: 'Gestão de Pessoas',
+    finan:   'Finanças e Contábil',
+    mkt:     'Marketing',
+    empre:   'Empreendedorismo',
+  };
+
+  /* ── PERFIL: Professor / Aluno ── */
+  function setRole(role) {
+    roleAtual = role;
+    const isProf = role === 'professor';
+
+    document.getElementById('rbtn-prof').classList.toggle('active', isProf);
+    document.getElementById('rbtn-aluno').classList.toggle('active', !isProf);
+    document.getElementById('btn-novo-topico').style.display = isProf ? '' : 'none';
+
+    const banner = document.getElementById('aluno-banner');
+    banner.classList.toggle('show', !isProf);
+
+    atualizarPrazo();
+  }
+
+  /* ── DATA HELPERS ── */
+  function parseDateLocal(str) {
+    if (!str) return null;
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+  function hoje() {
+    const d = new Date(); d.setHours(0,0,0,0); return d;
+  }
+  function calcStatus(inicioStr, fimStr) {
+    const h = hoje();
+    const ini = parseDateLocal(inicioStr);
+    const fim = parseDateLocal(fimStr);
+    if (fim && h > fim)    return 'encerrado';
+    if (ini && h < ini)    return 'em-breve';
+    return 'ativo';
+  }
+  function fmtDate(str) {
+    if (!str) return '';
+    const d = parseDateLocal(str);
+    return d.toLocaleDateString('pt-BR');
+  }
+
+  /* ── ATUALIZA BADGES DE STATUS E BLOQUEIO DE REPLY ── */
+  function atualizarPrazo() {
+    const h = hoje();
+    document.querySelectorAll('.topic[data-cat]').forEach(topic => {
+      const inicioStr = topic.dataset.inicio || '';
+      const fimStr    = topic.dataset.fim    || '';
+      const status    = calcStatus(inicioStr, fimStr);
+
+      /* badge de status no card */
+      const badge = topic.querySelector('.status-badge');
+      if (badge) {
+        badge.className = 'status-badge ' + status;
+        badge.textContent = status === 'ativo' ? 'ATIVO' : status === 'encerrado' ? 'ENCERRADO' : 'EM BREVE';
+      }
+
+      /* reply-box e lock-msg */
+      const body = topic.querySelector('.topic-body');
+      if (!body) return;
+
+      const replyBox = body.querySelector('.reply-box');
+      body.querySelectorAll('.lock-msg').forEach(el => el.remove());
+
+      if (roleAtual === 'professor') {
+        /* professor sempre pode responder */
+        if (replyBox) replyBox.style.display = '';
+        return;
+      }
+
+      /* aluno: checar prazo */
+      if (status === 'encerrado') {
+        if (replyBox) replyBox.style.display = 'none';
+        const msg = document.createElement('div');
+        msg.className = 'lock-msg encerrado';
+        msg.innerHTML = '🔒 Prazo de participação encerrado em <strong>' + fmtDate(fimStr) + '</strong>';
+        body.appendChild(msg);
+      } else if (status === 'em-breve') {
+        if (replyBox) replyBox.style.display = 'none';
+        const msg = document.createElement('div');
+        msg.className = 'lock-msg em-breve';
+        msg.innerHTML = '⏳ Participação disponível a partir de <strong>' + fmtDate(inicioStr) + '</strong>';
+        body.appendChild(msg);
+      } else {
+        if (replyBox) replyBox.style.display = '';
+      }
+    });
+  }
+
+  /* ── FILTRO POR CATEGORIA ── */
+  function filtrarCat(el, cat) {
+    currentCat = cat;
+    document.querySelectorAll('.side-cat').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    aplicarFiltros();
+  }
+
+  /* ── ORDENAÇÃO ── */
+  function ordenar(el, tipo) {
+    currentSort = tipo;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    aplicarFiltros();
+  }
+
+  /* ── BUSCA ── */
+  function buscar(val) {
+    searchQuery = val.trim().toLowerCase();
+    aplicarFiltros();
+  }
+
+  /* ── FILTROS + ORDENAÇÃO ── */
+  function aplicarFiltros() {
+    const topics = Array.from(document.querySelectorAll('.topic[data-cat]'));
+
+    let visíveis = topics.filter(t => {
+      const catOk = currentCat === 'todos' || t.dataset.cat === currentCat;
+      if (!searchQuery) return catOk;
+      const texto = [
+        t.querySelector('.topic-title')?.textContent || '',
+        t.querySelector('.topic-meta')?.textContent  || '',
+        Array.from(t.querySelectorAll('.topic-tag')).map(e => e.textContent).join(' '),
+      ].join(' ').toLowerCase();
+      return catOk && texto.includes(searchQuery);
+    });
+
+    if (currentSort === 'fixados') {
+      visíveis = visíveis.filter(t => t.dataset.pinned === '1');
+    }
+
+    const fns = {
+      recentes:   (a, b) => new Date(b.dataset.date)  - new Date(a.dataset.date),
+      comentados: (a, b) => +b.dataset.replies         - +a.dataset.replies,
+      vistos:     (a, b) => +b.dataset.views           - +a.dataset.views,
+      fixados:    (a, b) => +b.dataset.pinned          - +a.dataset.pinned,
+    };
+    visíveis.sort(fns[currentSort] || fns.recentes);
+
+    topics.forEach(t => { t.style.display = 'none'; t.style.order = ''; });
+    visíveis.forEach((t, i) => { t.style.display = ''; t.style.order = 10 + i; });
+
+    document.getElementById('no-result').style.display = visíveis.length === 0 ? 'block' : 'none';
+
+    /* reaplica prazo após reordenar (elementos abertos podem ter mudado) */
+    atualizarPrazo();
+  }
+
+  /* ── MODAL ── */
+  function abrirModal() {
+    /* define data de início padrão = hoje */
+    const d = new Date();
+    document.getElementById('nt-inicio').value = d.toISOString().slice(0,10);
+    d.setDate(d.getDate() + 14);
+    document.getElementById('nt-fim').value = d.toISOString().slice(0,10);
+    document.getElementById('modal-overlay').classList.add('open');
+    document.getElementById('nt-titulo').focus();
+  }
+
+  function fecharModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.getElementById('nt-titulo').value   = '';
+    document.getElementById('nt-cat').value      = '';
+    document.getElementById('nt-conteudo').value = '';
+    document.getElementById('nt-tags').value     = '';
+    document.getElementById('nt-inicio').value   = '';
+    document.getElementById('nt-fim').value      = '';
+    document.getElementById('nt-fixado').checked = false;
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+
+  function publicarTopico() {
+    const titulo    = document.getElementById('nt-titulo').value.trim();
+    const cat       = document.getElementById('nt-cat').value;
+    const conteudo  = document.getElementById('nt-conteudo').value.trim();
+    const tagsRaw   = document.getElementById('nt-tags').value;
+    const inicioStr = document.getElementById('nt-inicio').value;
+    const fimStr    = document.getElementById('nt-fim').value;
+    const isFixed   = document.getElementById('nt-fixado').checked;
+
+    if (!titulo)    { alert('Informe o título do tópico.');        return; }
+    if (!cat)       { alert('Selecione uma categoria.');           return; }
+    if (!conteudo)  { alert('Descreva o conteúdo do tópico.');    return; }
+    if (!inicioStr) { alert('Informe a data de início.');          return; }
+    if (!fimStr)    { alert('Informe a data de encerramento.');    return; }
+
+    const ini = parseDateLocal(inicioStr);
+    const fim = parseDateLocal(fimStr);
+    if (fim <= ini) { alert('A data de encerramento deve ser posterior à data de início.'); return; }
+
+    const tags = tagsRaw.split(',')
+      .map(t => t.trim().replace(/^#*/, '#').replace(/^#$/, ''))
+      .filter(Boolean);
+
+    const dateISO = new Date().toISOString().slice(0, 10);
+    const dataFmt = new Date().toLocaleDateString('pt-BR');
+
+    const avCor  = { avisos:'o', admin:'g', pessoas:'g', finan:'b', mkt:'g', empre:'a' };
+    const avIcon = { avisos:'📌', admin:'📘', pessoas:'👥', finan:'💰', mkt:'📣', empre:'🚀' };
+
+    const topicEl = document.createElement('div');
+    topicEl.className = 'topic';
+    Object.assign(topicEl.dataset, {
+      cat:    cat, replies:'0', views:'1',
+      date:   dateISO, pinned: isFixed ? '1' : '0',
+      inicio: inicioStr, fim: fimStr,
+    });
+
+    const status   = calcStatus(inicioStr, fimStr);
+    const stLabel  = status === 'ativo' ? 'ATIVO' : status === 'encerrado' ? 'ENCERRADO' : 'EM BREVE';
+    const pinBadge = isFixed ? '<span class="pin">FIXADO</span> ' : '';
+    const tagsHtml = tags.map(t => `<span class="topic-tag">${t}</span>`).join('');
+
+    topicEl.innerHTML = `
+      <div class="topic-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="topic-av ${avCor[cat] || 'g'}">${avIcon[cat] || '💬'}</div>
+        <div class="topic-info">
+          <div class="topic-title">${pinBadge}<span class="prof">PROFESSOR</span> ${titulo}</div>
+          <div class="topic-meta">Por <strong>Prof. (Você)</strong> · ${dataFmt} · Categoria: <em>${CAT_NAMES[cat]}</em></div>
+          <div class="topic-prazo">
+            📅 <span class="prazo-txt">De <strong>${fmtDate(inicioStr)}</strong> a <strong>${fmtDate(fimStr)}</strong></span>
+            <span class="status-badge ${status}">${stLabel}</span>
+          </div>
+          <div>${tagsHtml}</div>
+        </div>
+        <div class="topic-stats"><span class="sn">0</span> respostas<br/><small>1 visualização</small></div>
+      </div>
+      <div class="topic-body">
+        <div class="post">
+          <div class="post-av" style="background:linear-gradient(135deg,var(--orange),#c0630f);">EU</div>
+          <div class="post-body">
+            <div class="post-author">Prof. (Você) <span class="role p">PROFESSOR</span> <span class="post-time">agora</span></div>
+            <div class="post-text">${conteudo.replace(/\n/g, '<br>')}</div>
+            <div class="post-actions"><span>👍 0</span><span>💬 Responder</span></div>
+          </div>
+        </div>
+        <div class="reply-box">
+          <div class="post-av" style="background:var(--green-light);font-size:13px;">EU</div>
+          <textarea placeholder="Escreva sua resposta..."></textarea>
+          <button class="btn btn-green">Enviar</button>
+        </div>
+      </div>`;
+
+    const main = document.querySelector('.main');
+    const first = main.querySelector('.topic');
+    first ? main.insertBefore(topicEl, first) : main.appendChild(topicEl);
+
+    const statEl = document.getElementById('stat-topicos');
+    if (statEl) statEl.textContent = +statEl.textContent + 1;
+
+    atualizarContadores();
+    fecharModal();
+    aplicarFiltros();
+
+    topicEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => topicEl.classList.add('open'), 350);
+  }
+
+  /* ── CONTADORES DA SIDEBAR ── */
+  function atualizarContadores() {
+    const topics = Array.from(document.querySelectorAll('.topic[data-cat]'));
+    ['avisos','admin','pessoas','finan','mkt','empre'].forEach(c => {
+      const el = document.getElementById('cnt-' + c);
+      if (el) el.textContent = topics.filter(t => t.dataset.cat === c).length;
+    });
+    const tot = document.getElementById('cnt-todos');
+    if (tot) tot.textContent = topics.length;
+  }
+
+  /* ── INIT ── */
+  aplicarFiltros(); /* aplica ordenação e badges de status na carga */
+</script>
+
+</body>
+</html>

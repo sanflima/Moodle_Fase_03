@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IF Baiano · Sala de Aula Virtual · Administração</title>
+<style>
+  :root{
+    --green:#1e7e34;--green-dark:#155d27;--green-deep:#0d4019;
+    --green-light:#4caf50;--green-soft:#e7f3ea;--green-accent:#8bc34a;
+    --blue:#1565c0;--blue-dark:#0d47a1;--blue-soft:#e3f0fb;
+    --orange:#e67e22;--orange-dark:#c0630f;--orange-soft:#fdf2e6;
+    --red:#c0392b;--red-soft:#fdecea;
+    --ink:#1c2a1f;--muted:#5c6b5f;--bg:#f4f8f4;--card:#fff;--border:#d8e2d9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+
+  /* ── HEADER ── */
+  .inst-bar{background:linear-gradient(180deg,var(--green),var(--green-dark));color:#fff;padding:18px 40px;display:flex;align-items:center;gap:26px;border-bottom:4px solid var(--green-deep);}
+  .inst-txt{flex:1;min-width:0;}
+  .inst-txt .small{font-size:12px;opacity:.9;margin-bottom:4px;}
+  .inst-txt h1.inst-title{font-size:34px;font-weight:700;line-height:1.05;margin-bottom:6px;}
+  .inst-txt .tag{font-size:11px;opacity:.85;letter-spacing:2px;font-weight:700;}
+  .inst-search{background:#fff;border-radius:3px;padding:6px 10px;display:flex;align-items:center;width:240px;align-self:flex-start;margin-top:4px;}
+  .inst-search input{flex:1;border:none;outline:none;font-size:12px;font-family:inherit;color:#333;min-width:0;}
+  .inst-search button{background:none;border:none;cursor:pointer;color:var(--green);font-size:14px;}
+  header.top{background:var(--green-deep);color:#fff;padding:0 40px;display:flex;align-items:center;justify-content:flex-end;height:44px;}
+  nav.topnav a{color:#fff;text-decoration:none;padding:6px 14px;border-radius:3px;font-size:13px;opacity:.88;margin:0 2px;font-weight:600;}
+  nav.topnav a:hover,nav.topnav a.active{background:var(--green);opacity:1;}
+
+  .breadcrumb{background:var(--green-soft);padding:9px 28px;font-size:12px;color:var(--green-dark);border-bottom:1px solid var(--border);}
+  .breadcrumb a{color:var(--green-dark);text-decoration:none;font-weight:600;}
+
+  /* ── HERO ── */
+  .hero{background:radial-gradient(circle at 85% 20%,rgba(139,195,74,.22),transparent 50%),linear-gradient(135deg,var(--green-deep),var(--green-dark) 60%,var(--green));color:#fff;padding:56px 28px 70px;text-align:center;}
+  .hero h1{font-size:36px;margin-bottom:12px;}
+  .hero p{font-size:15px;opacity:.9;max-width:640px;margin:0 auto;}
+  .kicker{display:inline-block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,.15);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.3);margin-bottom:18px;font-weight:700;}
+  /* ── CHOOSER ── */
+  .chooser{max-width:1100px;margin:-40px auto 0;padding:0 28px;position:relative;z-index:2;}
+  .chooser-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .access-card{background:#fff;border-radius:18px;padding:34px 30px;box-shadow:0 20px 50px rgba(13,64,25,.15);border-top:6px solid var(--green);transition:.25s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+  .access-card.prof{border-top-color:var(--orange);}
+  .access-card:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(13,64,25,.22);}
+  .access-head{display:flex;align-items:center;gap:18px;margin-bottom:16px;}
+  .access-icon{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--green-light),var(--green));display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;}
+  .access-card.prof .access-icon{background:linear-gradient(135deg,var(--orange),#c0630f);}
+  .access-head h2{font-size:22px;color:var(--ink);}
+  .access-head p{font-size:13px;color:var(--muted);margin-top:2px;}
+  .access-body ul{list-style:none;}
+  .access-body li{padding:8px 0;font-size:13px;color:#333;display:flex;align-items:center;gap:10px;border-bottom:1px dashed var(--border);}
+  .access-body li:last-child{border-bottom:none;}
+  .access-body li::before{content:'✓';color:var(--green);font-weight:700;}
+  .access-card.prof .access-body li::before{color:var(--orange);}
+  .access-btn{margin-top:16px;display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;padding:12px 22px;border-radius:8px;font-weight:700;font-size:13px;}
+  .access-card.prof .access-btn{background:var(--orange);}
+
+  /* ── MODAIS GERAIS ── */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(13,64,25,.6);z-index:200;align-items:center;justify-content:center;padding:16px;}
+  .modal-bg.open{display:flex;}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;}
+  .mh{color:#fff;padding:22px 26px;position:relative;}
+  .mh.g{background:var(--green);}
+  .mh.o{background:var(--orange);}
+  .mh.b{background:var(--blue);}
+  .mh.r{background:var(--red);}
+  .mh h3{font-size:18px;display:flex;align-items:center;gap:10px;}
+  .mh p{font-size:12px;opacity:.85;margin-top:4px;}
+  .mclose{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;font-family:inherit;}
+  .mb{padding:22px 26px 26px;}
+  .field{margin-bottom:14px;}
+  .field label{font-size:12px;font-weight:700;color:#444;display:block;margin-bottom:5px;}
+  .field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;}
+  .field input:focus,.field select:focus{border-color:var(--green);}
+  .mfooter{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;}
+  .mfooter a{color:var(--blue);text-decoration:none;cursor:pointer;}
+  .mfooter a:hover{text-decoration:underline;}
+  .alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none;}
+  .alert.err{background:var(--red-soft);color:var(--red);border:1px solid #f5c6cb;}
+  .alert.ok{background:var(--green-soft);color:var(--green-dark);border:1px solid #b2dfdb;}
+  .alert.show{display:block;}
+
+  /* ── BOTÕES ── */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:7px;border:none;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:.2s;}
+  .btn-g{background:var(--green);color:#fff;width:100%;justify-content:center;font-size:14px;padding:12px;}
+  .btn-g:hover{background:var(--green-dark);}
+  .btn-o{background:var(--orange);color:#fff;}
+  .btn-o:hover{background:var(--orange-dark);}
+  .btn-ghost{background:#fff;color:#333;border:1px solid var(--border);}
+
+  /* ── DASHBOARD ── */
+  .dash{display:none;max-width:1200px;margin:34px auto;padding:0 28px;}
+  .dash.open{display:block;}
+  .dash-welcome{background:#fff;border-radius:14px;padding:24px 28px;border:1px solid var(--border);border-left:6px solid var(--green);margin-bottom:22px;display:flex;align-items:center;gap:18px;}
+  .dash-welcome.prof{border-left-color:var(--orange);}
+  .dash-avatar{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--green-light),var(--green));color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;cursor:pointer;position:relative;overflow:hidden;border:3px solid var(--border);transition:.2s;}
+  .dash-avatar:hover::after{content:'📷';position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font-size:26px;border-radius:50%;}
+  .dash-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;}
+  .dash-welcome.prof .dash-avatar{background:linear-gradient(135deg,var(--orange),#c0630f);}
+  .dash-welcome h2{font-size:26px;margin-bottom:4px;font-weight:700;}
+  .dash-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  .logout{background:#fde8e8;border:1.5px solid #f5b8b8;color:#c0392b;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:15px;font-weight:700;font-family:inherit;transition:.2s;}
+  .logout:hover{background:#f5c6cb;color:#922b21;}
+  .dash-grid{display:grid;grid-template-columns:260px 1fr;gap:22px;}
+  .dash-side{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .side-sec{padding:14px 16px;border-bottom:1px solid var(--border);}
+  .side-sec:last-child{border-bottom:none;}
+  .side-sec h4{font-size:11px;color:var(--green-dark);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:10px;}
+  .side-sec a{display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:13px;color:#444;text-decoration:none;border-radius:6px;margin-bottom:3px;}
+  .side-sec a:hover,.side-sec a.active{background:var(--green-soft);color:var(--green-dark);}
+  .dash-main{display:flex;flex-direction:column;gap:18px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .stat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .stat .s-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;margin-bottom:8px;}
+  .stat .s-ic.g{background:var(--green);}.stat .s-ic.o{background:var(--orange);}.stat .s-ic.b{background:var(--blue);}.stat .s-ic.a{background:var(--green-accent);}
+  .stat .s-num{font-size:22px;font-weight:700;color:var(--ink);}
+  .stat .s-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .panel{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .panel-head{padding:14px 18px;background:var(--green-soft);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .panel-head h3{font-size:14px;color:var(--green-dark);display:flex;align-items:center;gap:8px;}
+  .disc-item{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;transition:.2s;cursor:pointer;}
+  .disc-item:hover{border-color:var(--green);background:var(--green-soft);}
+  .disc-icon{width:42px;height:42px;border-radius:10px;background:var(--green-soft);color:var(--green-dark);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .disc-info{flex:1;min-width:0;}
+  .disc-name{font-size:14px;font-weight:700;color:var(--ink);}
+  .disc-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+  .disc-badge{background:var(--green-soft);color:var(--green-dark);padding:4px 9px;border-radius:10px;font-size:10px;font-weight:700;}
+  .task-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border-radius:7px;margin-bottom:8px;font-size:13px;}
+  .task-item .dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex-shrink:0;}
+  .task-item .dot.urg{background:var(--orange);}.task-item .dot.late{background:#e53935;}.task-item .dot.ok{background:var(--green-light);}
+  .task-item .t-date{margin-left:auto;font-size:11px;color:var(--muted);font-weight:700;}
+
+  /* ── ADM SENIO ── */
+  .adm-panel{display:none;max-width:1200px;margin:30px auto;padding:0 28px;}
+  .adm-panel.open{display:block;}
+  .adm-header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;}
+  .adm-header h2{font-size:22px;display:flex;align-items:center;gap:12px;}
+  .adm-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+  .adm-table th{background:#1a1a2e;color:#fff;padding:12px 16px;text-align:left;font-size:12px;letter-spacing:.5px;}
+  .adm-table td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--border);}
+  .adm-table tr:hover td{background:#f8faf8;}
+  .tag-primo{background:var(--orange-soft);color:var(--orange-dark);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;}
+  .tag-ok{background:var(--green-soft);color:var(--green-dark);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;}
+  .tag-adm{background:#1a1a2e;color:#fff;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;}
+  .adm-actions{display:flex;gap:6px;}
+  .btn-xs{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:inherit;}
+  .btn-xs.g{background:var(--green);color:#fff;}
+  .btn-xs.r{background:var(--red);color:#fff;}
+  .btn-xs.o{background:var(--orange);color:#fff;}
+  .btn-xs.ghost{background:#fff;color:#444;border:1px solid var(--border);}
+  .adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+  .adm-stat{background:#fff;border-radius:10px;padding:18px;border:1px solid var(--border);text-align:center;}
+  .adm-stat b{display:block;font-size:26px;font-weight:700;color:#1a1a2e;}
+  .adm-stat small{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+
+  footer.bottom{background:var(--green-deep);color:#aac4ad;padding:28px;text-align:center;font-size:12px;margin-top:40px;}
+  footer.bottom a{color:var(--green-accent);text-decoration:none;}
+  #toTop{
+    position:fixed;right:22px;bottom:22px;width:86px;height:86px;border-radius:28px;
+    border:none;cursor:pointer;opacity:0;pointer-events:none;z-index:999;
+    transition:opacity .25s,transform .25s,filter .25s;
+    font-size:0;line-height:0;position:fixed;
+    background:
+      radial-gradient(circle at 22% 18%, rgba(255,255,255,.4), transparent 42%),
+      linear-gradient(165deg,#8de000 0%,#55c600 52%,#31a900 100%);
+    box-shadow:
+      0 10px 24px rgba(0,0,0,.30),
+      inset 0 2px 2px rgba(255,255,255,.45),
+      inset 0 -8px 16px rgba(0,0,0,.14);
+  }
+  #toTop::before{
+    content:'';
+    position:absolute;left:50%;top:50%;
+    width:46px;height:54px;transform:translate(-50%,-52%);
+    background:#eef1ee;
+    clip-path:polygon(50% 0,100% 44%,73% 44%,73% 100%,27% 100%,27% 44%,0 44%);
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.20));
+  }
+  #toTop::after{
+    content:'';
+    position:absolute;inset:7px;border-radius:22px;pointer-events:none;
+    box-shadow:inset 0 10px 14px rgba(255,255,255,.18), inset 0 -10px 16px rgba(255,255,255,.10);
+  }
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{transform:translateY(-3px) scale(1.02);filter:saturate(1.08);}
+
+  /* ── SEÇÕES DO DASH ── */
+  .dash-section{display:none;flex-direction:column;gap:18px;}
+  .dash-section.active{display:flex;}
+
+  /* ── MATERIAIS / ENTREGAS ── */
+  .mat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;}
+  .mat-card:hover{border-color:var(--green);background:var(--green-soft);}
+  .mat-icon{width:44px;height:44px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .mat-info{flex:1;min-width:0;}
+  .mat-title{font-size:14px;font-weight:700;color:var(--ink);}
+  .mat-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+  .mat-actions{display:flex;gap:8px;align-items:center;}
+  .btn-dl{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;text-decoration:none;border:none;cursor:pointer;font-family:inherit;}
+  .btn-dl:hover{background:var(--blue-dark);}
+  .upload-box{border:2px dashed var(--border);border-radius:12px;padding:30px;text-align:center;transition:.2s;background:#fff;}
+  .upload-box:hover{border-color:var(--green);background:var(--green-soft);}
+  .upload-box input[type=file]{display:none;}
+  .upload-box label{cursor:pointer;color:var(--green-dark);font-weight:700;font-size:14px;}
+  .upload-box .up-icon{font-size:40px;margin-bottom:10px;}
+  .upload-box small{font-size:12px;color:var(--muted);margin-top:6px;}
+  /* ── CALENDÁRIO ── */
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .cal-header h3{font-size:16px;font-weight:700;}
+  .cal-nav{display:flex;gap:8px;}
+  .cal-nav button{background:var(--green-soft);border:1px solid var(--border);border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:700;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .cal-dow{text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding:6px 0;text-transform:uppercase;}
+  .cal-day{min-height:60px;border:1px solid var(--border);border-radius:6px;padding:4px 6px;background:#fff;font-size:12px;position:relative;}
+  .cal-day.today{border-color:var(--green);background:var(--green-soft);}
+  .cal-day.other-month{background:#f9f9f9;color:#bbb;}
+  .cal-day .day-num{font-weight:700;font-size:13px;margin-bottom:2px;}
+  .cal-event{font-size:10px;padding:2px 5px;border-radius:3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+  .cal-event.prova{background:#fdecea;color:#c0392b;}
+  .cal-event.entrega{background:var(--orange-soft);color:var(--orange-dark);}
+  .cal-event.aula{background:var(--green-soft);color:var(--green-dark);}
+  .evt-list{display:flex;flex-direction:column;gap:10px;}
+  .evt-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:flex-start;gap:12px;}
+  .evt-badge{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;}
+  .notas-table th{background:var(--green-soft);color:var(--green-dark);padding:10px 14px;text-align:left;font-size:12px;}
+  .notas-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);}
+  .notas-table tr:last-child td{border-bottom:none;}
+
+  .prog-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;margin-top:8px;}
+  .prog-fill{height:100%;background:var(--green);width:0;transition:width .3s;}
+
+  @media(max-width:880px){.chooser-grid{grid-template-columns:1fr;}.dash-grid{grid-template-columns:1fr;}.stat-row{grid-template-columns:repeat(2,1fr);}.adm-stats{grid-template-columns:repeat(2,1fr);}.cal-grid{grid-template-columns:repeat(7,1fr);}}
+  @media(max-width:560px){.inst-bar{flex-wrap:wrap;padding:14px 16px;gap:14px;}.inst-txt h1.inst-title{font-size:24px;}.inst-search{width:100%;}.header.top{padding:0 14px;}.adm-table{font-size:11px;}.cal-grid{grid-template-columns:repeat(7,1fr);font-size:10px;}}
+</style>
+</head>
+<body>
+
+<!-- FAIXA INSTITUCIONAL -->
+<div class="inst-bar">
+  <div class="inst-txt">
+    <div class="small">Instituto Federal de Educação, Ciência e Tecnologia Baiano</div>
+    <h1 class="inst-title">Instituto Federal Baiano</h1>
+    <div class="tag">CAMPUS SENHOR DO BONFIM · CURSO DE ADMINISTRAÇÃO</div>
+  </div>
+  <div class="inst-search">
+    <input type="text" placeholder="Digite sua pesquisa"/>
+    <button type="button" aria-label="Buscar">🔍</button>
+  </div>
+</div>
+<header class="top">
+  <nav class="topnav">
+    <a href="forum-administracao.html">💬 Fórum</a>
+    <a href="index.html#corpo-docente">👨‍🏫 Docentes</a>
+    <a href="perfil.html">👤 Perfil</a>
+  </nav>
+</header>
+<div class="breadcrumb"><strong>IF Baiano · Bonfim</strong> › <strong>Sala de Aula Virtual</strong></div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <span class="kicker">🏫 Ambiente Virtual · Administração</span>
+  <h1>Sala de Aula Virtual</h1>
+  <p>Escolha seu perfil de acesso. No primeiro acesso use seu CPF como identificador e a senha <strong>123@mudar</strong>.</p>
+</section>
+
+    <section class="chooser" id="chooser">
+  <div style="max-width:480px;margin:0 auto;">
+    <a class="access-card" onclick="abrirLogin('aluno');return false;" href="#" style="border-top-width:8px;">
+      <div class="access-head">
+        <div class="access-icon" style="width:84px;height:84px;font-size:42px;">🎓</div>
+        <div>
+          <h2 style="font-size:24px;">Acesso do Aluno</h2>
+          <p>Estudante do Curso de Administração · IF Baiano Bonfim</p>
+        </div>
+      </div>
+      <div class="access-body">
+        <ul>
+          <li>Acessar disciplinas e materiais publicados</li>
+          <li>Entregar tarefas dentro dos prazos</li>
+          <li>Acompanhar notas e progresso</li>
+          <li>Participar de fóruns e interagir com docentes</li>
+          <li>Consultar calendário acadêmico</li>
+        </ul>
+      </div>
+      <span class="access-btn" style="font-size:15px;padding:14px 28px;">Entrar na Sala de Aula →</span>
+    </a>
+  </div>
+  <p style="text-align:center;margin-top:18px;font-size:11px;color:var(--muted);">
+    🔐 Acesso restrito:
+    <a href="#" onclick="abrirAdmLogin();return false;" style="color:var(--green-dark);font-weight:700;">ADM_SENIO</a>
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════
+     MODAL DE LOGIN (ALUNO / PROFESSOR)
+══════════════════════════════════════════ -->
+<div class="modal-bg" id="loginModal">
+  <div class="modal">
+    <div class="mh g" id="mHead">
+      <h3 id="mTitle">🎓 Entrar como Aluno</h3>
+      <p id="mSub">Use seu CPF (somente números) como identificador</p>
+      <button class="mclose" onclick="fecharModal('loginModal')">✕</button>
+    </div>
+    <form class="mb" onsubmit="doLogin(event)">
+      <div class="alert err" id="loginErr"></div>
+      <div class="field">
+        <label id="loginLabel">CPF (somente números)</label>
+        <input type="text" id="loginId" placeholder="000.000.000-00" required autocomplete="username"/>
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="loginPwd" placeholder="••••••••" required autocomplete="current-password"/>
+      </div>
+      <button class="btn btn-g" type="submit">Entrar no Moodle</button>
+      <div class="mfooter" style="margin-top:12px;">
+        <a onclick="abrirEsqueceuSenha();return false;">Esqueceu a senha?</a>
+        <a onclick="abrirPrimeiroAcesso();return false;">Primeiro acesso</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL ESQUECEU A SENHA
+══════════════════════════════════════════ -->
+<div class="modal-bg" id="esqModal">
+  <div class="modal">
+    <div class="mh b">
+      <h3>🔑 Recuperar senha</h3>
+      <p>Informe seu CPF para verificar sua conta</p>
+      <button class="mclose" onclick="fecharModal('esqModal')">✕</button>
+    </div>
+    <div class="mb">
+      <div class="alert err" id="esqErr"></div>
+      <div class="alert ok" id="esqOk"></div>
+      <div class="field">
+        <label>CPF (somente números)</label>
+        <input type="text" id="esqCpf" placeholder="000.000.000-00"/>
+      </div>
+      <button class="btn btn-g" style="background:var(--blue);" onclick="verificarCpf()">Verificar CPF</button>
+      <div id="esqInfo" style="display:none;margin-top:14px;background:var(--green-soft);padding:14px;border-radius:8px;font-size:13px;color:var(--green-dark);">
+        <strong>✅ CPF localizado!</strong><br/><br/>
+        Sua senha padrão é: <strong id="senhaPadrao" style="background:#fff;padding:2px 8px;border-radius:4px;font-family:monospace;font-size:15px;"></strong><br/><br/>
+        <span style="font-size:12px;color:var(--muted);">Se já alterou sua senha e não a lembra, procure a <strong>Secretaria Acadêmica</strong> do Campus para redefinição.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL PRIMEIRO ACESSO
+══════════════════════════════════════════ -->
+<div class="modal-bg" id="primeiroModal">
+  <div class="modal">
+    <div class="mh b">
+      <h3>🆕 Primeiro acesso</h3>
+      <p>No primeiro acesso, use seu CPF e a senha padrão <strong>123@mudar</strong></p>
+      <button class="mclose" onclick="fecharModal('primeiroModal')">✕</button>
+    </div>
+    <div class="mb" style="font-size:13px;color:#333;line-height:1.7;">
+      <p style="background:var(--green-soft);padding:14px;border-radius:8px;color:var(--green-dark);margin-bottom:14px;">
+        <strong>Como acessar pela primeira vez:</strong><br/>
+        1. Clique em <em>"Entrar como Aluno"</em> ou <em>"Entrar como Professor"</em><br/>
+        2. No campo de identificador, use seu <strong>CPF (somente números)</strong><br/>
+        3. Senha: <code style="background:#fff;padding:1px 6px;border-radius:3px;font-size:14px;">123@mudar</code><br/>
+        4. Ao entrar, o sistema solicitará que você <strong>crie uma nova senha</strong>
+      </p>
+      <p style="color:var(--muted);font-size:12px;">Não possui cadastro? Procure a Coordenação do Curso ou a Secretaria Acadêmica do IF Baiano – Campus Senhor do Bonfim.</p>
+      <button class="btn btn-g" style="margin-top:12px;" onclick="fecharModal('primeiroModal');abrirLogin(currentRole||'aluno')">Ir para o login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL TROCAR SENHA (PRIMEIRO ACESSO)
+══════════════════════════════════════════ -->
+<div class="modal-bg" id="trocarModal">
+  <div class="modal" style="max-width:460px;">
+    <div class="mh o">
+      <h3>🔐 Crie sua nova senha</h3>
+      <p>Bem-vindo(a)! Por segurança, defina uma senha pessoal agora.</p>
+    </div>
+    <form class="mb" onsubmit="confirmarTrocaSenha(event)">
+      <div class="alert err" id="trocarErr"></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Usuário: <strong id="trocarNome"></strong></p>
+      <div class="field">
+        <label>Nova senha</label>
+        <input type="password" id="senhaNova" placeholder="Mín. 6 caracteres" required/>
+      </div>
+      <div class="field">
+        <label>Confirmar nova senha</label>
+        <input type="password" id="senhaConf" placeholder="Repita a nova senha" required/>
+      </div>
+      <button class="btn btn-g" style="background:var(--orange);" type="submit">Salvar nova senha e entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL LOGIN ADM_SENIO
+══════════════════════════════════════════ -->
+<div class="modal-bg" id="admLoginModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="mh r">
+      <h3>🛡️ Acesso Administrativo</h3>
+      <p>Painel restrito — ADM_SENIO</p>
+      <button class="mclose" onclick="fecharModal('admLoginModal')">✕</button>
+    </div>
+    <form class="mb" onsubmit="doAdmLogin(event)">
+      <div class="alert err" id="admErr"></div>
+      <div class="field">
+        <label>CPF (somente números)</label>
+        <input type="text" id="admUser" placeholder="00000000000" maxlength="14" required/>
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="admPwd" placeholder="••••••••" required/>
+      </div>
+      <button class="btn btn-g" style="background:var(--red);" type="submit">Entrar no painel</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DASHBOARD USUÁRIO NORMAL
+══════════════════════════════════════════ -->
+<section class="dash" id="dash">
+  <!-- input oculto para upload de foto -->
+  <input type="file" id="fotoFileInput" accept="image/*" style="display:none;" onchange="processarFotoUpload(this)"/>
+
+  <div class="dash-welcome" id="dashWelcome">
+    <div class="dash-avatar" id="dashAvatar" onclick="editarFoto()" title="Clique para alterar sua foto">🎓</div>
+    <div>
+      <h2 id="dashHello">Olá!</h2>
+      <p id="dashRole">Curso de Administração · IF Baiano Bonfim</p>
+      <p style="font-size:11px;color:var(--muted);margin-top:3px;">Clique na foto para alterá-la</p>
+    </div>
+    <div class="dash-actions">
+      <button class="logout" onclick="logout()">🚪 Sair</button>
+    </div>
+  </div>
+  <div class="dash-grid">
+    <aside class="dash-side" id="dashSide"></aside>
+    <div class="dash-main" id="dashMain">
+
+      <!-- SEÇÃO: PAINEL PRINCIPAL -->
+      <div class="dash-section active" id="sec-painel">
+        <div class="stat-row" id="statRow"></div>
+        <div class="panel">
+          <div class="panel-head"><h3>📚 Minhas Disciplinas</h3></div>
+          <div style="padding:14px 18px;" id="discList"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>📅 Upcoming Prazos and Events</h3></div>
+          <div style="padding:14px 18px;" id="taskList"></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO: DISCIPLINAS + MATERIAIS -->
+      <div class="dash-section" id="sec-disciplinas">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>📚 Disciplinas e Materiais</h3>
+            <span id="btnPubMaterial" style="display:none;">
+              <button class="btn-xs g" onclick="abrirModalMaterial()">➕ Publicar material</button>
+            </span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div id="discFilter" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;"></div>
+          <div id="materiaisList"><p style="color:var(--muted);font-size:13px;">Selecione uma disciplina acima.</p></div>
+          </div>
+        </div>
+        <div id="profList" class="panel" style="display:none;">
+          <div class="panel-head"><h3>👨‍🏫 Corpo Docente</h3></div>
+          <div style="padding:14px 18px;" id="profContent"></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO: ENVIAR ATIVIDADE -->
+      <div class="dash-section" id="sec-atividade">
+        <div class="panel">
+          <div class="panel-head"><h3>📤 Enviar Atividade</h3></div>
+          <div style="padding:14px 18px;">
+            <div id="entregaHistorico" style="margin-bottom:24px;"></div>
+            <form id="formEntrega" onsubmit="enviarEntrega(event)">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+                <div class="field">
+                  <label>Disciplina</label>
+                  <select id="entregaDisc" required>
+                    <option value="">Selecione…</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Título da atividade</label>
+                  <input id="entregaTitulo" placeholder="Ex: Estudo de Caso — PMEs" required/>
+                </div>
+              </div>
+              <div class="upload-box" id="uploadBox" onclick="document.getElementById('entregaFile').click()">
+                <div class="up-icon">📎</div>
+                <label for="entregaFile">Clique para selecionar o arquivo</label>
+                <input type="file" id="entregaFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.jpg,.jpeg,.png"/>
+                <p id="entregaFileName">PDF, Word, Excel, PPT, ZIP — máx. 20 MB</p>
+              </div>
+              <div class="prog-bar" id="entregaProgBar" style="display:none;"><div class="prog-fill" id="entregaProgFill"></div></div>
+              <div class="alert err" id="entregaErr" style="margin-top:10px;"></div>
+              <div class="alert ok" id="entregaOk" style="margin-top:10px;"></div>
+              <button class="btn btn-g" style="margin-top:14px;" type="submit" id="btnEnviarEntrega">📤 Enviar atividade</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO: NOTAS -->
+      <div class="dash-section" id="sec-notas">
+        <div class="panel">
+          <div class="panel-head"><h3>📊 Minhas Notas</h3></div>
+          <div style="padding:14px 18px;" id="notasContent">
+            <table class="notas-table">
+              <thead><tr><th>Disciplina</th><th>Atividade</th><th>Nota</th><th>Feedback</th><th>Enviado em</th></tr></thead>
+              <tbody id="notasTbody"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Carregando…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO: CALENDÁRIO -->
+      <div class="dash-section" id="sec-calendario">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>📅 Calendário Acadêmico</h3>
+            <span id="btnCriarEvento" style="display:none;">
+              <button class="btn-xs g" onclick="abrirModalEvento()">➕ Novo evento</button>
+            </span>
+          </div>
+          <div style="padding:18px 24px;">
+            <div class="cal-header">
+              <h3 id="calMesAno"></h3>
+              <div class="cal-nav">
+                <button onclick="navCal(-1)">◀ Anterior</button>
+                <button onclick="navCal(1)">Próximo ▶</button>
+              </div>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>📋 Próximos Eventos</h3></div>
+          <div style="padding:14px 18px;" id="evtList"></div>
+        </div>
+      </div>
+
+    </div><!-- /dash-main -->
+  </div><!-- /dash-grid -->
+</section>
+
+<!-- ══════════════════════════════════════════
+     PAINEL ADM_SENIO
+══════════════════════════════════════════ -->
+<section class="adm-panel" id="admPanel">
+  <div class="adm-header">
+    <h2>🛡️ Painel Administrativo — <span style="color:#ffd166;">ADM_SENIO</span></h2>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="btn btn-o" onclick="abrirCadastroUser()">➕ Novo usuário</button>
+      <button class="btn btn-ghost" onclick="exportarDB()">⬇️ Exportar DB</button>
+      <button class="btn btn-ghost" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.3);" onclick="logoutAdm()">Sair</button>
+    </div>
+  </div>
+  <div class="adm-stats" id="admStats"></div>
+  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+    <div style="padding:14px 18px;background:#1a1a2e;color:#fff;display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="font-size:14px;">👥 Usuários cadastrados</h3>
+      <input type="text" id="admBusca" placeholder="Buscar por nome ou CPF..." oninput="renderAdmTable(this.value)"
+        style="padding:6px 12px;border-radius:6px;border:none;font-size:12px;font-family:inherit;outline:none;width:220px;"/>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="adm-table" id="admTable">
+        <thead>
+          <tr>
+            <th>Nome</th><th>CPF / SIAPE</th><th>Perfil</th><th>Email</th>
+            <th>Turma</th><th>Status senha</th><th>Último acesso</th><th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="admTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── SOLICITAÇÕES DE RESET DE SENHA ── -->
+  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-top:18px;">
+    <div style="padding:14px 18px;background:#1a1a2e;color:#fff;display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="font-size:14px;">🔑 Solicitações de Reset de Senha<span id="resetBadge" style="color:#ffd166;font-weight:700;"></span></h3>
+      <button class="btn-xs g" onclick="renderResetRequests()">↺ Atualizar</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="adm-table">
+        <thead>
+          <tr><th>Nome</th><th>CPF</th><th>Perfil</th><th>Solicitado em</th><th>Ação</th></tr>
+        </thead>
+        <tbody id="resetTbody">
+          <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Nenhuma solicitação pendente.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL CADASTRO DE NOVO USUÁRIO (ADM) -->
+<div class="modal-bg" id="cadModal">
+  <div class="modal" style="max-width:520px;">
+    <div class="mh r">
+      <h3>➕ Cadastrar usuário</h3>
+      <p>Aluno ou Professor · senha padrão: CPF + 123@mudar</p>
+      <button class="mclose" onclick="fecharModal('cadModal')">✕</button>
+    </div>
+    <form class="mb" onsubmit="salvarNovoUser(event)">
+      <div class="alert err" id="cadErr"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field"><label>Nome completo</label><input id="cNome" placeholder="Ex: João da Silva" required/></div>
+        <div class="field"><label>CPF (somente números)</label><input id="cCpf" placeholder="00000000000" required maxlength="11"/></div>
+        <div class="field"><label>Email institucional</label><input id="cEmail" placeholder="nome@ifbaiano.edu.br" required type="email"/></div>
+        <div class="field"><label>Perfil</label>
+          <select id="cRole"><option value="aluno">Aluno</option><option value="prof">Professor</option><option value="adm_senio">ADM Sênio</option></select>
+        </div>
+        <div class="field"><label>Turma / Período</label><input id="cTurma" placeholder="ADM-2026.1 / 4º Período"/></div>
+        <div class="field"><label>SIAPE (professores)</label><input id="cSiape" placeholder="Opcional"/></div>
+        <div class="field" style="grid-column:1 / -1;"><label>Foto (URL da imagem ou emoji)</label><input id="cFoto" placeholder="Ex: uploads/docentes/sandro.jpg ou 👨‍🏫"/></div>
+      </div>
+      <button class="btn btn-g" style="background:var(--red);margin-top:4px;" type="submit">Cadastrar usuário</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: PUBLICAR MATERIAL (professor) -->
+<div class="modal-bg" id="materialModal">
+  <div class="modal" style="max-width:500px;">
+    <div class="mh b">
+      <h3>📎 Publicar Material</h3>
+      <p>O arquivo ficará disponível para os alunos da disciplina</p>
+      <button class="mclose" onclick="fecharModal('materialModal')">✕</button>
+    </div>
+    <form class="mb" onsubmit="salvarMaterial(event)">
+      <div class="alert err" id="matErr"></div>
+      <div class="field"><label>Título</label><input id="matTitulo" placeholder="Ex: Slides — Aula 08" required/></div>
+      <div class="field"><label>Disciplina</label>
+        <select id="matDisc" required>
+          <option value="">Selecione…</option>
+        </select>
+      </div>
+      <div class="field"><label>Descrição (opcional)</label><input id="matDesc" placeholder="Resumo do conteúdo…"/></div>
+      <div class="upload-box" style="padding:16px;margin-bottom:12px;">
+        <label for="matFile">📎 Selecionar arquivo (máx. 20 MB)</label>
+        <input type="file" id="matFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.jpg,.jpeg,.png" required/>
+        <p id="matFileName" style="font-size:11px;color:var(--muted);margin-top:4px;">Nenhum arquivo selecionado</p>
+      </div>
+      <div class="prog-bar" id="matProgBar" style="display:none;"><div class="prog-fill" id="matProgFill"></div></div>
+      <button class="btn btn-g" style="background:var(--blue);" type="submit" id="btnSalvarMat">Publicar material</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: CRIAR EVENTO (professor/ADM) -->
+<div class="modal-bg" id="eventoModal">
+  <div class="modal" style="max-width:460px;">
+    <div class="mh g">
+      <h3>📅 Criar Evento no Calendário</h3>
+      <p>Visível para todos os alunos</p>
+      <button class="mclose" onclick="fecharModal('eventoModal')">✕</button>
+    </div>
+    <form class="mb" onsubmit="salvarEvento(event)">
+      <div class="alert err" id="evtErr"></div>
+      <div class="field"><label>Título</label><input id="evtTitulo" placeholder="Ex: Prova — Gestão de Pessoas" required/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field"><label>Data</label><input type="date" id="evtData" required/></div>
+        <div class="field"><label>Tipo</label>
+          <select id="evtTipo">
+            <option value="aviso">📢 Aviso</option>
+            <option value="prova">📝 Prova</option>
+            <option value="entrega">📋 Entrega</option>
+            <option value="aula">📚 Aula</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Descrição (opcional)</label><input id="evtDesc" placeholder="Detalhes do evento…"/></div>
+      <button class="btn btn-g" type="submit" id="btnSalvarEvt">Publicar evento</button>
+    </form>
+  </div>
+</div>
+
+<footer class="bottom">
+  © 2026 <strong>IF Baiano · Campus Senhor do Bonfim</strong> — Moodle · Curso de Administração
+  · <a href="sala-de-aula.html">Sala de Aula</a>
+</footer>
+
+<button id="toTop" aria-label="Voltar ao topo" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT — SISTEMA COMPLETO (PHP + SQLite)
+══════════════════════════════════════════ -->
+<script>
+// ─── API PHP + SQLite CONFIG ──────────────────────────────────────────────────
+// Para rodar localmente: abra terminal na pasta Moodle_Fase_03 e execute:
+//   php -S localhost:8080
+// Depois acesse: http://localhost:8080/sala-de-aula.html
+const API = 'api/sala.php';
+
+// credenciais ADM_SENIO gerenciadas no banco SQLite (role='adm_senio')
+const SENHA_PADRAO = '123@mudar';
+const SESSION_KEY  = 'ifba_session';
+const DOCENTES_KEY = 'ifbaiano_docentes';
+
+function escapeHtml(txt = '') {
+  return String(txt).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+}
+function fotoEhUrl(valor = '') {
+  const v = String(valor || '').trim();
+  return /^(https?:\/\/|data:image\/|uploads\/|assets\/|\.\/|\/)/i.test(v);
+}
+function renderFotoDocente(foto, nome, fallback = '👨‍🏫') {
+  const v = String(foto || '').trim();
+  if (fotoEhUrl(v)) return `<img src="${escapeHtml(v)}" alt="Foto de ${escapeHtml(nome || 'docente')}" loading="lazy"/>`;
+  return escapeHtml(v || fallback);
+}
+function renderDashAvatar(user) {
+  const el = document.getElementById('dashAvatar');
+  if (!el) return;
+  const isProf = user && (hasRole(user.role,'prof') || hasRole(user.role,'adm_senio'));
+  const fallback = isProf ? '👨‍🏫' : '🎓';
+  const foto = String(user?.foto || '').trim();
+  if (fotoEhUrl(foto)) {
+    el.innerHTML = `<img src="${escapeHtml(foto)}" alt="Foto de ${escapeHtml(user?.nome || 'Usuário')}" loading="lazy"/>`;
+    return;
+  }
+  el.textContent = foto || fallback;
+}
+function salvarCacheDocente(user) {
+  if (!user || (!hasRole(user.role,'prof') && !hasRole(user.role,'adm_senio'))) return;
+  const docs = JSON.parse(localStorage.getItem(DOCENTES_KEY) || '[]');
+  const lista = Array.isArray(docs) ? docs : [];
+  const idx = lista.findIndex(d => d.id === user.id || ((d.email || '').toLowerCase() === (user.email || '').toLowerCase()));
+  const base = idx >= 0 ? lista[idx] : {
+    id: user.id || ('p' + Date.now()),
+    cor: ['blue', 'green', 'orange'][lista.length % 3],
+    area: 'Docente do Curso de Administração',
+    titulacao: 'Professor(a)',
+    disciplinas: []
+  };
+  const atualizado = {
+    ...base,
+    id: user.id || base.id,
+    nome: user.nome || base.nome,
+    email: user.email || base.email
+  };
+  if (user.foto) atualizado.foto = user.foto;
+  if (!atualizado.foto) atualizado.foto = '🧑‍🏫';
+  if (!Array.isArray(atualizado.disciplinas)) atualizado.disciplinas = [];
+  if (idx >= 0) lista[idx] = atualizado; else lista.push(atualizado);
+  localStorage.setItem(DOCENTES_KEY, JSON.stringify(lista));
+}
+function sincronizarCacheDocentes(profs = []) {
+  if (!Array.isArray(profs)) return;
+  profs.forEach(p => salvarCacheDocente({ ...p, role: 'prof' }));
+}
+
+// ─── HELPER DE FETCH ─────────────────────────────────────────────────────────
+async function api(action, data = {}) {
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ action, ...data })
+  });
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error || 'Erro HTTP ' + res.status);
+  }
+  return res.json();
+}
+
+// ─── OPERAÇÕES NO BANCO (PHP + SQLite) ────────────────────────────────────────
+async function findUser(cpfOuSiape) {
+  return await api('find_user', { identifier: cpfOuSiape });
+}
+async function findUserById(id) {
+  return await api('find_by_id', { id });
+}
+async function updateUser(id, changes) {
+  await api('update_user', { id, changes });
+}
+async function getAllUsers(busca = '') {
+  const data = await api('get_users', { busca });
+  if (!Array.isArray(data)) throw new Error(data.error || 'Resposta inválida do servidor');
+  return data;
+}
+async function createUser(userData) {
+  try {
+    const result = await api('create_user', userData);
+    return { data: result, error: null };
+  } catch(e) {
+    return { data: null, error: { message: e.message, code: e.message.includes('CPF') ? '23505' : null } };
+  }
+}
+async function deleteUser(id) {
+  await api('delete_user', { id });
+}
+async function createResetRequest(userId) {
+  await api('create_reset', { usuario_id: userId });
+}
+async function getPendingResets() {
+  const rows = await api('get_resets');
+  return rows.map(r => ({
+    id: r.id, usuario_id: r.usuario_id, criado_em: r.criado_em,
+    usuarios: { nome: r.nome, cpf: r.cpf, role: r.role }
+  }));
+}
+async function resolverReset(resetId, userId) {
+  await api('resolve_reset', { reset_id: resetId, usuario_id: userId });
+}
+async function registrarLog(userId, acao) {
+  try { await api('log', { usuario_id: userId, acao }); } catch(e) {}
+}
+
+//PAPER ─── HELPERS ────────────────────────────────────────────────────────
+function hasRole(r, role) { return (r||'').split(',').map(s=>s.trim()).includes(role); }
+function roleTag(r) {
+    const tags=[];
+    if(hasRole(r,'adm_senio')) tags.push('<span class="tag-adm" style="background:#7c3aed;">ADM SÊNIO</span>');
+    if(hasRole(r,'prof'))      tags.push('<span class="tag-adm">PROFESSOR</span>');
+    if(hasRole(r,'aluno'))     tags.push('<span class="tag-ok">ALUNO</span>');
+    return tags.join(' ')||`<span class="tag-ok">${r}</span>`;
+}
+
+// ─── VARIÁVEIS DE ESTADO ──────────────────────────────────────────────────────
+let currentRole = 'aluno';
+let pendingUser = null; // usuário aguardando troca de senha
+
+// ─── HELPERS DE MODAL ─────────────────────────────────────────────────────────
+function abrirModal(id) { document.getElementById(id).classList.add('open'); }
+function fecharModal(id) { document.getElementById(id).classList.remove('open'); }
+function showErr(id, msg) { const el=document.getElementById(id); el.textContent=msg; el.classList.add('show'); }
+function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+
+// ─── FLUXO DE LOGIN ───────────────────────────────────────────────────────────
+function abrirLogin(role) {
+  currentRole = role;
+  const head = document.getElementById('mHead');
+  const title = document.getElementById('mTitle');
+  const sub = document.getElementById('mSub');
+  const label = document.getElementById('loginLabel');
+  const inp = document.getElementById('loginId');
+  hideErr('loginErr');
+  if (role === 'aluno') {
+    head.className = 'mh g';
+    title.innerHTML = '🎓 Entrar como Aluno';
+    sub.textContent = 'Use seu CPF (somente números) como identificador';
+    label.textContent = 'CPF (somente números)';
+    inp.placeholder = '000.000.000-00';
+  } else {
+    head.className = 'mh o';
+    title.innerHTML = '👨‍🏫 Entrar como Professor';
+    sub.textContent = 'Use seu CPF ou SIAPE como identificador';
+    label.textContent = 'CPF ou SIAPE';
+    inp.placeholder = 'CPF ou nº SIAPE';
+  }
+  document.getElementById('loginId').value = '';
+  document.getElementById('loginPwd').value = '';
+  abrirModal('loginModal');
+}
+
+async function doLogin(ev) {
+  ev.preventDefault();
+  hideErr('loginErr');
+  const btn = ev.target.querySelector('[type=submit]');
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  try {
+    const id  = document.getElementById('loginId').value.trim();
+    const pwd = document.getElementById('loginPwd').value;
+    const identNum = id.replace(/\D/g, '');
+    const user = await api('login', { identifier: identNum || id, password: pwd });
+    if (!hasRole(user.role, currentRole)) {
+      const labelRole = hasRole(user.role,'adm_senio') ? 'administrador (use o acesso ADM)' : hasRole(user.role,'prof') ? 'professor' : 'aluno';
+      showErr('loginErr', `❌ Este identificador é de um ${labelRole}. Escolha o perfil correto.`);
+      return;
+    }
+    fecharModal('loginModal');
+    if (user.primeiro_acesso) {
+      pendingUser = { ...user, _pwd: pwd };
+      document.getElementById('trocarNome').textContent = user.nome;
+      ['senhaNova','senhaConf'].forEach(i => document.getElementById(i).value = '');
+      hideErr('trocarErr');
+      abrirModal('trocarModal');
+    } else {
+      iniciarSessao(user);
+    }
+  } catch(e) {
+    showErr('loginErr', '❌ ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Entrar no Moodle';
+  }
+}
+
+async function confirmarTrocaSenha(ev) {
+  ev.preventDefault();
+  hideErr('trocarErr');
+  if (!pendingUser) return;
+  const nova  = document.getElementById('senhaNova').value;
+  const conf  = document.getElementById('senhaConf').value;
+  if (nova.length < 6)       { showErr('trocarErr', '❌ A nova senha deve ter pelo menos 6 caracteres.'); return; }
+  if (nova === SENHA_PADRAO) { showErr('trocarErr', '❌ Você não pode usar a senha padrão como nova senha.'); return; }
+  if (nova !== conf)         { showErr('trocarErr', '❌ As senhas não coincidem.'); return; }
+  const btn = ev.target.querySelector('[type=submit]');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  try {
+    await api('change_password', { id: pendingUser.id, old_password: pendingUser._pwd, new_password: nova });
+    await registrarLog(pendingUser.id, 'troca_senha');
+    const updated = { ...pendingUser, primeiro_acesso: false };
+    const isAdm = !!pendingUser._isAdm;
+    pendingUser = null;
+    fecharModal('trocarModal');
+    alert('✅ Senha alterada com sucesso! Bem-vindo(a) ao Moodle do IF Baiano.');
+    if (isAdm) { await renderAdmPanel(); } else { iniciarSessao(updated); }
+  } catch(e) {
+    showErr('trocarErr', '❌ ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Salvar nova senha e entrar';
+  }
+}
+
+// ─── SESSÃO / DASHBOARD ───────────────────────────────────────────────────────
+function iniciarSessao(user) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ id: user.id, role: user.role, nome: user.nome, cpf: user.cpf, email: user.email, turma: user.turma, foto: user.foto }));
+  document.getElementById('chooser').style.display = 'none';
+  document.getElementById('hero').style.display    = 'none';
+  renderDash(user);
+}
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('dash').classList.remove('open');
+  document.getElementById('chooser').style.display = '';
+  document.getElementById('hero').style.display    = '';
+  window.scrollTo({ top: 0 });
+}
+
+// ─── DISCIPLINAS ──────────────────────────────────────────────────────────────
+const DISC_ALUNO = [
+  { nome:'Teoria Geral da Administração II', periodo:'2º Período' },
+  { nome:'Gestão de Pessoas',                periodo:'3º Período' },
+  { nome:'Matemática Financeira',            periodo:'2º Período' },
+  { nome:'Marketing I',                      periodo:'4º Período' },
+  { nome:'Empreendedorismo',                 periodo:'5º Período' }
+];
+const DISC_PROF = [
+  { nome:'Gestão de Pessoas',                periodo:'ADM-2026.1 · 3º Período' },
+  { nome:'Comportamento Organizacional',     periodo:'ADM-2026.1 · 4º Período' }
+];
+
+let _sessaoUser  = null; // usuário logado
+let _calAno      = new Date().getFullYear();
+let _calMes      = new Date().getMonth();
+let _eventos     = [];
+let _discAtiva   = '';
+
+// ─── SEÇÕES DO SIDEBAR ────────────────────────────────────────────────────────
+function showSection(nome) {
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#dashSide a[data-sec]').forEach(a => a.classList.remove('active'));
+  const sec = document.getElementById('sec-' + nome);
+  if (sec) sec.classList.add('active');
+  const link = document.querySelector(`#dashSide a[data-sec="${nome}"]`);
+  if (link) link.classList.add('active');
+  if (nome === 'disciplinas') carregarDiscSection();
+  if (nome === 'calendario')  carregarCalendario();
+  if (nome === 'notas')       carregarNotas();
+  if (nome === 'atividade')   prepararFormEntrega();
+}
+
+// ─── RENDER DASHBOARD ─────────────────────────────────────────────────────────
+async function renderDash(user) {
+  _sessaoUser = user;
+  const role  = user.role;
+  document.getElementById('dash').classList.add('open');
+  const wl = document.getElementById('dashWelcome');
+  const isProf = hasRole(role,'prof') || hasRole(role,'adm_senio');
+  wl.className = 'dash-welcome' + (isProf ? ' prof' : '');
+  renderDashAvatar(user);
+  salvarCacheDocente(user);
+  document.getElementById('dashHello').textContent  = 'Olá, ' + user.nome.split(' ')[0] + '!';
+  document.getElementById('dashRole').textContent   = isProf
+    ? 'Professor(a) · Curso de Administração · IF Baiano Bonfim'
+    : 'Aluno(a) · Curso de Administração · IF Baiano Bonfim';
+
+  document.getElementById('dashSide').innerHTML = isProf
+    ? `<div class="side-sec"><h4>Docente</h4>
+         <a href="#" data-sec="painel" class="active" onclick="showSection('painel');return false;">🏠 Painel</a>
+         <a href="#" data-sec="disciplinas" onclick="showSection('disciplinas');return false;">📚 Materiais publicados</a>
+         <a href="#" data-sec="atividade" onclick="showSection('atividade');return false;">📝 Submissões dos alunos</a>
+         <a href="#" data-sec="calendario" onclick="showSection('calendario');return false;">📅 Calendário</a>
+       </div>
+       <div class="side-sec"><h4>Interação</h4>
+         <a href="forum-administracao.html">💬 Fórum</a>
+       </div>`
+    : `<div class="side-sec"><h4>Menu do Aluno</h4>
+         <a href="#" data-sec="painel" class="active" onclick="showSection('painel');return false;">🏠 Painel</a>
+         <a href="#" data-sec="disciplinas" onclick="showSection('disciplinas');return false;">📚 Material e Docente</a>
+         <a href="#" data-sec="atividade" onclick="showSection('atividade');return false;">📤 Enviar Atividade</a>
+         <a href="#" data-sec="notas" onclick="showSection('notas');return false;">📊 Minhas Notas</a>
+         <a href="#" data-sec="calendario" onclick="showSection('calendario');return false;">📅 Calendário</a>
+       </div>
+       <div class="side-sec"><h4>Acesso Rápido</h4>
+         <a href="forum-administracao.html">💬 Fórum</a>
+         <a href="index.html#corpo-docente">👨‍🏫 Docentes</a>
+         <a href="perfil.html">👤 Perfil</a>
+       </div>`;
+
+  // Mostrar botões exclusivos de professor
+  ['btnPubMaterial','btnCriarEvento'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = isProf ? '' : 'none';
+  });
+
+  const stats = isProf
+    ? [{ic:'g',n:'2',l:'Turmas ativas'},{ic:'o',n:'—',l:'Submissões'},{ic:'b',n:'60',l:'Alunos'},{ic:'a',n:'—',l:'Materiais'}]
+    : [{ic:'g',n:'5',l:'Disciplinas'},{ic:'o',n:'—',l:'Prazos abertos'},{ic:'b',n:'—',l:'Notas pendentes'},{ic:'a',n:'—',l:'Materiais'}];
+  document.getElementById('statRow').innerHTML = stats.map(s =>
+    `<div class="stat"><div class="s-ic ${s.ic}">📊</div><div class="s-num">${s.n}</div><div class="s-lbl">${s.l}</div></div>`
+  ).join('');
+
+  const discs = isProf ? DISC_PROF : DISC_ALUNO;
+  document.getElementById('discList').innerHTML = discs.map(d =>
+    `<div class="disc-item" onclick="showSection('disciplinas');filtrarDisc('${d.nome}')">
+       <div class="disc-icon">📘</div>
+       <div class="disc-info">
+         <div class="disc-name">${d.nome}</div>
+         <div class="disc-meta">${d.periodo}</div>
+       </div>
+       <span class="disc-badge">EM CURSO</span>
+     </div>`
+  ).join('');
+
+  // Prazos via eventos do banco
+  try {
+    const evts = await api('get_eventos');
+    _eventos = evts;
+    const hoje = new Date(); hoje.setHours(0,0,0,0);
+    const proximos = evts.filter(e => new Date(e.data) >= hoje).slice(0,5);
+    document.getElementById('taskList').innerHTML = proximos.length
+      ? proximos.map(e => {
+          const cls = e.tipo==='prova'?'urg':e.tipo==='entrega'?'late':'';
+          const ico  = e.tipo==='prova'?'📝':e.tipo==='entrega'?'📋':'📢';
+          const dt   = new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR');
+          return `<div class="task-item"><span class="dot ${cls}"></span><span>${ico} ${e.titulo}</span><span class="t-date">${dt}</span></div>`;
+        }).join('')
+      : '<p style="color:var(--muted);font-size:13px;">Nenhum prazo próximo.</p>';
+    // stats dinâmicos
+    document.querySelector('#statRow .stat:nth-child(2) .s-num').textContent = proximos.length;
+  } catch(e) {}
+}
+
+/* ── Abre o seletor de arquivo para qualquer perfil ── */
+function editarFoto() {
+  document.getElementById('fotoFileInput').click();
+}
+
+/* ── Processa a imagem selecionada do computador ── */
+function processarFotoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    alert('Selecione um arquivo de imagem (JPG, PNG, WebP…).');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    alert('A imagem deve ter no máximo 5 MB.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result;
+    /* Redimensiona antes de salvar para economizar espaço */
+    const img = new Image();
+    img.onload = async () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 200;
+      const ratio = Math.min(MAX / img.width, MAX / img.height, 1);
+      canvas.width  = Math.round(img.width  * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      try {
+        /* Tenta salvar no servidor; não bloqueia se a API estiver offline */
+        try { await updateUser(_sessaoUser.id, { foto: dataUrl }); } catch (_) {}
+        _sessaoUser.foto = dataUrl;
+        /* Atualiza sessão persistida */
+        const sess = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}');
+        sess.foto = dataUrl;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+        renderDashAvatar(_sessaoUser);
+        if (hasRole(_sessaoUser.role,'prof') || hasRole(_sessaoUser.role,'adm_senio')) {
+          salvarCacheDocente(_sessaoUser);
+        }
+      } catch (err) {
+        alert('❌ Erro ao salvar foto: ' + err.message);
+      }
+    };
+    img.src = base64;
+  };
+  reader.readAsDataURL(file);
+  /* Limpa o input para permitir selecionar o mesmo arquivo novamente */
+  input.value = '';
+}
+
+// ─── SEÇÃO DISCIPLINAS ────────────────────────────────────────────────────────
+async function carregarDiscSection() {
+  const isProf = _sessaoUser && (hasRole(_sessaoUser.role,'prof')||hasRole(_sessaoUser.role,'adm_senio'));
+  const discs  = isProf ? DISC_PROF : DISC_ALUNO;
+
+  // Filtros de disciplina
+  document.getElementById('discFilter').innerHTML = discs.map(d =>
+    `<button class="btn-xs ${_discAtiva===d.nome?'g':'ghost'}" style="${_discAtiva===d.nome?'':'background:#fff;border:1px solid var(--border);color:#444;'}" onclick="filtrarDisc('${d.nome}')">${d.nome}</button>`
+  ).join('') + `<button class="btn-xs" style="background:#fff;border:1px solid var(--border);color:#444;" onclick="filtrarDisc('')">Todos</button>`;
+
+  await carregarMateriais(_discAtiva);
+
+  // Corpo docente
+  const profListEl = document.getElementById('profList');
+  if (!isProf) {
+    profListEl.style.display = '';
+    try {
+      const profs = await api('get_profs');
+      sincronizarCacheDocentes(profs);
+      document.getElementById('profContent').innerHTML = profs.filter(p=>p).map(p =>
+        `<div class="mat-card" style="margin-bottom:10px;">
+           <div class="mat-icon" style="background:var(--orange-soft);color:var(--orange-dark);">${renderFotoDocente(p.foto, p.nome)}</div>
+           <div class="mat-info">
+             <div class="mat-title">${p.nome}</div>
+             <div class="mat-meta">${p.email}${p.siape?' · SIAPE '+p.siape:''}</div>
+           </div>
+         </div>`
+      ).join('') || '<p style="color:var(--muted);">Nenhum docente cadastrado.</p>';
+    } catch(e) { document.getElementById('profContent').innerHTML = '<p style="color:var(--muted);">Erro ao carregar docentes.</p>'; }
+  } else {
+    profListEl.style.display = 'none';
+  }
+}
+
+async function carregarMateriais(disc='') {
+  const el = document.getElementById('materiaisList');
+  el.innerHTML = '<p style="color:var(--muted);font-size:13px;">⏳ Carregando materiais…</p>';
+  try {
+    const mats = await api('get_materiais', disc ? {disciplina: disc} : {});
+    const isProf = _sessaoUser && (hasRole(_sessaoUser.role,'prof')||hasRole(_sessaoUser.role,'adm_senio'));
+    if (!mats.length) { el.innerHTML = '<p style="color:var(--muted);font-size:13px;">Nenhum material publicado ainda.</p>'; return; }
+    el.innerHTML = mats.map(m => {
+      const ext  = (m.arquivo_original||'').split('.').pop().toUpperCase();
+      const url  = `uploads/materiais/${m.arquivo_nome}`;
+      const dt   = new Date(m.criado_em).toLocaleDateString('pt-BR');
+      return `<div class="mat-card" style="margin-bottom:10px;">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info">
+          <div class="mat-title">${m.titulo} <small style="font-weight:400;color:var(--muted);">[${ext}]</small></div>
+          <div class="mat-meta">${m.disciplina} · ${m.prof_nome||'Professor'} · ${dt}</div>
+          ${m.descricao?`<div class="mat-meta" style="margin-top:2px;">${m.descricao}</div>`:''}
+        </div>
+        <div class="mat-actions">
+          <a class="btn-dl" href="${url}" download="${m.arquivo_original||m.titulo}">⬇ Baixar</a>
+          ${isProf?`<button class="btn-xs r" onclick="excluirMaterial('${m.id}')">🗑</button>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = `<p style="color:var(--red);">Erro: ${e.message}</p>`; }
+}
+
+function filtrarDisc(nome) {
+  _discAtiva = nome;
+  carregarDiscSection();
+}
+
+// ─── PUBLICAR MATERIAL (professor) ───────────────────────────────────────────
+function abrirModalMaterial() {
+  document.getElementById('matTitulo').value = '';
+  document.getElementById('matDesc').value   = '';
+  document.getElementById('matFileName').textContent = 'Nenhum arquivo selecionado';
+  document.getElementById('matErr').classList.remove('show');
+  document.getElementById('matProgBar').style.display = 'none';
+  const sel = document.getElementById('matDisc');
+  sel.innerHTML = '<option value="">Selecione…</option>' + DISC_PROF.map(d=>`<option>${d.nome}</option>`).join('');
+  document.getElementById('matFile').value = '';
+  document.getElementById('matFile').onchange = e => {
+    document.getElementById('matFileName').textContent = e.target.files[0]?.name || 'Nenhum arquivo';
+  };
+  abrirModal('materialModal');
+}
+async function salvarMaterial(ev) {
+  ev.preventDefault();
+  const btn = document.getElementById('btnSalvarMat');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  const err = document.getElementById('matErr');
+  err.classList.remove('show');
+  try {
+    const fd = new FormData();
+    fd.append('tipo',      'material');
+    fd.append('titulo',    document.getElementById('matTitulo').value.trim());
+    fd.append('descricao', document.getElementById('matDesc').value.trim());
+    fd.append('disciplina',document.getElementById('matDisc').value);
+    fd.append('prof_id',   _sessaoUser.id);
+    fd.append('arquivo',   document.getElementById('matFile').files[0]);
+    const bar = document.getElementById('matProgBar');
+    const fill= document.getElementById('matProgFill');
+    bar.style.display=''; fill.style.width='30%';
+    const res = await fetch(API, {method:'POST',body:fd});
+    fill.style.width='100%';
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    fecharModal('materialModal');
+    alert('✅ Material publicado com sucesso!');
+    await carregarMateriais(_discAtiva);
+  } catch(e) { err.textContent='❌ '+e.message; err.classList.add('show'); }
+  finally { btn.disabled=false; btn.textContent='Publicar material'; }
+}
+async function excluirMaterial(id) {
+  if (!confirm('Excluir este material?')) return;
+  await api('delete_material',{id});
+  await carregarMateriais(_discAtiva);
+}
+
+// ─── ENVIAR ATIVIDADE (aluno) ────────────────────────────────────────────────
+function prepararFormEntrega() {
+  const isProf = _sessaoUser && (hasRole(_sessaoUser.role,'prof')||hasRole(_sessaoUser.role,'adm_senio'));
+  const sel    = document.getElementById('entregaDisc');
+  const discs  = isProf ? DISC_PROF : DISC_ALUNO;
+  sel.innerHTML = '<option value="">Selecione…</option>' + discs.map(d=>`<option>${d.nome}</option>`).join('');
+  document.getElementById('entregaFile').onchange = e => {
+    document.getElementById('entregaFileName').textContent = e.target.files[0]?.name || 'PDF, Word, Excel — máx. 20 MB';
+  };
+  if (isProf) {
+    // Professor vê submissões dos alunos
+    carregarSubmissoes();
+  } else {
+    carregarEntregasAluno();
+  }
+}
+async function carregarEntregasAluno() {
+  const el = document.getElementById('entregaHistorico');
+  try {
+    const entregas = await api('get_entregas',{aluno_id: _sessaoUser.id});
+    if (!entregas.length) { el.innerHTML=''; return; }
+    el.innerHTML = `<div class="panel-head" style="margin-bottom:10px;"><h3>📋 Minhas entregas anteriores</h3></div>`
+      + entregas.map(e => `<div class="mat-card" style="margin-bottom:8px;">
+          <div class="mat-icon" style="background:var(--orange-soft);color:var(--orange-dark);">📤</div>
+          <div class="mat-info">
+            <div class="mat-title">${e.titulo}</div>
+            <div class="mat-meta">${e.disciplina} · ${new Date(e.enviado_em).toLocaleString('pt-BR')}</div>
+            ${e.nota?`<div class="mat-meta" style="margin-top:2px;color:var(--green-dark);font-weight:700;">Nota: ${e.nota}${e.feedback?' — '+e.feedback:''}</div>`:''}
+          </div>
+          <a class="btn-dl" href="uploads/entregas/${e.arquivo_nome}" download="${e.arquivo_original}">⬇</a>
+        </div>`).join('');
+  } catch(e) { el.innerHTML=''; }
+}
+async function carregarSubmissoes() {
+  const el = document.getElementById('entregaHistorico');
+  el.innerHTML = '<p style="color:var(--muted);font-size:13px;">⏳ Carregando submissões…</p>';
+  try {
+    const entregas = await api('get_entregas',{});
+    if (!entregas.length) { el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhuma entrega recebida ainda.</p>'; return; }
+    el.innerHTML = `<table class="notas-table"><thead><tr><th>Aluno</th><th>Disciplina</th><th>Título</th><th>Enviado em</th><th>Arquivo</th><th>Nota</th><th>Ações</th></tr></thead><tbody>`
+      + entregas.map(e => `<tr>
+          <td>${e.aluno_nome||'-'}</td>
+          <td>${e.disciplina}</td>
+          <td>${e.titulo}</td>
+          <td>${new Date(e.enviado_em).toLocaleDateString('pt-BR')}</td>
+          <td><a class="btn-dl" style="font-size:11px;" href="uploads/entregas/${e.arquivo_nome}" download="${e.arquivo_original}">⬇ Baixar</a></td>
+          <td>${e.nota||'—'}</td>
+          <td><button class="btn-xs g" onclick="abrirAvaliar('${e.id}','${(e.aluno_nome||'').replace(/'/g,"\\'")}')">✏️ Avaliar</button></td>
+        </tr>`).join('')
+      + '</tbody></table>';
+  } catch(e) { el.innerHTML=`<p style="color:var(--red);">Erro: ${e.message}</p>`; }
+  document.getElementById('formEntrega').style.display='none';
+}
+async function enviarEntrega(ev) {
+  ev.preventDefault();
+  const btn = document.getElementById('btnEnviarEntrega');
+  btn.disabled=true; btn.textContent='Enviando…';
+  const err = document.getElementById('entregaErr');
+  const ok  = document.getElementById('entregaOk');
+  err.classList.remove('show'); ok.classList.remove('show');
+  try {
+    const fd = new FormData();
+    fd.append('tipo',       'entrega');
+    fd.append('aluno_id',   _sessaoUser.id);
+    fd.append('disciplina', document.getElementById('entregaDisc').value);
+    fd.append('titulo',     document.getElementById('entregaTitulo').value.trim());
+    fd.append('arquivo',    document.getElementById('entregaFile').files[0]);
+    const bar = document.getElementById('entregaProgBar');
+    const fill= document.getElementById('entregaProgFill');
+    bar.style.display=''; fill.style.width='30%';
+    const res  = await fetch(API, {method:'POST',body:fd});
+    fill.style.width='100%';
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    ok.textContent='✅ Atividade enviada com sucesso!'; ok.classList.add('show');
+    document.getElementById('entregaTitulo').value='';
+    document.getElementById('entregaFile').value='';
+    document.getElementById('entregaFileName').textContent='PDF, Word, Excel — máx. 20 MB';
+    bar.style.display='none';
+    await carregarEntregasAluno();
+  } catch(e) { err.textContent='❌ '+e.message; err.classList.add('show'); }
+  finally { btn.disabled=false; btn.textContent='📤 Enviar atividade'; }
+}
+function abrirAvaliar(id, nome) {
+  const nota = prompt(`Nota para "${nome}" (ex: 8.5):`);
+  if (nota===null) return;
+  const feedback = prompt('Feedback/comentário (opcional):') || '';
+  api('avaliar_entrega',{id, nota, feedback}).then(()=>carregarSubmissoes());
+}
+
+// ─── NOTAS (aluno) ────────────────────────────────────────────────────────────
+async function carregarNotas() {
+  const tbody = document.getElementById('notasTbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr>';
+  try {
+    const entregas = await api('get_entregas',{aluno_id: _sessaoUser.id});
+    if (!entregas.length) { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">Nenhuma entrega realizada ainda.</td></tr>'; return; }
+    tbody.innerHTML = entregas.map(e => `<tr>
+      <td>${e.disciplina}</td>
+      <td>${e.titulo}</td>
+      <td>${e.nota||'—'}</td>
+      <td>${e.feedback||'—'}</td>
+      <td>${new Date(e.enviado_em).toLocaleDateString('pt-BR')}</td>
+    </tr>`).join('');
+  } catch(e) { tbody.innerHTML=`<tr><td colspan="5" style="color:var(--red);padding:16px;">${e.message}</td></tr>`; }
+}
+
+// ─── CALENDÁRIO ───────────────────────────────────────────────────────────────
+async function carregarCalendario() {
+  try { _eventos = await api('get_eventos'); } catch(e) {}
+  renderCal();
+  renderEvtList();
+}
+function navCal(dir) { _calMes += dir; if(_calMes>11){_calMes=0;_calAno++;} if(_calMes<0){_calMes=11;_calAno--;} renderCal(); }
+function renderCal() {
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('calMesAno').textContent = `${meses[_calMes]} ${_calAno}`;
+  const grid = document.getElementById('calGrid');
+  const dias  = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let html = dias.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const primeiro = new Date(_calAno, _calMes, 1);
+  const ultimo   = new Date(_calAno, _calMes+1, 0).getDate();
+  const hoje     = new Date(); hoje.setHours(0,0,0,0);
+  for (let i=0;i<primeiro.getDay();i++) html+=`<div class="cal-day other-month"></div>`;
+  for (let d=1;d<=ultimo;d++) {
+    const dt = new Date(_calAno,_calMes,d); dt.setHours(0,0,0,0);
+    const isHoje = dt.getTime()===hoje.getTime();
+    const dtStr  = `${_calAno}-${String(_calMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evts   = _eventos.filter(e=>e.data===dtStr);
+    html += `<div class="cal-day${isHoje?' today':''}">
+      <div class="day-num">${d}</div>
+      ${evts.map(e=>`<div class="cal-event ${e.tipo}" title="${e.titulo}">${e.titulo}</div>`).join('')}
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+function renderEvtList() {
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const proximos = _eventos.filter(e=>new Date(e.data+'T12:00:00')>=hoje).slice(0,8);
+  const cores = {prova:'background:#fdecea;color:#c0392b;',entrega:'background:var(--orange-soft);color:var(--orange-dark);',aviso:'background:var(--blue-soft);color:var(--blue);',aula:'background:var(--green-soft);color:var(--green-dark);'};
+  const icons = {prova:'📝',entrega:'📋',aviso:'📢',aula:'📚'};
+  document.getElementById('evtList').innerHTML = proximos.length
+    ? proximos.map(e => {
+        const isProf = _sessaoUser && (hasRole(_sessaoUser.role,'prof')||hasRole(_sessaoUser.role,'adm_senio'));
+        const dt = new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'});
+        return `<div class="evt-item">
+          <span class="evt-badge" style="${cores[e.tipo]||cores.aviso}">${icons[e.tipo]||'📢'} ${e.tipo.toUpperCase()}</span>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:14px;">${e.titulo}</div>
+            <div style="font-size:12px;color:var(--muted);">${dt}${e.descricao?' — '+e.descricao:''}</div>
+          </div>
+          ${isProf?`<button class="btn-xs r" onclick="excluirEvento('${e.id}')">🗑</button>`:''}
+        </div>`;
+      }).join('')
+    : '<p style="color:var(--muted);font-size:13px;">Nenhum evento próximo.</p>';
+}
+function abrirModalEvento() {
+  ['evtTitulo','evtDesc'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('evtData').value = new Date().toISOString().split('T')[0];
+  document.getElementById('evtErr').classList.remove('show');
+  abrirModal('eventoModal');
+}
+async function salvarEvento(ev) {
+  ev.preventDefault();
+  const btn=document.getElementById('btnSalvarEvt');
+  btn.disabled=true; btn.textContent='Salvando…';
+  try {
+    await api('criar_evento',{
+      titulo: document.getElementById('evtTitulo').value.trim(),
+      descricao: document.getElementById('evtDesc').value.trim(),
+      data: document.getElementById('evtData').value,
+      tipo: document.getElementById('evtTipo').value,
+      prof_id: _sessaoUser.id
+    });
+    fecharModal('eventoModal');
+    await carregarCalendario();
+  } catch(e) { const err=document.getElementById('evtErr'); err.textContent='❌ '+e.message; err.classList.add('show'); }
+  finally { btn.disabled=false; btn.textContent='Publicar evento'; }
+}
+async function excluirEvento(id) {
+  if (!confirm('Excluir este evento?')) return;
+  await api('delete_evento',{id});
+  await carregarCalendario();
+}
+function navDocentes() { if(_sessaoUser) showSection('disciplinas'); else mostrarAviso('Faça login para ver os docentes.'); }
+function abrirModalMaterialDisc(disc) { _discAtiva=disc; showSection('disciplinas'); abrirModalMaterial(); }
+
+// ─── ESQUECEU A SENHA ─────────────────────────────────────────────────────────
+function abrirEsqueceuSenha() {
+  fecharModal('loginModal');
+  document.getElementById('esqCpf').value = '';
+  hideErr('esqErr');
+  const ok = document.getElementById('esqOk'); ok.textContent = ''; ok.className = 'alert ok';
+  document.getElementById('esqInfo').style.display = 'none';
+  abrirModal('esqModal');
+}
+async function verificarCpf() {
+  hideErr('esqErr');
+  document.getElementById('esqInfo').style.display = 'none';
+  const ok = document.getElementById('esqOk'); ok.textContent = ''; ok.className = 'alert ok';
+  const cpf = document.getElementById('esqCpf').value.replace(/\D/g, '');
+  if (cpf.length < 11) { showErr('esqErr', '❌ CPF inválido. Digite os 11 dígitos.'); return; }
+  const btn = document.querySelector('#esqModal .btn-g');
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  try {
+    const user = await findUser(cpf);
+    if (!user) { showErr('esqErr', '❌ CPF não encontrado. Procure a Secretaria Acadêmica.'); return; }
+    if (user.primeiro_acesso || user.senha === SENHA_PADRAO) {
+      document.getElementById('senhaPadrao').textContent = '123@mudar';
+      document.getElementById('esqInfo').style.display = 'block';
+    } else {
+      await createResetRequest(user.id);
+      await registrarLog(user.id, 'reset_solicitado');
+      ok.textContent = '✅ Solicitação registrada! O administrador redefinirá sua senha. Retorne após contato com a Secretaria Acadêmica.';
+      ok.className = 'alert ok show';
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = 'Verificar CPF';
+  }
+}
+
+function abrirPrimeiroAcesso() { fecharModal('loginModal'); abrirModal('primeiroModal'); }
+
+// ─── ADM_SENIO ────────────────────────────────────────────────────────────────
+function abrirAdmLogin() {
+  document.getElementById('admUser').value = '';
+  document.getElementById('admPwd').value  = '';
+  hideErr('admErr');
+  abrirModal('admLoginModal');
+}
+async function doAdmLogin(ev) {
+  ev.preventDefault();
+  hideErr('admErr');
+  const cpf = document.getElementById('admUser').value.replace(/\D/g, '');
+  const pwd = document.getElementById('admPwd').value;
+  const btn = ev.target.querySelector('[type=submit]');
+  btn.disabled = true; btn.textContent = 'Verificando...';
+  try {
+    const user = await api('login', { identifier: cpf, password: pwd });
+    if (!hasRole(user.role, 'adm_senio')) {
+      showErr('admErr', '❌ CPF não encontrado ou sem perfil administrativo.'); return;
+    }
+    fecharModal('admLoginModal');
+    document.getElementById('chooser').style.display = 'none';
+    document.getElementById('hero').style.display    = 'none';
+    if (user.primeiro_acesso) {
+      pendingUser = { ...user, _isAdm: true, _pwd: pwd };
+      document.getElementById('trocarNome').textContent = user.nome;
+      ['senhaNova','senhaConf'].forEach(i => document.getElementById(i).value = '');
+      hideErr('trocarErr');
+      abrirModal('trocarModal');
+    } else {
+      await renderAdmPanel(user);
+    }
+  } catch(e) {
+    showErr('admErr', '❌ ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Entrar no painel';
+  }
+}
+function logoutAdm() {
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('admPanel').classList.remove('open');
+  document.getElementById('chooser').style.display = '';
+  document.getElementById('hero').style.display    = '';
+  window.scrollTo({ top: 0 });
+}
+
+async function renderAdmPanel(user = null) {
+  if (user) localStorage.setItem(SESSION_KEY, JSON.stringify({ id: user.id, role: user.role, nome: user.nome }));
+  document.getElementById('admPanel').classList.add('open');
+  document.getElementById('admTbody').innerHTML =
+    '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted);">⏳ Conectando ao banco...</td></tr>';
+  try {
+    const db       = await getAllUsers();
+    const alunos   = db.filter(u => hasRole(u.role,'aluno')).length;
+    const profs    = db.filter(u => hasRole(u.role,'prof') && !hasRole(u.role,'adm_senio')).length;
+    const adms     = db.filter(u => hasRole(u.role,'adm_senio')).length;
+    const primeiros = db.filter(u => u.primeiro_acesso).length;
+    document.getElementById('admStats').innerHTML = [
+      { b: db.length, s: 'Total de usuários' },
+      { b: alunos,    s: 'Alunos' },
+      { b: profs,     s: 'Professores' },
+      { b: adms,      s: 'ADM Sênio' },
+      { b: primeiros, s: 'Aguardando 1º acesso' }
+    ].map(x => `<div class="adm-stat"><b>${x.b}</b><small>${x.s}</small></div>`).join('');
+    renderAdmTable('', db);
+    renderResetRequests();
+  } catch(e) {
+    document.getElementById('admTbody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--red);">
+        ❌ Erro ao conectar: ${e.message}<br>
+        <small style="color:var(--muted);">Verifique se executou o supabase-schema.sql no Dashboard → SQL Editor</small>
+      </td></tr>`;
+  }
+}
+
+async function renderAdmTable(busca = '', dbCache = null) {
+  let db;
+  try {
+    db = (dbCache !== null && !busca) ? dbCache : await getAllUsers(busca);
+  } catch(e) {
+    document.getElementById('admTbody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--red);">❌ ${e.message}</td></tr>`;
+    return;
+  }
+  document.getElementById('admTbody').innerHTML = db.map(u => {
+    const nome   = u.nome.replace(/'/g, "\\'");
+    const acesso = u.ultimo_acesso ? new Date(u.ultimo_acesso).toLocaleString('pt-BR') : '-';
+    return `<tr>
+      <td><strong>${u.nome}</strong></td>
+      <td style="font-family:monospace;">${u.cpf}${u.siape ? ' / ' + u.siape : ''}</td>
+      <td>${roleTag(u.role)}</td>
+      <td><a href="mailto:${u.email}" style="color:var(--blue);">${u.email}</a></td>
+      <td>${u.turma || '-'}</td>
+      <td>${u.primeiro_acesso ? '<span class="tag-primo">Aguarda 1º acesso</span>' : '<span class="tag-ok">Ativa</span>'}</td>
+      <td>${acesso}</td>
+      <td><div class="adm-actions">
+        <button class="btn-xs o" onclick="resetarSenha('${u.id}','${nome}')">🔑 Reset</button>
+        <button class="btn-xs r" onclick="excluirUser('${u.id}','${nome}')">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px;">Nenhum resultado.</td></tr>';
+}
+
+async function renderResetRequests() {
+  const tbody = document.getElementById('resetTbody');
+  const badge = document.getElementById('resetBadge');
+  if (!tbody) return;
+  const requests = await getPendingResets();
+  if (badge) badge.textContent = requests.length > 0 ? ` (${requests.length})` : '';
+  tbody.innerHTML = requests.length === 0
+    ? '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Nenhuma solicitação pendente.</td></tr>'
+    : requests.map(r => {
+        const nome = (r.usuarios?.nome || '-').replace(/'/g, "\\'");
+        return `<tr>
+          <td><strong>${r.usuarios?.nome || '-'}</strong></td>
+          <td style="font-family:monospace;">${r.usuarios?.cpf || '-'}</td>
+          <td>${roleTag(r.users?.role||'')}</td>
+          <td>${new Date(r.criado_em).toLocaleString('pt-BR')}</td>
+          <td><button class="btn-xs g" onclick="aprovarReset('${r.id}','${r.usuario_id}','${nome}')">✅ Aprovar reset</button></td>
+        </tr>`;
+      }).join('');
+}
+
+async function resetarSenha(id, nome) {
+  if (!confirm(`Resetar senha de "${nome}" para a senha padrão (123@mudar)?`)) return;
+  await updateUser(id, { senha: SENHA_PADRAO, primeiro_acesso: true });
+  alert('✅ Senha resetada. O usuário deverá criar nova senha no próximo acesso.');
+  await renderAdmPanel();
+}
+async function aprovarReset(resetId, userId, nome) {
+  if (!confirm(`Confirmar reset de senha para "${nome}"?`)) return;
+  await resolverReset(resetId, userId);
+  alert(`✅ Senha de "${nome}" redefinida para 123@mudar.`);
+  await renderAdmPanel();
+}
+async function excluirUser(id, nome) {
+  if (!confirm(`Excluir permanentemente o usuário "${nome}"?`)) return;
+  await deleteUser(id);
+  await renderAdmPanel();
+}
+
+function abrirCadastroUser() {
+  hideErr('cadErr');
+  ['cNome','cCpf','cEmail','cTurma','cSiape','cFoto'].forEach(id => document.getElementById(id).value = '');
+  abrirModal('cadModal');
+}
+async function salvarNovoUser(ev) {
+  ev.preventDefault();
+  hideErr('cadErr');
+  const nome  = document.getElementById('cNome').value.trim();
+  const cpf   = document.getElementById('cCpf').value.replace(/\D/g,'');
+  const email = document.getElementById('cEmail').value.trim();
+  const role  = document.getElementById('cRole').value;
+  const turma = document.getElementById('cTurma').value.trim();
+  const siape = document.getElementById('cSiape').value.trim();
+  const foto  = document.getElementById('cFoto').value.trim();
+  if (cpf.length !== 11) { showErr('cadErr', '❌ CPF deve ter exatamente 11 dígitos.'); return; }
+  const btn = ev.target.querySelector('[type=submit]');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  try {
+    const { data, error } = await createUser({
+      nome, cpf, siape: siape || null, role, email,
+      turma: turma || null, foto: foto || null, senha: SENHA_PADRAO, primeiro_acesso: true,
+      data_criacao: new Date().toISOString()
+    });
+    if (error) {
+      showErr('cadErr', '❌Error: ' + error.message);
+      return;
+    }
+    if (hasRole(role,'prof') || hasRole(role,'adm_senio')) {
+      salvarCacheDocente({ id: data?.id || null, nome, email, role, foto: foto || '🧑‍🏫' });
+    }
+    fecharModal('cadModal');
+    alert(data?.merged
+      ? `✅ Papel "${role}" adicionado ao usuário "${nome}" com sucesso!`
+      : `✅ Usuário "${nome}" cadastrado!\nIdentificador: ${cpf}\nSenha padrão: ${SENHA_PADRAO}`);
+    await renderAdmPanel();
+  } finally {
+    btn.disabled = false; btn.textContent = 'Cadastrar usuário';
+  }
+}
+
+async function exportarDB() {
+  const db = await getAllUsers();
+  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ifba_adm_users_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+// ─── TOAST (aviso não-bloqueante) ─────────────────────────────────────────────
+function mostrarAviso(msg) {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;top:22px;left:50%;transform:translateX(-50%);background:#1c2a1f;color:#fff;padding:12px 26px;border-radius:8px;z-index:9999;font-size:13px;font-family:Arial,sans-serif;box-shadow:0 4px 20px rgba(0,0,0,.35);pointer-events:none;';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+// ─── BACK TO TOP ──────────────────────────────────────────────────────────────
+const _toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => _toTop.classList.toggle('show', scrollY > 400));
+
+// ─── VERIFICAÇÃO DE CONEXÃO COM A API ────────────────────────────────────────
+(async function() {
+  try {
+    await api('ping');
+  } catch(e) {
+    const aviso = document.createElement('div');
+    aviso.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;text-align:center;padding:12px 20px;font-size:14px;font-weight:600;z-index:9999;';
+    aviso.textContent = '⚠️ Servidor indisponível: ' + e.message + ' — Contate o administrador.';
+    document.body.prepend(aviso);
+    return;
+  }
+  // ─── AUTO-LOGIN SE SESSÃO ATIVA ──────────────────────────────────────────────
+  const raw = localStorage.getItem(SESSION_KEY);
+  if (!raw) return;
+  try {
+    const sess = JSON.parse(raw);
+    const user = await findUserById(sess.id);
+    if (user && !user.primeiro_acesso) {
+      currentRole = user.role;
+      if (hasRole(user.role, 'adm_senio')) { await renderAdmPanel(); } else { initiateSessao(user); }
+    } else {
+      localStorage.removeItem(SESSION_KEY);
+    }
+  } catch(e) {
+    localStorage.removeItem(SESSION_KEY);
+  }
+})();
+</script>
+</body>
+</html>

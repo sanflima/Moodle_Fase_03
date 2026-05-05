@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IF Baiano · Sala de Aula Professor · Administração</title>
+<style>
+:root{
+  --blue:#1565c0;--blue-dark:#0d47a1;--blue-deep:#071e38;--blue-mid:#0d3b6e;
+  --blue-soft:#e3f2fd;--blue-light:#42a5f5;
+  --green:#1e7e34;--green-dark:#155d27;--green-soft:#e8f5e9;
+  --orange:#e67e22;--orange-dark:#b85c00;--orange-soft:#fdf3e3;
+  --red:#c0392b;--red-soft:#fdecea;
+  --bg:#eef2f7;--card:#fff;--ink:#1a2636;--muted:#5a6a7e;--border:#ccd6e2;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh;}
+
+/* ── TOPO ── */
+.inst-bar{background:linear-gradient(180deg,var(--blue-mid) 0%,#0a2d55 100%);color:#fff;padding:14px 28px;display:flex;align-items:center;gap:20px;border-bottom:4px solid var(--blue-deep);}
+.inst-logo-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.inst-logo-wrap img{height:42px;width:auto;filter:brightness(0) invert(1);}
+.inst-logo-ico{font-size:30px;}
+.inst-txt{flex:1;}
+.inst-txt .small{font-size:11px;opacity:.85;margin-bottom:2px;}
+.inst-txt strong{font-size:18px;font-weight:700;display:block;line-height:1.2;}
+.inst-tag{font-size:10px;letter-spacing:1.5px;opacity:.8;margin-top:2px;text-transform:uppercase;}
+.top-user{display:flex;align-items:center;gap:10px;}
+.top-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:17px;overflow:hidden;cursor:pointer;flex-shrink:0;}
+.top-avatar img{width:100%;height:100%;object-fit:cover;}
+.top-name{font-size:13px;font-weight:700;}
+.top-role{font-size:10px;opacity:.8;}
+.btn-logout{background:#fde8e8;border:1.5px solid #f5b8b8;color:#c0392b;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;}
+.btn-logout:hover{background:#fbd0d0;}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{background:#dde6f0;padding:7px 28px;font-size:12px;color:var(--blue-mid);border-bottom:1px solid var(--border);}
+.breadcrumb a{color:var(--blue-mid);text-decoration:none;font-weight:600;}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:calc(100vh - 130px);}
+
+/* ── SIDEBAR ── */
+.sidebar{width:224px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);padding:0;}
+.side-user{padding:16px;border-bottom:1px solid var(--border);}
+.side-avatar-wrap{position:relative;width:60px;height:60px;margin:0 auto 8px;cursor:pointer;}
+.side-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--blue-light),var(--blue-mid));display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;overflow:hidden;border:3px solid var(--border);}
+.side-avatar img{width:100%;height:100%;object-fit:cover;}
+.side-avatar-wrap:hover .side-av-overlay{opacity:1;}
+.side-av-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;font-size:20px;opacity:0;transition:.2s;}
+.side-nome{text-align:center;font-size:13px;font-weight:700;color:var(--ink);}
+.side-role{text-align:center;font-size:11px;color:var(--muted);margin-top:1px;}
+.side-sec{padding:6px 0;}
+.side-sec h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:6px 16px 4px;font-weight:700;}
+.sidebar a{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:13px;color:var(--ink);text-decoration:none;border-left:3px solid transparent;transition:.14s;}
+.sidebar a:hover{background:var(--blue-soft);color:var(--blue-mid);}
+.sidebar a.active{background:var(--blue-soft);color:var(--blue-mid);border-left-color:var(--blue);font-weight:700;}
+.side-divider{border:none;border-top:1px solid var(--border);margin:4px 0;}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:24px 26px;min-width:0;}
+.section{display:none;}
+.section.active{display:block;}
+
+/* ── WELCOME BANNER ── */
+.welcome-banner{background:linear-gradient(135deg,var(--blue-mid),var(--blue-deep));color:#fff;border-radius:10px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:16px;}
+.wb-icon{font-size:38px;flex-shrink:0;}
+.wb-title{font-size:17px;font-weight:700;margin-bottom:3px;}
+.wb-sub{font-size:12.5px;opacity:.85;}
+.wb-actions{margin-left:auto;display:flex;gap:8px;flex-shrink:0;}
+
+/* ── STATS ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;border-top:3px solid var(--blue);}
+.stat-card .s-ico{font-size:22px;margin-bottom:4px;}
+.stat-card .s-num{font-size:24px;font-weight:700;color:var(--blue-mid);}
+.stat-card .s-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:18px;}
+.card-head{background:var(--blue-soft);padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;border-radius:8px 8px 0 0;}
+.card-head h3{font-size:14px;color:var(--blue-mid);font-weight:700;flex:1;}
+.card-body{padding:16px 18px;}
+
+/* ── ATIVIDADES ── */
+.atv-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:.15s;}
+.atv-card:hover{border-color:var(--blue-light);box-shadow:0 2px 8px rgba(21,101,192,.1);}
+.atv-ico{width:44px;height:44px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.atv-ico.ativa{background:var(--green-soft);}
+.atv-ico.encerrada{background:#f5f5f5;}
+.atv-ico.em-breve{background:var(--blue-soft);}
+.atv-info{flex:1;min-width:0;}
+.atv-titulo{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.atv-meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:6px;}
+.atv-desc{font-size:12.5px;color:#444;margin-bottom:8px;}
+.atv-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:700;}
+.badge-ativa{background:var(--green-soft);color:var(--green-dark);}
+.badge-encerrada{background:#f5f5f5;color:#666;}
+.badge-em-breve{background:var(--blue-soft);color:var(--blue-dark);}
+.badge-disc{background:#f3e5f5;color:#6a1b9a;}
+.badge-cnt{background:#fff3e0;color:#e65100;}
+.atv-actions{display:flex;gap:6px;flex-shrink:0;flex-direction:column;align-items:flex-end;}
+
+/* ── UPLOAD ── */
+.upload-box{border:2px dashed var(--border);border-radius:6px;padding:22px;text-align:center;cursor:pointer;transition:.2s;background:#f9fbff;}
+.upload-box:hover{border-color:var(--blue);background:var(--blue-soft);}
+.upload-box .ub-ico{font-size:30px;margin-bottom:6px;}
+.upload-box .ub-txt{font-size:13px;color:var(--muted);}
+.upload-box .ub-file{font-size:12px;color:var(--blue-mid);font-weight:600;margin-top:5px;}
+
+/* ── FORM ── */
+.form-row{margin-bottom:14px;}
+.form-lbl{display:block;font-size:11.5px;font-weight:700;color:var(--blue-mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+.form-inp{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:5px;font-family:inherit;font-size:13px;color:var(--ink);}
+.form-inp:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 2px rgba(21,101,192,.12);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ── BOTÕES ── */
+.btn-prim{background:var(--blue);color:#fff;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.18s;display:inline-flex;align-items:center;gap:6px;}
+.btn-prim:hover{background:var(--blue-dark);}
+.btn-prim:disabled{opacity:.6;cursor:not-allowed;}
+.btn-green{background:var(--green);color:#fff;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.18s;display:inline-flex;align-items:center;gap:6px;}
+.btn-green:hover{background:var(--green-dark);}
+.btn-orange{background:var(--orange);color:#fff;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:.18s;display:inline-flex;align-items:center;gap:6px;}
+.btn-orange:hover{background:var(--orange-dark);}
+.btn-cancel{background:#fff;border:1px solid var(--border);color:var(--ink);padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;}
+.btn-cancel:hover{background:#f5f5f5;}
+.btn-xs{padding:4px 10px;border-radius:4px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--ink);font-family:inherit;}
+.btn-xs.danger{background:var(--red-soft);border-color:var(--red);color:var(--red);}
+.btn-xs.primary{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-mid);}
+.btn-xs.success{background:var(--green-soft);border-color:var(--green);color:var(--green-dark);}
+.prog-bar{display:none;height:6px;background:var(--blue-soft);border-radius:3px;overflow:hidden;margin:10px 0;}
+.prog-bar span{display:block;height:100%;background:var(--blue);transition:width .4s;}
+
+/* ── ALERTAS ── */
+.alert-ok{color:#155724;background:#d4edda;border:1px solid #c3e6cb;border-radius:5px;padding:8px 12px;font-size:12.5px;display:none;margin:8px 0;}
+.alert-err{color:#721c24;background:#f8d7da;border:1px solid #f5c6cb;border-radius:5px;padding:8px 12px;font-size:12.5px;display:none;margin:8px 0;}
+.alert-ok.show,.alert-err.show{display:block;}
+.alert-info{color:#0d47a1;background:var(--blue-soft);border:1px solid #90caf9;border-radius:5px;padding:8px 12px;font-size:12.5px;margin:8px 0;}
+
+/* ── TABELA ── */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{background:var(--blue-soft);color:var(--blue-mid);padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--border);}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:#f8fbff;}
+.badge-nota{display:inline-block;padding:2px 8px;border-radius:10px;font-weight:700;font-size:11px;}
+.badge-ok{background:#d4edda;color:#155724;}
+.badge-pend{background:#fff3cd;color:#856404;}
+
+/* ── MATERIAIS ── */
+.mat-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px;}
+.mat-icon{width:40px;height:40px;border-radius:8px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.mat-info{flex:1;min-width:0;}
+.mat-title{font-size:13px;font-weight:600;color:var(--ink);}
+.mat-meta{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.mat-actions{display:flex;gap:6px;flex-shrink:0;}
+.btn-dl{background:var(--green);color:#fff;padding:5px 10px;border-radius:4px;font-size:11.5px;font-weight:600;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;}
+.btn-dl:hover{background:var(--green-dark);}
+
+/* ── FILTROS ── */
+.filter-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.filter-tab{border:1px solid var(--border);background:#fff;color:var(--muted);border-radius:16px;padding:5px 12px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.18s;}
+.filter-tab:hover{border-color:var(--blue);color:var(--blue-mid);}
+.filter-tab.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+/* ── ALUNOS ── */
+.aluno-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.aluno-ava{width:40px;height:40px;border-radius:50%;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.aluno-info{flex:1;}
+.aluno-nome{font-size:13px;font-weight:600;}
+.aluno-meta{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+/* ── CALENDÁRIO ── */
+.cal-nav{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.cal-nav h3{flex:1;text-align:center;font-size:15px;color:var(--blue-mid);}
+.cal-nav button{background:var(--blue-soft);border:1px solid var(--border);color:var(--blue-mid);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;font-family:inherit;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dow{text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding:4px 0;}
+.cal-day{min-height:54px;background:#fff;border:1px solid var(--border);border-radius:4px;padding:4px 5px;font-size:12px;}
+.cal-day.today{background:var(--blue-soft);border-color:var(--blue);}
+.cal-day.other-month{background:#fafafa;border-color:#eee;}
+.day-num{font-weight:700;font-size:11px;margin-bottom:2px;}
+.cal-event{font-size:9.5px;padding:2px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cal-event.prova{background:var(--red-soft);color:var(--red);}
+.cal-event.entrega{background:var(--orange-soft);color:var(--orange-dark);}
+.cal-event.aviso{background:var(--blue-soft);color:var(--blue-dark);}
+.cal-event.aula{background:var(--green-soft);color:var(--green-dark);}
+.cal-event.atividade{background:#f3e5f5;color:#6a1b9a;}
+.evt-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.evt-item:last-child{border-bottom:none;}
+.evt-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;margin-top:2px;}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(7,30,56,.65);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal-box{background:#fff;border-radius:10px;max-width:540px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto;}
+.modal-box.wide{max-width:760px;}
+.modal-box h2{color:var(--blue-mid);margin-bottom:4px;font-size:18px;display:flex;align-items:center;gap:8px;}
+.modal-box p.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+
+/* ── LOGIN SCREEN ── */
+.login-screen{min-height:100vh;background:linear-gradient(135deg,var(--blue-deep) 0%,var(--blue-mid) 60%,#1565c0 100%);display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-box{background:#fff;border-radius:14px;width:100%;max-width:420px;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden;}
+.login-header{background:linear-gradient(135deg,var(--blue-mid),var(--blue-deep));color:#fff;padding:28px 30px;}
+.login-header .lh-logo{font-size:40px;margin-bottom:10px;}
+.login-header h1{font-size:20px;font-weight:700;margin-bottom:4px;}
+.login-header p{font-size:12.5px;opacity:.85;}
+.login-badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:12px;}
+.login-body{padding:28px 30px;}
+.l-field{margin-bottom:14px;}
+.l-field label{font-size:12px;font-weight:700;color:#444;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px;}
+.l-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;transition:.2s;}
+.l-field input:focus{border-color:var(--blue);}
+.login-err{padding:9px 13px;border-radius:6px;font-size:13px;margin-bottom:12px;display:none;background:var(--red-soft);color:var(--red);border:1px solid #f5c6cb;}
+.login-err.show{display:block;}
+.btn-login{background:var(--blue);color:#fff;width:100%;padding:12px;border-radius:7px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;}
+.btn-login:hover{background:var(--blue-dark);}
+.btn-login:disabled{opacity:.65;cursor:not-allowed;}
+.login-footer{text-align:center;padding:16px 30px 20px;font-size:12px;color:var(--muted);}
+.login-footer a{color:var(--blue);text-decoration:none;}
+
+/* ── TOAST ── */
+#avisoToast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(7,30,56,.92);color:#fff;padding:10px 22px;border-radius:7px;font-size:13px;z-index:9000;display:none;max-width:420px;text-align:center;}
+
+/* ── VOLTAR AO TOPO ── */
+#toTop{position:fixed;right:24px;bottom:24px;width:52px;height:52px;border-radius:14px;border:none;cursor:pointer;opacity:0;pointer-events:none;z-index:9999;transition:opacity .25s,transform .18s;font-size:20px;background:linear-gradient(155deg,#42a5f5,var(--blue-mid));box-shadow:0 6px 18px rgba(13,71,161,.35);color:#fff;}
+#toTop.show{opacity:1;pointer-events:auto;}
+#toTop:hover{transform:translateY(-3px);}
+
+/* ── FOOTER ── */
+footer{background:var(--blue-deep);color:#7a9ab5;padding:14px 24px;text-align:center;font-size:12px;}
+footer a{color:#90caf9;text-decoration:none;}
+
+/* ── SUBMISSÃO DETALHE ── */
+.subm-detalhe{background:#f9fbff;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-top:8px;display:none;}
+.subm-detalhe.open{display:block;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .sidebar{display:none;}
+  .stat-row{grid-template-columns:1fr 1fr;}
+  .form-row-2{grid-template-columns:1fr;}
+}
+@media(max-width:560px){
+  .stat-row{grid-template-columns:1fr;}
+  .wb-actions{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ TELA DE LOGIN ════════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="lh-logo">👨‍🏫</div>
+      <div class="login-badge">ACESSO DOCENTE</div>
+      <h1>Sala de Aula · Professor</h1>
+      <p>Instituto Federal Baiano — Campus Senhor do Bonfim<br>Curso de Administração</p>
+    </div>
+    <div class="login-body">
+      <div class="login-err" id="loginErr"></div>
+      <form id="formLogin" onsubmit="doLogin(event)">
+        <div class="l-field">
+          <label>CPF ou SIAPE</label>
+          <input id="loginId" type="text" placeholder="Digite seu CPF ou nº SIAPE" autocomplete="username" required/>
+        </div>
+        <div class="l-field">
+          <label>Senha</label>
+          <input id="loginPwd" type="password" placeholder="Sua senha de acesso" autocomplete="current-password" required/>
+        </div>
+        <button class="btn-login" type="submit" id="btnLogin">Entrar na Sala</button>
+      </form>
+    </div>
+    <div class="login-footer">
+      Esqueceu sua senha? <a href="sala-de-aula.html">Acesse pelo portal principal</a><br>
+      <a href="index.html" style="color:var(--muted);">← Voltar ao início</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ DASHBOARD ════════════════════ -->
+<div id="dashContainer" style="display:none;">
+
+<!-- TOPO -->
+<div class="inst-bar">
+  <div class="inst-logo-wrap">
+    <img src="assets/logo.png" alt="IF Baiano" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <span class="inst-logo-ico" style="display:none;">🏫</span>
+  </div>
+  <div class="inst-txt">
+    <div class="small">Instituto Federal de Educação, Ciência e Tecnologia Baiano</div>
+    <strong>Instituto Federal Baiano</strong>
+    <div class="inst-tag">Campus Senhor do Bonfim · Curso de Administração</div>
+  </div>
+  <div class="top-user">
+    <div class="top-avatar" id="topAvatar" onclick="editarFoto()" title="Alterar foto">👨‍🏫</div>
+    <div>
+      <div class="top-name" id="topNome">Professor</div>
+      <div class="top-role">Docente · ADM</div>
+    </div>
+  </div>
+  <button class="btn-logout" onclick="logout()">Sair ×</button>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Início</a> ›
+  <a href="sala-de-aula.html">Sala de Aula</a> ›
+  <strong id="breadSec">Painel do Professor</strong>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="side-user">
+      <div class="side-avatar-wrap" onclick="editarFoto()" title="Alterar foto">
+        <div class="side-avatar" id="sideAvatar">👨‍🏫</div>
+        <div class="side-av-overlay">📷</div>
+      </div>
+      <div class="side-nome" id="sideNome">Professor</div>
+      <div class="side-role">Docente · IF Baiano Bonfim</div>
+    </div>
+    <div class="side-sec">
+      <h4>Docente</h4>
+      <a href="#" data-sec="painel"     class="active" onclick="navSec('painel');return false;">🏠 Painel</a>
+      <a href="#" data-sec="atividades" onclick="navSec('atividades');return false;">📝 Atividades</a>
+      <a href="#" data-sec="materiais"  onclick="navSec('materiais');return false;">📁 Materiais</a>
+      <a href="#" data-sec="submissoes" onclick="navSec('submissoes');return false;">📋 Submissões</a>
+      <a href="#" data-sec="calendario" onclick="navSec('calendario');return false;">📅 Calendário</a>
+      <a href="#" data-sec="alunos"     onclick="navSec('alunos');return false;">👥 Alunos</a>
+    </div>
+    <hr class="side-divider"/>
+    <div class="side-sec">
+      <h4>Links</h4>
+      <a href="forum-administracao.html">💬 Fórum</a>
+      <a href="professor.html">⚙️ Painel Geral</a>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO -->
+  <main class="content">
+
+    <!-- ── PAINEL ── -->
+    <div id="sec-painel" class="section active">
+      <div class="welcome-banner">
+        <div class="wb-icon">👨‍🏫</div>
+        <div style="flex:1;">
+          <div class="wb-title" id="wbNome">Olá, Professor(a)!</div>
+          <div class="wb-sub">Sala de Aula · Gerencie atividades, materiais e acompanhe seus alunos.</div>
+        </div>
+        <div class="wb-actions">
+          <button class="btn-prim" onclick="navSec('atividades');abrirModalAtividade()">➕ Nova atividade</button>
+          <button class="btn-green" onclick="navSec('materiais');abrirModalMaterial()">📁 Publicar material</button>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="s-ico">📝</div><div class="s-num" id="statAtv">—</div><div class="s-lbl">Atividades</div></div>
+        <div class="stat-card"><div class="s-ico">📁</div><div class="s-num" id="statMats">—</div><div class="s-lbl">Materiais</div></div>
+        <div class="stat-card"><div class="s-ico">📋</div><div class="s-num" id="statPend">—</div><div class="s-lbl">Aguardando avaliação</div></div>
+        <div class="stat-card"><div class="s-ico">📅</div><div class="s-num" id="statEvts">—</div><div class="s-lbl">Eventos próximos</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+        <div class="card">
+          <div class="card-head"><h3>📝 Atividades recentes</h3><button class="btn-xs primary" onclick="navSec('atividades')">Ver todas</button></div>
+          <div class="card-body" id="atvPainelList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>📋 Submissões pendentes</h3><button class="btn-xs primary" onclick="navSec('submissoes')">Ver todas</button></div>
+          <div class="card-body" id="submPainelList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>📅 Próximos eventos do calendário</h3><button class="btn-xs primary" onclick="navSec('calendario');abrirModalEvento()">➕ Novo evento</button></div>
+        <div class="card-body" id="evtPainelList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+      </div>
+    </div>
+
+    <!-- ── ATIVIDADES ── -->
+    <div id="sec-atividades" class="section">
+      <div class="card">
+        <div class="card-head">
+          <h3>📝 Atividades publicadas</h3>
+          <button class="btn-prim" style="font-size:12px;padding:6px 13px;" onclick="abrirModalAtividade()">➕ Nova atividade</button>
+        </div>
+        <div class="card-body">
+          <div class="filter-tabs" id="atvFiltros">
+            <button class="filter-tab active" data-f="todas" onclick="filtrarAtv(this,'todas')">Todas</button>
+            <button class="filter-tab" data-f="ativa" onclick="filtrarAtv(this,'ativa')">✅ Ativas</button>
+            <button class="filter-tab" data-f="em-breve" onclick="filtrarAtv(this,'em-breve')">🔜 Em breve</button>
+            <button class="filter-tab" data-f="encerrada" onclick="filtrarAtv(this,'encerrada')">🔒 Encerradas</button>
+          </div>
+          <div id="atvList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MATERIAIS ── -->
+    <div id="sec-materiais" class="section">
+      <div class="card">
+        <div class="card-head">
+          <h3>📁 Materiais publicados</h3>
+          <button class="btn-prim" style="font-size:12px;padding:6px 13px;" onclick="abrirModalMaterial()">➕ Publicar</button>
+        </div>
+        <div class="card-body">
+          <div class="filter-tabs" id="matFilterTabs">
+            <button class="filter-tab active" data-disc="" onclick="filtrarMat(this,'')">Todos</button>
+          </div>
+          <div id="matList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUBMISSÕES ── -->
+    <div id="sec-submissoes" class="section">
+      <div class="card">
+        <div class="card-head"><h3>📋 Submissões dos alunos</h3></div>
+        <div class="card-body">
+          <div class="filter-tabs" id="submFiltros">
+            <button class="filter-tab active" data-sf="todas" onclick="filtrarSubm(this,'todas')">Todas</button>
+            <button class="filter-tab" data-sf="pendente" onclick="filtrarSubm(this,'pendente')">⏳ Pendentes</button>
+            <button class="filter-tab" data-sf="avaliada" onclick="filtrarSubm(this,'avaliada')">✅ Avaliadas</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Aluno</th><th>Atividade / Disciplina</th><th>Enviado em</th><th>Arquivo</th><th>Nota</th><th>Ações</th></tr></thead>
+              <tbody id="submTbody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CALENDÁRIO ── -->
+    <div id="sec-calendario" class="section">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px;">
+        <button class="btn-prim" onclick="abrirModalEvento()">📅 Novo evento</button>
+        <button class="btn-orange" onclick="navSec('atividades');abrirModalAtividade()">📝 Nova atividade</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:18px;">
+        <div class="card">
+          <div class="card-body">
+            <div class="cal-nav">
+              <button onclick="navCal(-1)">‹</button>
+              <h3 id="calMesAno"></h3>
+              <button onclick="navCal(1)">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>📋 Agenda</h3></div>
+          <div class="card-body" id="evtList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ALUNOS ── -->
+    <div id="sec-alunos" class="section">
+      <div class="card">
+        <div class="card-head"><h3>👥 Alunos matriculados</h3></div>
+        <div class="card-body">
+          <input id="buscarAluno" class="form-inp" style="max-width:340px;margin-bottom:14px;" placeholder="🔍 Buscar por nome ou CPF…" oninput="carregarAlunos(this.value)"/>
+          <div id="alunosList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /layout -->
+
+<footer>
+  © 2026 <strong>IF Baiano · Campus Senhor do Bonfim</strong> — Moodle · Sala de Aula do Professor
+  · <a href="sala-de-aula.html">Sala Aluno</a>
+  · <a href="index.html">Início</a>
+</footer>
+</div><!-- /dashContainer -->
+
+<!-- ════════ MODAL NOVA ATIVIDADE ════════ -->
+<div id="modalAtv" class="modal-bg" onclick="if(event.target===this)fecharModal('modalAtv')">
+  <div class="modal-box wide">
+    <h2>📝 Publicar atividade</h2>
+    <p class="sub">Defina um prazo — os alunos só poderão enviar respostas dentro do período.</p>
+    <div class="alert-err" id="atvErr"></div>
+    <form id="formAtv" onsubmit="salvarAtividade(event)">
+      <div class="form-row">
+        <label class="form-lbl">Disciplina</label>
+        <select id="atvDisc" class="form-inp">
+          <option value="">Selecione…</option>
+          <option>Gestão de Pessoas</option>
+          <option>Comportamento Organizacional</option>
+          <option>Matemática Financeira</option>
+          <option>Teoria Geral da Administração II</option>
+          <option>Logística</option>
+          <option>Empreendedorismo</option>
+          <option>Direito Empresarial</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Título da atividade</label>
+        <input id="atvTitulo" class="form-inp" placeholder="Ex: Lista de exercícios — Cap. 5"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Descrição / Instruções</label>
+        <textarea id="atvDesc" rows="3" class="form-inp" style="resize:vertical;" placeholder="Descreva o que o aluno deve fazer, critérios de avaliação…"></textarea>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-lbl">Data de início</label>
+          <input id="atvInicio" type="date" class="form-inp"/>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label class="form-lbl">Data de entrega (fim)</label>
+          <input id="atvFim" type="date" class="form-inp"/>
+        </div>
+      </div>
+      <div class="form-row" style="margin-top:14px;">
+        <label class="form-lbl">Arquivo de apoio (opcional)</label>
+        <div class="upload-box" onclick="document.getElementById('atvFile').click()">
+          <div class="ub-ico">📎</div>
+          <div class="ub-txt">Clique para anexar um arquivo de apoio</div>
+          <div class="ub-file" id="atvFileName">PDF, Word, Excel — máx. 20 MB</div>
+        </div>
+        <input id="atvFile" type="file" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.txt"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Valor máximo (pontos)</label>
+        <input id="atvPontos" class="form-inp" type="number" min="1" max="100" placeholder="Ex: 10" style="max-width:160px;"/>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" onclick="fecharModal('modalAtv')">Cancelar</button>
+        <button type="submit" class="btn-prim" id="btnSalvarAtv">📝 Publicar atividade</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ════════ MODAL PUBLICAR MATERIAL ════════ -->
+<div id="modalMat" class="modal-bg" onclick="if(event.target===this)fecharModal('modalMat')">
+  <div class="modal-box">
+    <h2>📁 Publicar material</h2>
+    <p class="sub">O arquivo ficará disponível para todos os alunos da disciplina.</p>
+    <div class="alert-err" id="matErr"></div>
+    <form id="formMat" onsubmit="salvarMaterial(event)">
+      <div class="form-row">
+        <label class="form-lbl">Disciplina</label>
+        <select id="matDisc" class="form-inp">
+          <option value="">Selecione…</option>
+          <option>Gestão de Pessoas</option>
+          <option>Comportamento Organizacional</option>
+          <option>Matemática Financeira</option>
+          <option>Teoria Geral da Administração II</option>
+          <option>Logística</option>
+          <option>Empreendedorismo</option>
+          <option>Direito Empresarial</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Título</label>
+        <input id="matTitulo" class="form-inp" placeholder="Ex: Apostila Capítulo 3"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Descrição (opcional)</label>
+        <input id="matDesc" class="form-inp" placeholder="Breve descrição do conteúdo"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Arquivo</label>
+        <div class="upload-box" onclick="document.getElementById('matFile').click()">
+          <div class="ub-ico">📎</div>
+          <div class="ub-txt">Clique para selecionar o arquivo</div>
+          <div class="ub-file" id="matFileName">PDF, Word, Excel, ZIP — máx. 20 MB</div>
+        </div>
+        <input id="matFile" type="file" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.txt"/>
+      </div>
+      <div class="prog-bar" id="matProgBar"><span id="matProgFill" style="width:0%"></span></div>
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" onclick="fecharModal('modalMat')">Cancelar</button>
+        <button type="submit" class="btn-prim" id="btnSalvarMat">Publicar material</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ════════ MODAL CRIAR EVENTO ════════ -->
+<div id="modalEvt" class="modal-bg" onclick="if(event.target===this)fecharModal('modalEvt')">
+  <div class="modal-box">
+    <h2>📅 Criar evento no calendário</h2>
+    <p class="sub">O evento ficará visível no calendário para todos os alunos.</p>
+    <div class="alert-err" id="evtErr"></div>
+    <form id="formEvt" onsubmit="salvarEvento(event)">
+      <div class="form-row">
+        <label class="form-lbl">Tipo</label>
+        <select id="evtTipo" class="form-inp">
+          <option value="aviso">📢 Aviso</option>
+          <option value="prova">📝 Prova / Avaliação</option>
+          <option value="entrega">📋 Prazo de entrega</option>
+          <option value="aula">📚 Aula especial</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Título</label>
+        <input id="evtTitulo" class="form-inp" placeholder="Ex: Prova de Gestão de Pessoas"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Data</label>
+        <input id="evtData" type="date" class="form-inp"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Descrição (opcional)</label>
+        <input id="evtDesc" class="form-inp" placeholder="Detalhes do evento"/>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" onclick="fecharModal('modalEvt')">Cancelar</button>
+        <button type="submit" class="btn-prim" id="btnSalvarEvt">Publicar evento</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ════════ MODAL AVALIAR ════════ -->
+<div id="modalAvaliar" class="modal-bg" onclick="if(event.target===this)fecharModal('modalAvaliar')">
+  <div class="modal-box">
+    <h2>✏️ Avaliar entrega</h2>
+    <p class="sub" id="avalNome"></p>
+    <input type="hidden" id="avalId"/>
+    <div class="form-row">
+      <label class="form-lbl">Nota</label>
+      <input id="avalNota" class="form-inp" placeholder="Ex: 8.5" style="max-width:160px;"/>
+    </div>
+    <div class="form-row">
+      <label class="form-lbl">Feedback / comentário</label>
+      <textarea id="avalFeedback" rows="3" class="form-inp" style="resize:vertical;" placeholder="Comentário opcional para o aluno"></textarea>
+    </div>
+    <div class="alert-ok" id="avalOk"></div>
+    <div class="alert-err" id="avalErr"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn-cancel" onclick="fecharModal('modalAvaliar')">Cancelar</button>
+      <button type="button" class="btn-prim" onclick="confirmarAvaliacao()">Salvar avaliação</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODAL VER SUBMISSÕES DA ATIVIDADE ════════ -->
+<div id="modalSubmAtv" class="modal-bg" onclick="if(event.target===this)fecharModal('modalSubmAtv')">
+  <div class="modal-box wide">
+    <h2>📋 Submissões — <span id="submAtvTitulo">Atividade</span></h2>
+    <p class="sub" id="submAtvSub"></p>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>Aluno</th><th>Enviado em</th><th>Arquivo</th><th>Nota</th><th>Feedback</th><th>Ação</th></tr></thead>
+        <tbody id="submAtvTbody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn-cancel" onclick="fecharModal('modalSubmAtv')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- INPUT FOTO OCULTO -->
+<input type="file" id="fotoFileInput" accept="image/*" style="display:none" onchange="processarFotoUpload(this)"/>
+
+<!-- TOAST -->
+<div id="avisoToast"></div>
+
+<!-- BOTÃO TOPO -->
+<button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">↑</button>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const API         = 'api/sala.php';
+const SESSION_KEY = 'ifba_session';
+const ATV_KEY     = 'ifba_atividades_prof';
+
+let _u        = null;
+let _calAno   = new Date().getFullYear();
+let _calMes   = new Date().getMonth();
+let _eventos  = [];
+let _atividades = [];
+let _submFiltroAtual = 'todas';
+let _atvFiltroAtual  = 'todas';
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function esc(t){return String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function hasRole(r,role){return(r||'').split(',').map(s=>s.trim()).includes(role);}
+function aviso(msg){const t=document.getElementById('avisoToast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200);}
+function abrirModal(id){document.getElementById(id).classList.add('open');}
+function fecharModal(id){document.getElementById(id).classList.remove('open');}
+function parseDateLocal(str){if(!str)return null;const[y,m,d]=str.split('-').map(Number);return new Date(y,m-1,d);}
+function fmtDate(str){const d=parseDateLocal(str);return d?d.toLocaleDateString('pt-BR'):'—';}
+
+async function api(action,data={}){
+  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({action,...data})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'Erro HTTP '+res.status);}
+  return res.json();
+}
+
+// ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
+const BREAD={painel:'Painel do Professor',atividades:'Atividades',materiais:'Materiais',submissoes:'Submissões dos Alunos',calendario:'Calendário',alunos:'Alunos'};
+function navSec(nome){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sidebar a[data-sec]').forEach(a=>a.classList.remove('active'));
+  document.getElementById('sec-'+nome).classList.add('active');
+  const lnk=document.querySelector(`.sidebar a[data-sec="${nome}"]`);
+  if(lnk) lnk.classList.add('active');
+  document.getElementById('breadSec').textContent=BREAD[nome]||nome;
+  if(nome==='atividades') carregarAtividades();
+  if(nome==='materiais')  carregarMateriais('');
+  if(nome==='submissoes') carregarSubmissoes();
+  if(nome==='calendario') carregarCalendario();
+  if(nome==='alunos')     carregarAlunos('');
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+async function doLogin(ev){
+  ev.preventDefault();
+  const err=document.getElementById('loginErr');
+  err.classList.remove('show');
+  const btn=document.getElementById('btnLogin');
+  btn.disabled=true; btn.textContent='Verificando…';
+  try{
+    const idVal  = document.getElementById('loginId').value.trim();
+    const pwd    = document.getElementById('loginPwd').value;
+    const identN = idVal.replace(/\D/g,'');
+    const user   = await api('login',{identifier:identN||idVal,password:pwd});
+    if(!hasRole(user.role,'prof')&&!hasRole(user.role,'adm_senio')){
+      err.textContent='❌ Este acesso é exclusivo para professores. Alunos devem usar a Sala de Aula do Aluno.';
+      err.classList.add('show'); return;
+    }
+    localStorage.setItem(SESSION_KEY,JSON.stringify(user));
+    iniciarSessao(user);
+  }catch(e){
+    err.textContent='❌ '+e.message;
+    err.classList.add('show');
+  }finally{
+    btn.disabled=false; btn.textContent='Entrar na Sala';
+  }
+}
+
+// ─── SESSÃO ───────────────────────────────────────────────────────────────────
+function iniciarSessao(user){
+  _u=user;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('dashContainer').style.display='block';
+  const primeiroNome=(_u.nome||'').split(' ')[0];
+  const ultimoNome=(_u.nome||'').split(' ').slice(-1)[0];
+  document.getElementById('topNome').textContent=primeiroNome;
+  document.getElementById('sideNome').textContent=_u.nome||'Professor';
+  document.getElementById('wbNome').textContent='Olá, Prof. '+ultimoNome+'!';
+  renderFotoTopo(_u);
+  document.getElementById('evtData').value=new Date().toISOString().split('T')[0];
+  const hoje=new Date().toISOString().split('T')[0];
+  document.getElementById('atvInicio').value=hoje;
+  carregarPainel();
+}
+
+function renderFotoTopo(user){
+  const foto=String(user?.foto||'').trim();
+  const isUrl=/^(https?:\/\/|data:image\/|uploads\/|assets\/)/.test(foto);
+  ['topAvatar','sideAvatar'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(isUrl){el.innerHTML=`<img src="${esc(foto)}" alt="foto"/>`;}
+    else{el.textContent=foto||'👨‍🏫';}
+  });
+}
+
+function logout(){
+  localStorage.removeItem(SESSION_KEY);
+  _u=null;
+  document.getElementById('dashContainer').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginId').value='';
+  document.getElementById('loginPwd').value='';
+  document.getElementById('loginErr').classList.remove('show');
+}
+
+// ─── FOTO DO PROFESSOR ────────────────────────────────────────────────────────
+function editarFoto(){document.getElementById('fotoFileInput').click();}
+function processarFotoUpload(input){
+  const file=input.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')){aviso('❌ Selecione apenas imagens.');input.value='';return;}
+  if(file.size>5*1024*1024){aviso('❌ Imagem muito grande (máx. 5 MB).');input.value='';return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=200;
+      let w=img.width,h=img.height;
+      if(w>h){if(w>max){h=Math.round(h*max/w);w=max;}}else{if(h>max){w=Math.round(w*max/h);h=max;}}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      const b64=cv.toDataURL('image/jpeg',0.85);
+      _u.foto=b64;
+      const sess=JSON.parse(localStorage.getItem(SESSION_KEY)||'{}');
+      sess.foto=b64;
+      localStorage.setItem(SESSION_KEY,JSON.stringify(sess));
+      renderFotoTopo(_u);
+      aviso('✅ Foto atualizada!');
+      try{api('update_user',{id:_u.id,changes:{foto:b64}});}catch(e){}
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+// ─── PAINEL ───────────────────────────────────────────────────────────────────
+async function carregarPainel(){
+  try{
+    const[mats,subms,evts]=await Promise.all([
+      api('get_materiais').catch(()=>[]),
+      api('get_entregas').catch(()=>[]),
+      api('get_eventos').catch(()=>[])
+    ]);
+    _eventos=evts||[];
+    _atividades=carregarAtvLocal();
+
+    document.getElementById('statAtv').textContent=_atividades.length;
+    document.getElementById('statMats').textContent=(mats||[]).length;
+    const pend=(subms||[]).filter(s=>!s.nota).length;
+    document.getElementById('statPend').textContent=pend;
+    const hoje=new Date();hoje.setHours(0,0,0,0);
+    const prox=(_eventos).filter(e=>new Date(e.data+'T12:00:00')>=hoje);
+    document.getElementById('statEvts').textContent=prox.length;
+
+    // atividades recentes no painel
+    const atvRec=_atividades.slice(0,4);
+    const icons={prova:'📝',entrega:'📋',aviso:'📢',aula:'📚'};
+    document.getElementById('atvPainelList').innerHTML=atvRec.length
+      ?atvRec.map(a=>{
+          const st=calcStatusAtv(a.inicio,a.fim);
+          const cls=st==='ativa'?'badge-ativa':st==='em-breve'?'badge-em-breve':'badge-encerrada';
+          return `<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+            <span style="font-size:16px;">📝</span>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.titulo)}</div>
+              <div style="font-size:11.5px;color:var(--muted);">${esc(a.disciplina)} · Entrega: ${fmtDate(a.fim)}</div>
+            </div>
+            <span class="badge ${cls}">${st==='ativa'?'Ativa':st==='em-breve'?'Em breve':'Encerrada'}</span>
+          </div>`;
+      }).join('')
+      :'<p style="color:var(--muted);font-size:13px;">Nenhuma atividade publicada ainda.</p>';
+
+    // submissões pendentes no painel
+    const pendList=(subms||[]).filter(s=>!s.nota).slice(0,5);
+    document.getElementById('submPainelList').innerHTML=pendList.length
+      ?pendList.map(s=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <span style="font-size:16px;">📋</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;">${esc(s.aluno_nome||'Aluno')}</div>
+            <div style="font-size:11.5px;color:var(--muted);">${esc(s.disciplina)} · ${esc(s.titulo)}</div>
+          </div>
+          <button class="btn-xs primary" onclick="abrirAvaliar('${esc(s.id)}','${esc(s.aluno_nome||'')}','${esc(s.disciplina)}','${esc(s.titulo)}')">Avaliar</button>
+        </div>`).join('')
+      :'<p style="color:var(--muted);font-size:13px;">Nenhuma submissão pendente. ✅</p>';
+
+    // eventos painel
+    const proxEvts=prox.slice(0,5);
+    const eicons={prova:'📝',entrega:'📋',aviso:'📢',aula:'📚'};
+    document.getElementById('evtPainelList').innerHTML=proxEvts.length
+      ?proxEvts.map(e=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <span>${eicons[e.tipo]||'📢'}</span>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${esc(e.titulo)}</div>
+          <div style="font-size:11.5px;color:var(--muted);">${new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR')}</div></div>
+          <button class="btn-xs danger" onclick="excluirEvento('${esc(e.id)}')">🗑</button>
+        </div>`).join('')
+      :'<p style="color:var(--muted);font-size:13px;">Nenhum evento próximo.</p>';
+  }catch(e){console.error(e);}
+}
+
+// ─── ATIVIDADES (localStorage) ────────────────────────────────────────────────
+function carregarAtvLocal(){
+  try{return JSON.parse(localStorage.getItem(ATV_KEY)||'[]');}catch(e){return[];}
+}
+function salvarAtvLocal(lista){
+  localStorage.setItem(ATV_KEY,JSON.stringify(lista));
+}
+
+function calcStatusAtv(inicio,fim){
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const ini=parseDateLocal(inicio);
+  const fim2=parseDateLocal(fim);
+  if(!ini||!fim2)return'ativa';
+  if(hoje<ini)return'em-breve';
+  if(hoje>fim2)return'encerrada';
+  return'ativa';
+}
+
+function carregarAtividades(){
+  _atividades=carregarAtvLocal();
+  renderAtividades(_atvFiltroAtual);
+}
+
+function renderAtividades(filtro){
+  _atvFiltroAtual=filtro;
+  const el=document.getElementById('atvList');
+  let lista=_atividades;
+  if(filtro!=='todas') lista=lista.filter(a=>calcStatusAtv(a.inicio,a.fim)===filtro);
+  if(!lista.length){
+    el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhuma atividade encontrada.</p>';
+    return;
+  }
+  el.innerHTML=lista.map(a=>{
+    const st=calcStatusAtv(a.inicio,a.fim);
+    const stLbl=st==='ativa'?'✅ Ativa':st==='em-breve'?'🔜 Em breve':'🔒 Encerrada';
+    const stCls=st==='ativa'?'badge-ativa':st==='em-breve'?'badge-em-breve':'badge-encerrada';
+    const icoCls=st;
+    return `<div class="atv-card">
+      <div class="atv-ico ${icoCls}">📝</div>
+      <div class="atv-info">
+        <div class="atv-titulo">${esc(a.titulo)}</div>
+        <div class="atv-meta">
+          <span>📅 ${fmtDate(a.inicio)} → ${fmtDate(a.fim)}</span>
+          ${a.pontos?`<span>⭐ ${esc(a.pontos)} pts</span>`:''}
+        </div>
+        ${a.descricao?`<div class="atv-desc">${esc(a.descricao)}</div>`:''}
+        <div class="atv-badges">
+          <span class="badge ${stCls}">${stLbl}</span>
+          <span class="badge badge-disc">📚 ${esc(a.disciplina)}</span>
+          ${a.arquivo?`<span class="badge" style="background:#e8f5e9;color:#1b5e20;">📎 Com arquivo</span>`:''}
+        </div>
+      </div>
+      <div class="atv-actions">
+        <button class="btn-xs primary" onclick="verSubmissoesAtv('${esc(a.id)}')">📋 Submissões</button>
+        <button class="btn-xs danger" onclick="excluirAtividade('${esc(a.id)}')">🗑 Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filtrarAtv(btn,filtro){
+  document.querySelectorAll('#atvFiltros .filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAtividades(filtro);
+}
+
+function abrirModalAtividade(){
+  document.getElementById('atvDisc').value='';
+  document.getElementById('atvTitulo').value='';
+  document.getElementById('atvDesc').value='';
+  document.getElementById('atvFim').value='';
+  document.getElementById('atvPontos').value='10';
+  document.getElementById('atvFileName').textContent='PDF, Word, Excel — máx. 20 MB';
+  document.getElementById('atvErr').classList.remove('show');
+  document.getElementById('atvFile').value='';
+  const hoje=new Date().toISOString().split('T')[0];
+  document.getElementById('atvInicio').value=hoje;
+  abrirModal('modalAtv');
+}
+
+document.getElementById('atvFile').addEventListener('change',e=>{
+  document.getElementById('atvFileName').textContent=e.target.files[0]?.name||'PDF, Word, Excel — máx. 20 MB';
+});
+
+async function salvarAtividade(ev){
+  ev.preventDefault();
+  const btn=document.getElementById('btnSalvarAtv');
+  const err=document.getElementById('atvErr');
+  err.classList.remove('show');
+  const disc  =document.getElementById('atvDisc').value;
+  const titulo=document.getElementById('atvTitulo').value.trim();
+  const desc  =document.getElementById('atvDesc').value.trim();
+  const inicio=document.getElementById('atvInicio').value;
+  const fim   =document.getElementById('atvFim').value;
+  const pontos=document.getElementById('atvPontos').value.trim();
+
+  if(!disc){err.textContent='❌ Selecione a disciplina.';err.classList.add('show');return;}
+  if(!titulo){err.textContent='❌ Informe o título da atividade.';err.classList.add('show');return;}
+  if(!inicio){err.textContent='❌ Informe a data de início.';err.classList.add('show');return;}
+  if(!fim){err.textContent='❌ Informe a data de entrega.';err.classList.add('show');return;}
+  if(parseDateLocal(fim)<=parseDateLocal(inicio)){err.textContent='❌ A data de entrega deve ser após o início.';err.classList.add('show');return;}
+
+  btn.disabled=true; btn.textContent='Salvando…';
+  try{
+    const file=document.getElementById('atvFile').files[0];
+    let arquivoNome='';
+    if(file){
+      // simula upload guardando nome (em produção enviaria para servidor)
+      arquivoNome=file.name;
+    }
+    const nova={
+      id:'atv_'+Date.now(),
+      prof_id:_u?.id,
+      prof_nome:_u?.nome,
+      disciplina:disc,
+      titulo,
+      descricao:desc,
+      inicio,
+      fim,
+      pontos:pontos||'10',
+      arquivo:arquivoNome,
+      criado_em:new Date().toISOString()
+    };
+    _atividades=carregarAtvLocal();
+    _atividades.unshift(nova);
+    salvarAtvLocal(_atividades);
+    fecharModal('modalAtv');
+    aviso('✅ Atividade publicada com sucesso!');
+    carregarPainel();
+    navSec('atividades');
+  }catch(e){
+    err.textContent='❌ '+e.message; err.classList.add('show');
+  }finally{
+    btn.disabled=false; btn.textContent='📝 Publicar atividade';
+  }
+}
+
+function excluirAtividade(id){
+  if(!confirm('Excluir esta atividade? Essa ação não pode ser desfeita.'))return;
+  _atividades=carregarAtvLocal().filter(a=>a.id!==id);
+  salvarAtvLocal(_atividades);
+  carregarAtividades();
+  aviso('Atividade excluída.');
+}
+
+async function verSubmissoesAtv(atvId){
+  const atv=carregarAtvLocal().find(a=>a.id===atvId);
+  if(!atv)return;
+  document.getElementById('submAtvTitulo').textContent=atv.titulo;
+  document.getElementById('submAtvSub').textContent=`${atv.disciplina} · Prazo: ${fmtDate(atv.fim)}`;
+  document.getElementById('submAtvTbody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr>';
+  abrirModal('modalSubmAtv');
+  try{
+    const subms=await api('get_entregas').catch(()=>[]);
+    const filtradas=(subms||[]).filter(s=>s.atividade_id===atvId||s.titulo===atv.titulo);
+    if(!filtradas.length){
+      document.getElementById('submAtvTbody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">Nenhuma submissão recebida ainda.</td></tr>';
+      return;
+    }
+    document.getElementById('submAtvTbody').innerHTML=filtradas.map(s=>`
+      <tr>
+        <td><strong>${esc(s.aluno_nome||'Aluno')}</strong></td>
+        <td>${new Date(s.criado_em).toLocaleDateString('pt-BR')}</td>
+        <td>${s.arquivo_nome?`<a href="uploads/entregas/${esc(s.arquivo_nome)}" target="_blank" class="btn-dl" style="font-size:11px;">⬇ Baixar</a>`:'—'}</td>
+        <td><span class="badge-nota ${s.nota?'badge-ok':'badge-pend'}">${esc(s.nota||'Pendente')}</span></td>
+        <td style="font-size:12px;max-width:180px;">${esc(s.feedback||'—')}</td>
+        <td><button class="btn-xs primary" onclick="abrirAvaliar('${esc(s.id)}','${esc(s.aluno_nome||'')}','${esc(s.disciplina)}','${esc(s.titulo)}')">Avaliar</button></td>
+      </tr>`).join('');
+  }catch(e){
+    document.getElementById('submAtvTbody').innerHTML=`<tr><td colspan="6" style="text-align:center;color:var(--red);">Erro ao carregar submissões.</td></tr>`;
+  }
+}
+
+// ─── MATERIAIS ────────────────────────────────────────────────────────────────
+async function carregarMateriais(disc){
+  const el=document.getElementById('matList');
+  el.innerHTML='<p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p>';
+  try{
+    const todos=await api('get_materiais');
+    const unicas=[...new Set(todos.map(m=>m.disciplina))];
+    const tabs=document.getElementById('matFilterTabs');
+    tabs.innerHTML=`<button class="filter-tab ${!disc?'active':''}" data-disc="" onclick="filtrarMat(this,'')">Todos</button>`
+      +unicas.map(d=>`<button class="filter-tab ${disc===d?'active':''}" data-disc="${esc(d)}" onclick="filtrarMat(this,'${esc(d)}')">${esc(d)}</button>`).join('');
+    const mats=disc?todos.filter(m=>m.disciplina===disc):todos;
+    if(!mats.length){el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhum material publicado ainda.</p>';return;}
+    el.innerHTML=mats.map(m=>{
+      const ext=(m.arquivo_original||'').split('.').pop().toUpperCase();
+      const url=`uploads/materiais/${m.arquivo_nome}`;
+      const dt=new Date(m.criado_em).toLocaleDateString('pt-BR');
+      const meu=m.prof_id===_u?.id;
+      return `<div class="mat-card">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info">
+          <div class="mat-title">${esc(m.titulo)} <small style="font-weight:400;color:var(--muted);">[${ext}]</small></div>
+          <div class="mat-meta">${esc(m.disciplina)} · ${esc(m.prof_nome||'Professor')} · ${dt}</div>
+          ${m.descricao?`<div class="mat-meta" style="margin-top:2px;">${esc(m.descricao)}</div>`:''}
+        </div>
+        <div class="mat-actions">
+          <a class="btn-dl" href="${url}" download="${esc(m.arquivo_original||m.titulo)}">⬇</a>
+          ${meu?`<button class="btn-xs danger" onclick="excluirMaterial('${esc(m.id)}')">🗑</button>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){el.innerHTML=`<p style="color:var(--red);font-size:13px;">⚠️ Não foi possível carregar materiais (API offline).</p>`;}
+}
+
+function filtrarMat(btn,disc){
+  document.querySelectorAll('#matFilterTabs .filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  carregarMateriais(disc);
+}
+
+async function excluirMaterial(id){
+  if(!confirm('Excluir este material?'))return;
+  try{await api('delete_material',{id});await carregarMateriais('');aviso('Material excluído.');}
+  catch(e){alert('Erro: '+e.message);}
+}
+
+function abrirModalMaterial(){
+  document.getElementById('matTitulo').value='';
+  document.getElementById('matDesc').value='';
+  document.getElementById('matDisc').value='';
+  document.getElementById('matFileName').textContent='PDF, Word, Excel, ZIP — máx. 20 MB';
+  document.getElementById('matErr').classList.remove('show');
+  document.getElementById('matProgBar').style.display='none';
+  document.getElementById('matFile').value='';
+  abrirModal('modalMat');
+}
+
+document.getElementById('matFile').addEventListener('change',e=>{
+  document.getElementById('matFileName').textContent=e.target.files[0]?.name||'PDF, Word, Excel — máx. 20 MB';
+});
+
+async function salvarMaterial(ev){
+  ev.preventDefault();
+  const btn=document.getElementById('btnSalvarMat');
+  const err=document.getElementById('matErr');
+  err.classList.remove('show');
+  const disc  =document.getElementById('matDisc').value;
+  const titulo=document.getElementById('matTitulo').value.trim();
+  const descr =document.getElementById('matDesc').value.trim();
+  const file  =document.getElementById('matFile').files[0];
+  if(!disc){err.textContent='❌ Selecione a disciplina.';err.classList.add('show');return;}
+  if(!titulo){err.textContent='❌ Informe o título.';err.classList.add('show');return;}
+  if(!file){err.textContent='❌ Selecione um arquivo.';err.classList.add('show');return;}
+  if(file.size>20*1024*1024){err.textContent='❌ Arquivo muito grande (máx. 20 MB).';err.classList.add('show');return;}
+  btn.disabled=true; btn.textContent='Enviando…';
+  const bar=document.getElementById('matProgBar');
+  const fill=document.getElementById('matProgFill');
+  bar.style.display='block'; fill.style.width='0%';
+  try{
+    const fd=new FormData();
+    fd.append('action','upload_material');
+    fd.append('disciplina',disc);
+    fd.append('titulo',titulo);
+    fd.append('descricao',descr);
+    fd.append('prof_id',_u?.id||'');
+    fd.append('arquivo',file);
+    const xhr=new XMLHttpRequest();
+    xhr.open('POST',API);
+    xhr.upload.onprogress=e=>{if(e.lengthComputable)fill.style.width=Math.round(e.loaded/e.total*100)+'%';};
+    await new Promise((res,rej)=>{
+      xhr.onload=()=>{try{const r=JSON.parse(xhr.responseText);if(r.error)rej(new Error(r.error));else res(r);}catch(e){rej(new Error('Resposta inválida'));}};
+      xhr.onerror=()=>rej(new Error('Erro de rede'));
+      xhr.send(fd);
+    });
+    fill.style.width='100%';
+    fecharModal('modalMat');
+    aviso('✅ Material publicado com sucesso!');
+    await carregarMateriais('');
+    carregarPainel();
+  }catch(e){
+    err.textContent='❌ '+e.message; err.classList.add('show');
+  }finally{
+    btn.disabled=false; btn.textContent='Publicar material';
+    setTimeout(()=>{bar.style.display='none';fill.style.width='0%';},800);
+  }
+}
+
+// ─── SUBMISSÕES ───────────────────────────────────────────────────────────────
+let _todasSubms=[];
+async function carregarSubmissoes(){
+  const tb=document.getElementById('submTbody');
+  tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr>';
+  try{
+    _todasSubms=await api('get_entregas');
+    renderSubmissoes(_submFiltroAtual);
+  }catch(e){
+    tb.innerHTML=`<tr><td colspan="6" style="text-align:center;color:var(--red);padding:16px;">⚠️ Não foi possível carregar submissões (API offline).</td></tr>`;
+  }
+}
+
+function filtrarSubm(btn,filtro){
+  _submFiltroAtual=filtro;
+  document.querySelectorAll('#submFiltros .filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSubmissoes(filtro);
+}
+
+function renderSubmissoes(filtro){
+  const tb=document.getElementById('submTbody');
+  let lista=_todasSubms;
+  if(filtro==='pendente')lista=lista.filter(s=>!s.nota);
+  if(filtro==='avaliada')lista=lista.filter(s=>!!s.nota);
+  if(!lista.length){
+    tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px;">Nenhuma submissão encontrada.</td></tr>';
+    return;
+  }
+  tb.innerHTML=lista.map(s=>`
+    <tr>
+      <td><strong>${esc(s.aluno_nome||'Aluno')}</strong><br><small style="color:var(--muted);">${esc(s.aluno_cpf||'')}</small></td>
+      <td>${esc(s.disciplina||'—')}<br><small style="color:var(--muted);">${esc(s.titulo||'—')}</small></td>
+      <td>${new Date(s.criado_em).toLocaleDateString('pt-BR')}</td>
+      <td>${s.arquivo_nome?`<a href="uploads/entregas/${esc(s.arquivo_nome)}" target="_blank" class="btn-dl" style="font-size:11px;">⬇ Baixar</a>`:'—'}</td>
+      <td><span class="badge-nota ${s.nota?'badge-ok':'badge-pend'}">${esc(s.nota||'Pendente')}</span></td>
+      <td><button class="btn-xs primary" onclick="abrirAvaliar('${esc(s.id)}','${esc(s.aluno_nome||'')}','${esc(s.disciplina)}','${esc(s.titulo)}')">✏️ Avaliar</button></td>
+    </tr>`).join('');
+}
+
+// ─── AVALIAÇÃO ────────────────────────────────────────────────────────────────
+function abrirAvaliar(id,nome,disc,titulo){
+  document.getElementById('avalId').value=id;
+  document.getElementById('avalNome').textContent=`${nome} — ${disc}: ${titulo}`;
+  document.getElementById('avalNota').value='';
+  document.getElementById('avalFeedback').value='';
+  document.getElementById('avalOk').classList.remove('show');
+  document.getElementById('avalErr').classList.remove('show');
+  abrirModal('modalAvaliar');
+}
+
+async function confirmarAvaliacao(){
+  const id   =document.getElementById('avalId').value;
+  const nota =document.getElementById('avalNota').value.trim();
+  const fb   =document.getElementById('avalFeedback').value.trim();
+  const ok   =document.getElementById('avalOk');
+  const err  =document.getElementById('avalErr');
+  ok.classList.remove('show'); err.classList.remove('show');
+  if(!nota){err.textContent='❌ Informe a nota.';err.classList.add('show');return;}
+  const n=parseFloat(nota.replace(',','.'));
+  if(isNaN(n)||n<0||n>10){err.textContent='❌ Nota deve ser entre 0 e 10.';err.classList.add('show');return;}
+  try{
+    await api('avaliar_entrega',{id,nota:n,feedback:fb});
+    ok.textContent='✅ Avaliação salva com sucesso!'; ok.classList.add('show');
+    setTimeout(()=>{fecharModal('modalAvaliar');carregarSubmissoes();carregarPainel();},1500);
+  }catch(e){err.textContent='❌ '+e.message; err.classList.add('show');}
+}
+
+// ─── CALENDÁRIO ───────────────────────────────────────────────────────────────
+async function carregarCalendario(){
+  try{
+    _eventos=await api('get_eventos').catch(()=>[]);
+    renderCal();
+    renderEvtLista();
+  }catch(e){renderCal();renderEvtLista();}
+}
+
+function navCal(dir){
+  _calMes+=dir;
+  if(_calMes>11){_calMes=0;_calAno++;}
+  if(_calMes<0){_calMes=11;_calAno--;}
+  renderCal();
+}
+
+function renderCal(){
+  const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('calMesAno').textContent=`${meses[_calMes]} ${_calAno}`;
+  const grid=document.getElementById('calGrid');
+  const dows=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let html=dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const primeiro=new Date(_calAno,_calMes,1);
+  const totalDias=new Date(_calAno,_calMes+1,0).getDate();
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  for(let i=0;i<primeiro.getDay();i++) html+=`<div class="cal-day other-month"></div>`;
+  for(let d=1;d<=totalDias;d++){
+    const data=new Date(_calAno,_calMes,d);
+    const dataStr=`${_calAno}-${String(_calMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isHoje=data.getTime()===hoje.getTime();
+    const evtsDia=(_eventos||[]).filter(e=>e.data===dataStr);
+    // também verifica atividades com fim nessa data
+    const atvsDia=carregarAtvLocal().filter(a=>a.fim===dataStr);
+    const evtHtml=[
+      ...evtsDia.map(e=>`<div class="cal-event ${e.tipo||'aviso'}" title="${esc(e.titulo)}">${esc(e.titulo)}</div>`),
+      ...atvsDia.map(a=>`<div class="cal-event atividade" title="Entrega: ${esc(a.titulo)}">📝 ${esc(a.titulo)}</div>`)
+    ].join('');
+    html+=`<div class="cal-day${isHoje?' today':''}"><div class="day-num">${d}</div>${evtHtml}</div>`;
+  }
+  grid.innerHTML=html;
+}
+
+function renderEvtLista(){
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const eicons={prova:'📝',entrega:'📋',aviso:'📢',aula:'📚',atividade:'📝'};
+  const ecols={prova:'#c0392b',entrega:var_('--orange'),aviso:var_('--blue'),aula:var_('--green'),atividade:'#6a1b9a'};
+  function var_(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+  const todos=[
+    ...(_eventos||[]).map(e=>({...e,tipo_src:'evento'})),
+    ...carregarAtvLocal().filter(a=>parseDateLocal(a.fim)>=hoje).map(a=>({id:a.id,data:a.fim,titulo:`Entrega: ${a.titulo}`,tipo:'atividade',tipo_src:'atv'}))
+  ].filter(e=>new Date(e.data+'T12:00:00')>=hoje).sort((a,b)=>a.data.localeCompare(b.data)).slice(0,10);
+
+  const el=document.getElementById('evtList');
+  if(!todos.length){el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhum evento próximo.</p>';return;}
+  el.innerHTML=todos.map(e=>`<div class="evt-item">
+    <div>
+      <div style="font-weight:600;font-size:13px;">${eicons[e.tipo]||'📢'} ${esc(e.titulo)}</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'})}</div>
+      ${e.descricao?`<div style="font-size:11.5px;color:#555;margin-top:2px;">${esc(e.descricao)}</div>`:''}
+    </div>
+    ${e.tipo_src==='evento'?`<button class="btn-xs danger" style="margin-left:auto;flex-shrink:0;" onclick="excluirEvento('${esc(e.id)}')">🗑</button>`:''}
+  </div>`).join('');
+}
+
+function abrirModalEvento(){
+  document.getElementById('evtTitulo').value='';
+  document.getElementById('evtDesc').value='';
+  document.getElementById('evtTipo').value='aviso';
+  document.getElementById('evtData').value=new Date().toISOString().split('T')[0];
+  document.getElementById('evtErr').classList.remove('show');
+  abrirModal('modalEvt');
+}
+
+async function salvarEvento(ev){
+  ev.preventDefault();
+  const btn=document.getElementById('btnSalvarEvt');
+  const err=document.getElementById('evtErr');
+  err.classList.remove('show');
+  const tipo  =document.getElementById('evtTipo').value;
+  const titulo=document.getElementById('evtTitulo').value.trim();
+  const data  =document.getElementById('evtData').value;
+  const desc  =document.getElementById('evtDesc').value.trim();
+  if(!titulo){err.textContent='❌ Informe o título.';err.classList.add('show');return;}
+  if(!data){err.textContent='❌ Informe a data.';err.classList.add('show');return;}
+  btn.disabled=true; btn.textContent='Publicando…';
+  try{
+    await api('create_evento',{tipo,titulo,data,descricao:desc,prof_id:_u?.id});
+    fecharModal('modalEvt');
+    aviso('✅ Evento publicado no calendário!');
+    await carregarCalendario();
+    carregarPainel();
+  }catch(e){err.textContent='❌ '+e.message; err.classList.add('show');}
+  finally{btn.disabled=false; btn.textContent='Publicar evento';}
+}
+
+async function excluirEvento(id){
+  if(!confirm('Excluir este evento?'))return;
+  try{
+    await api('delete_evento',{id});
+    _eventos=_eventos.filter(e=>e.id!==id);
+    renderCal(); renderEvtLista();
+    carregarPainel();
+    aviso('Evento excluído.');
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+// ─── ALUNOS ───────────────────────────────────────────────────────────────────
+async function carregarAlunos(busca){
+  const el=document.getElementById('alunosList');
+  el.innerHTML='<p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p>';
+  try{
+    const todos=await api('get_users',{busca:busca||''});
+    const alunos=todos.filter(u=>hasRole(u.role,'aluno'));
+    if(!alunos.length){el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhum aluno encontrado.</p>';return;}
+    el.innerHTML=alunos.map(a=>`<div class="aluno-card">
+      <div class="aluno-ava">${a.foto&&/^(data:|https?)/.test(a.foto)?`<img src="${esc(a.foto)}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="foto"/>`:esc(a.foto||'🎓')}</div>
+      <div class="aluno-info">
+        <div class="aluno-nome">${esc(a.nome)}</div>
+        <div class="aluno-meta">CPF: ${esc(a.cpf||'—')} · ${esc(a.email||'')}</div>
+      </div>
+      <span class="badge badge-ativa" style="margin-left:auto;">Ativo</span>
+    </div>`).join('');
+  }catch(e){el.innerHTML=`<p style="color:var(--red);font-size:13px;">⚠️ Não foi possível carregar alunos (API offline).</p>`;}
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────────
+(function init(){
+  // botão topo
+  window.addEventListener('scroll',()=>{
+    document.getElementById('toTop').classList.toggle('show',window.scrollY>300);
+  });
+  // verificar sessão existente
+  const raw=localStorage.getItem(SESSION_KEY);
+  if(raw){
+    try{
+      const s=JSON.parse(raw);
+      if(s&&(hasRole(s.role,'prof')||hasRole(s.role,'adm_senio'))){
+        iniciarSessao(s);
+        return;
+      }
+    }catch(e){}
+  }
+  // exibir tela de login
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('dashContainer').style.display='none';
+})();
+</script>
+</body>
+</html>

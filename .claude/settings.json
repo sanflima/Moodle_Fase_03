@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c mklink /D \"C:\\\\xampp\\\\htdocs\\\\Moodle_Fase_03\" \"d:\\\\00 - PROJETOS - GITHUB_2026\\\\Moodle_Fase_03\")",
+      "Bash(powershell -Command \"New-Item -ItemType SymbolicLink -Path 'C:\\\\xampp\\\\htdocs\\\\Moodle_Fase_03' -Target 'd:\\\\00 - PROJETOS - GITHUB_2026\\\\Moodle_Fase_03'\")",
+      "Bash(powershell -Command \"Get-Item 'C:\\\\xampp\\\\htdocs\\\\Moodle_Fase_03' | Select-Object Name, LinkType, Target\")",
+      "Bash(powershell -Command \"Get-Item 'C:\\\\xampp\\\\htdocs\\\\Moodle_Fase_03' | Select-Object FullName, Attributes, LinkType\")"
+    ]
+  }
+}

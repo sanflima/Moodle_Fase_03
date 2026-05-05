@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<title>Perfil · Moodle · IF Baiano Bonfim</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  :root{
+    --green:#1e7e34; --green-dark:#155d27; --green-deep:#0d4019;
+    --green-light:#4caf50; --green-soft:#e8f5e9;
+    --orange:#e67e22; --blue:#1976d2;
+    --bg:#f4f6f5; --card:#fff; --ink:#1d2a1f; --muted:#66736a; --border:#d9e0db;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
+
+  /* faixa institucional + nav */
+  .inst-bar{background:linear-gradient(180deg,var(--green) 0%,var(--green-dark) 100%);color:#fff;padding:18px 40px;display:flex;align-items:center;gap:26px;border-bottom:4px solid var(--green-deep);}
+  .inst-txt{flex:1;min-width:0;}
+  .inst-txt .small{font-size:12px;opacity:.9;margin-bottom:4px;}
+  .inst-txt h1.inst-title{font-size:34px;font-weight:700;line-height:1.05;margin-bottom:6px;letter-spacing:-.3px;}
+  .inst-txt .tag{font-size:11px;opacity:.85;letter-spacing:2px;font-weight:700;}
+  .inst-search{background:#fff;border-radius:3px;padding:6px 10px;display:flex;align-items:center;width:240px;align-self:flex-start;margin-top:4px;}
+  .inst-search input{flex:1;border:none;outline:none;font-size:12px;font-family:inherit;color:#333;min-width:0;}
+  .inst-search button{background:none;border:none;cursor:pointer;color:var(--green);font-size:14px;}
+  header.top{background:var(--green-deep);color:#fff;padding:0 40px;display:flex;align-items:center;justify-content:flex-end;height:44px;}
+  nav.topnav a{color:#fff;text-decoration:none;padding:6px 14px;border-radius:3px;font-size:13px;opacity:.88;margin:0 2px;font-weight:600;}
+  nav.topnav a:hover,nav.topnav a.active{background:var(--green);opacity:1;}
+
+  /* breadcrumb */
+  .breadcrumb{background:var(--green-soft);padding:9px 28px;font-size:12px;color:var(--green-dark);border-bottom:1px solid var(--border);}
+  .breadcrumb a{color:var(--green-dark);text-decoration:none;}
+  .breadcrumb a:hover{text-decoration:underline;}
+
+  /* cabeçalho do perfil */
+  .prof-head{background:#fff;border-bottom:1px solid var(--border);padding:36px 28px;}
+  .prof-inner{max-width:1180px;margin:0 auto;display:flex;gap:30px;align-items:center;flex-wrap:wrap;}
+  .prof-ava{
+    width:130px;height:130px;border-radius:50%;
+    background:linear-gradient(135deg,var(--green-light),var(--green-dark));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:48px;font-weight:700;
+    box-shadow:0 4px 14px rgba(21,93,39,.22);border:4px solid #fff;outline:2px solid var(--green);
+    flex-shrink:0;
+  }
+  .prof-head-info{flex:1;min-width:260px;}
+  .prof-head-info h1{font-size:28px;margin-bottom:6px;color:var(--ink);}
+  .prof-role{
+    display:inline-block;background:var(--green-soft);color:var(--green-dark);
+    padding:3px 12px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+    margin-right:6px;
+  }
+  .prof-role.online{background:#d4edda;color:#155724;}
+  .prof-role.online::before{content:"●";color:#28a745;margin-right:5px;}
+  .prof-meta{margin-top:10px;color:var(--muted);font-size:13px;display:flex;gap:20px;flex-wrap:wrap;}
+  .prof-meta b{color:var(--ink);font-weight:600;}
+  .prof-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.2s;}
+  .btn-prim{background:var(--green);color:#fff;}
+  .btn-prim:hover{background:var(--green-dark);}
+  .btn-sec{background:#fff;color:var(--green-dark);border-color:var(--border);}
+  .btn-sec:hover{background:var(--green-soft);border-color:var(--green);}
+
+  /* grid geral */
+  .wrap{max-width:1180px;margin:30px auto;padding:0 28px;display:grid;grid-template-columns:1fr 320px;gap:26px;}
+
+  /* cards moodle-style */
+  .card{background:#fff;border:1px solid var(--border);border-radius:6px;margin-bottom:22px;overflow:hidden;}
+  .card h3{font-size:15px;background:var(--green-soft);color:var(--green-dark);padding:12px 18px;border-bottom:1px solid var(--border);font-weight:700;display:flex;align-items:center;gap:8px;}
+  .card h3 .ico{font-size:16px;}
+  .card-body{padding:18px 22px;}
+
+  /* tabela estilo moodle */
+  .info-table{width:100%;border-collapse:collapse;}
+  .info-table tr+tr td{border-top:1px solid var(--border);}
+  .info-table td{padding:10px 2px;font-size:13.5px;vertical-align:top;}
+  .info-table td.lbl{color:var(--muted);width:42%;font-weight:600;}
+  .info-table td a{color:var(--blue);text-decoration:none;}
+  .info-table td a:hover{text-decoration:underline;}
+
+  /* disciplinas matriculadas */
+  .courses-list{list-style:none;display:grid;gap:10px;}
+  .courses-list li{padding:12px 14px;background:var(--green-soft);border-left:4px solid var(--green);border-radius:4px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+  .courses-list li .c-name{font-size:13.5px;font-weight:600;color:var(--green-dark);}
+  .courses-list li .c-sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .courses-list li .c-prog{width:90px;height:6px;background:#fff;border-radius:3px;overflow:hidden;flex-shrink:0;}
+  .courses-list li .c-prog span{display:block;height:100%;background:var(--green);}
+
+  /* grade e trabalhos publicados */
+  .grade-info{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+  .grade-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .grade-filter{
+    border:1px solid var(--border);background:#fff;color:var(--muted);
+    border-radius:16px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:.2s;
+  }
+  .grade-filter:hover{border-color:var(--green);color:var(--green-dark);}
+  .grade-filter.active{background:var(--green);border-color:var(--green);color:#fff;}
+  .grade-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grade-item{border:1px solid var(--border);border-radius:8px;background:#fff;overflow:hidden;}
+  .grade-item-head{background:var(--green-soft);padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .grade-doc-photo{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden;font-size:16px;flex-shrink:0;}
+  .grade-doc-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .grade-item-head b{font-size:12.5px;color:var(--green-dark);}
+  .grade-item-head small{display:block;font-size:10.5px;color:var(--muted);margin-top:2px;}
+  .grade-item-body{padding:10px 12px 12px;}
+  .grade-meta{font-size:11px;color:var(--muted);margin-bottom:8px;}
+  .grade-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .grade-list li{background:var(--green-soft);border-left:3px solid var(--green);padding:7px 8px;border-radius:4px;font-size:12px;color:#2e4034;}
+  .grade-empty{font-size:12px;color:var(--muted);padding:14px;border:1px dashed var(--border);border-radius:7px;background:#fafcfa;}
+
+  /* timeline atividade recente */
+  .timeline{list-style:none;}
+  .timeline li{position:relative;padding:10px 0 14px 24px;border-left:2px solid var(--border);margin-left:8px;font-size:13px;}
+  .timeline li::before{content:"";position:absolute;left:-7px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid #fff;}
+  .timeline li.orange::before{background:var(--orange);}
+  .timeline li.blue::before{background:var(--blue);}
+  .timeline li b{color:var(--ink);}
+  .timeline li small{display:block;color:var(--muted);margin-top:2px;font-size:11.5px;}
+  .timeline li:last-child{border-left-color:transparent;}
+
+  /* badges conquistadas */
+  .badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .badge{text-align:center;}
+  .badge-med{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#ffd166,#e67e22);display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;margin:0 auto 6px;box-shadow:0 3px 10px rgba(230,126,34,.3);}
+  .badge.locked .badge-med{background:linear-gradient(135deg,#ddd,#aaa);filter:grayscale(1);}
+  .badge small{font-size:10.5px;color:var(--muted);display:block;line-height:1.3;}
+
+  /* estatísticas */
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .stat{background:var(--green-soft);border-radius:6px;padding:14px;text-align:center;}
+  .stat b{display:block;font-size:22px;color:var(--green-dark);font-weight:700;}
+  .stat small{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+
+  /* footer */
+  footer.bottom{background:var(--green-deep);color:#fff;padding:20px 28px;text-align:center;font-size:12px;}
+  footer.bottom a{color:#ffd166;text-decoration:none;}
+
+  /* modal senha */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(13,64,25,.65);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:#fff;border-radius:8px;max-width:440px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .modal-box h2{color:var(--green-dark);margin-bottom:6px;font-size:20px;}
+  .modal-box p.sub{color:var(--muted);font-size:13px;margin-bottom:18px;}
+  .form-lbl{display:block;font-size:12px;font-weight:700;color:var(--green-dark);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+  .form-inp{width:100%;padding:10px;border:1px solid var(--border);border-radius:5px;font-family:inherit;font-size:13.5px;margin-bottom:14px;}
+  .form-inp:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(30,126,52,.15);}
+  .msg-erro{color:#c0392b;font-size:12.5px;background:#fdecea;border:1px solid #f5c6cb;border-radius:4px;padding:8px 12px;margin-bottom:12px;display:none;}
+  .msg-ok{color:#155724;font-size:12.5px;background:#d4edda;border:1px solid #c3e6cb;border-radius:4px;padding:8px 12px;margin-bottom:12px;display:none;}
+  .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:4px;}
+
+  @media(max-width:900px){
+    .wrap{grid-template-columns:1fr;}
+    .prof-inner{flex-direction:column;text-align:center;}
+    .prof-actions{justify-content:center;}
+    .prof-meta{justify-content:center;}
+    .grade-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:560px){
+    .inst-bar{flex-wrap:wrap;padding:14px 16px;gap:14px;}
+    .inst-txt h1.inst-title{font-size:24px;}
+    .inst-search{width:100%;}
+    header.top{padding:0 14px;}
+    nav.topnav{overflow-x:auto;}
+    .badges-grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<div class="inst-bar">
+  <div class="inst-txt">
+    <div class="small">Instituto Federal de Educação, Ciência e Tecnologia Baiano</div>
+    <h1 class="inst-title">Instituto Federal Baiano</h1>
+    <div class="tag">CAMPUS SENHOR DO BONFIM · CURSO DE ADMINISTRAÇÃO</div>
+  </div>
+  <div class="inst-search">
+    <input type="text" placeholder="Digite sua pesquisa"/>
+    <button type="button" aria-label="Buscar">🔍</button>
+  </div>
+</div>
+
+<header class="top">
+  <nav class="topnav">
+    <a href="index.html">Página Principal</a>
+    <a href="sala-de-aula.html">Sala de Aula</a>
+    <a href="forum-administracao.html">Fórum</a>
+    <a href="index.html#corpo-docente">Docentes</a>
+    <a href="perfil.html" class="active">Perfil</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="index.html">Início</a> › <a href="#">Meu perfil</a> › <strong id="breadNome">Perfil</strong>
+</div>
+
+<!-- CABEÇALHO DO PERFIL -->
+<section class="prof-head">
+  <div class="prof-inner">
+    <div class="prof-ava" id="profAva">?</div>
+    <div class="prof-head-info">
+      <h1 id="profNome">Carregando...</h1>
+      <span class="prof-role online">Online agora</span>
+      <span class="prof-role" id="profTurma"></span>
+      <div class="prof-meta">
+        <span>📧 <b id="profEmail">—</b></span>
+        <span>📍 <b>Senhor do Bonfim – BA</b></span>
+        <span>🎓 <b id="profMatricula">—</b></span>
+      </div>
+      <div class="prof-actions">
+        <button class="btn btn-prim" onclick="abrirEdicao()">✏️ Editar perfil</button>
+        <button class="btn btn-sec" onclick="abrirTrocaSenha()">🔑 Alterar senha</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<div class="wrap">
+
+  <!-- COLUNA ESQUERDA -->
+  <div>
+
+    <div class="card">
+      <h3><span class="ico">👤</span> Detalhes do usuário</h3>
+      <div class="card-body">
+        <table class="info-table" id="tblDetalhes">
+          <tr><td class="lbl">Nome completo</td><td id="dtNome">—</td></tr>
+          <tr><td class="lbl">Endereço de e-mail</td><td id="dtEmail">—</td></tr>
+          <tr><td class="lbl">Cidade / Município</td><td>Senhor do Bonfim</td></tr>
+          <tr><td class="lbl">País</td><td>Brasil</td></tr>
+          <tr><td class="lbl">Fuso horário</td><td>América / Bahia (GMT -3)</td></tr>
+          <tr><td class="lbl">Perfil</td><td id="dtRole">—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">📚</span> Detalhes do curso</h3>
+      <div class="card-body">
+        <table class="info-table">
+          <tr><td class="lbl">Instituição</td><td>IF Baiano · Campus Senhor do Bonfim</td></tr>
+          <tr><td class="lbl">Curso</td><td>Tecnologia em Gestão e Administração</td></tr>
+          <tr><td class="lbl">Período atual</td><td id="dtTurma">—</td></tr>
+          <tr><td class="lbl">Coeficiente de rendimento</td><td><b style="color:var(--green-dark);">8,4 / 10</b></td></tr>
+          <tr><td class="lbl">Disciplinas matriculadas</td><td>5 disciplinas ativas</td></tr>
+        </table>
+
+        <h4 style="font-size:13px;color:var(--green-dark);margin:18px 0 10px;text-transform:uppercase;letter-spacing:.5px;">Disciplinas ativas</h4>
+        <ul class="courses-list">
+          <li>
+            <div>
+              <div class="c-name">Teoria Geral da Administração II</div>
+              <div class="c-sub">Prof. Dr. Carlos Menezes · Seg/Qua · 80h</div>
+            </div>
+            <div class="c-prog" title="68% concluído"><span style="width:68%;"></span></div>
+          </li>
+          <li>
+            <div>
+              <div class="c-name">Gestão de Pessoas</div>
+              <div class="c-sub">Profa. Dra. Joana Ribeiro · Ter/Qui · 60h</div>
+            </div>
+            <div class="c-prog" title="72% concluído"><span style="width:72%;"></span></div>
+          </li>
+          <li>
+            <div>
+              <div class="c-name">Matemática Financeira</div>
+              <div class="c-sub">Prof. Me. Ricardo Almeida · Qua/Sex · 80h</div>
+            </div>
+            <div class="c-prog" title="54% concluído"><span style="width:54%;"></span></div>
+          </li>
+          <li>
+            <div>
+              <div class="c-name">Marketing I</div>
+              <div class="c-sub">Profa. Esp. Marina Souza · Seg/Qui · 60h</div>
+            </div>
+            <div class="c-prog" title="61% concluído"><span style="width:61%;"></span></div>
+          </li>
+          <li>
+            <div>
+              <div class="c-name">Empreendedorismo</div>
+              <div class="c-sub">Prof. Me. Fernando Oliveira · Sex · 40h</div>
+            </div>
+            <div class="c-prog" title="80% concluído"><span style="width:80%;"></span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" id="grade-trabalhos">
+      <h3><span class="ico">📚</span> Grade e trabalhos publicados</h3>
+      <div class="card-body">
+        <p class="grade-info">
+          Filtre por docente para visualizar as disciplinas e os trabalhos publicados.
+        </p>
+        <div id="gradeFilters" class="grade-filters"></div>
+        <div id="gradeGrid" class="grade-grid"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">🕒</span> Atividade recente</h3>
+      <div class="card-body">
+        <ul class="timeline">
+          <li>
+            <b>Entregou</b> o trabalho "Análise SWOT – Feira de Bonfim" na disciplina Marketing I
+            <small>Hoje · 14:22</small>
+          </li>
+          <li class="orange">
+            <b>Publicou resposta</b> no fórum em "Dúvida sobre VPL com fluxos desiguais"
+            <small>Ontem · 19:45</small>
+          </li>
+          <li class="blue">
+            <b>Concluiu</b> o questionário "Liderança Situacional – Revisão" · Nota 9,0
+            <small>15/04/2026 · 10:08</small>
+          </li>
+          <li>
+            <b>Acessou</b> o material "Capítulo 4 – Planejamento Estratégico (PDF)"
+            <small>14/04/2026 · 21:30</small>
+          </li>
+          <li class="orange">
+            <b>Comentou</b> no tópico "Pitch Day 2026 – inscrições abertas"
+            <small>12/04/2026 · 16:12</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COLUNA DIREITA -->
+  <aside>
+
+    <div class="card">
+      <h3><span class="ico">📊</span> Estatísticas</h3>
+      <div class="card-body">
+        <div class="stats-grid">
+          <div class="stat"><b>68%</b><small>Progresso médio</small></div>
+          <div class="stat"><b>8,4</b><small>Média geral</small></div>
+          <div class="stat"><b>23</b><small>Atividades feitas</small></div>
+          <div class="stat"><b>47</b><small>Posts no fórum</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">🏆</span> Medalhas conquistadas</h3>
+      <div class="card-body">
+        <div class="badges-grid">
+          <div class="badge">
+            <div class="badge-med">🎯</div>
+            <small>Entrega<br/>em dia</small>
+          </div>
+          <div class="badge">
+            <div class="badge-med">💬</div>
+            <small>Participante<br/>no fórum</small>
+          </div>
+          <div class="badge">
+            <div class="badge-med">⭐</div>
+            <small>Destaque<br/>2025.2</small>
+          </div>
+          <div class="badge">
+            <div class="badge-med">📖</div>
+            <small>Leitor<br/>assíduo</small>
+          </div>
+          <div class="badge locked">
+            <div class="badge-med">🔒</div>
+            <small>Pesquisador<br/>(bloqueado)</small>
+          </div>
+          <div class="badge locked">
+            <div class="badge-med">🔒</div>
+            <small>Mentor<br/>(bloqueado)</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">🔐</span> Privacidade e segurança</h3>
+      <div class="card-body">
+        <table class="info-table">
+          <tr><td class="lbl">Último acesso</td><td>Hoje · 14:22</td></tr>
+          <tr><td class="lbl">Primeiro acesso</td><td>12/02/2024</td></tr>
+          <tr><td class="lbl">Sessão atual</td><td>Navegador Web</td></tr>
+        </table>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="#" class="btn btn-sec" style="font-size:12px;padding:6px 12px;">Preferências</a>
+          <a href="#" class="btn btn-sec" style="font-size:12px;padding:6px 12px;">Exportar dados</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ico">📮</span> Fórum – minha atividade</h3>
+      <div class="card-body" style="font-size:13px;">
+        <div style="padding:8px 0;border-bottom:1px solid var(--border);"><b>7</b> tópicos criados</div>
+        <div style="padding:8px 0;border-bottom:1px solid var(--border);"><b>40</b> respostas publicadas</div>
+        <div style="padding:8px 0;"><b>12</b> curtidas recebidas</div>
+        <a href="forum-administracao.html" style="color:var(--blue);font-size:12.5px;margin-top:10px;display:inline-block;">Ver atividade completa →</a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<footer class="bottom">
+  © 2026 <strong>IF Baiano · Campus Senhor do Bonfim</strong> – Moodle · Perfil do Usuário
+  · <a href="index.html">Página Principal</a>
+</footer>
+
+<!-- MODAL EDITAR PERFIL -->
+<div id="modalEditar" class="modal-overlay" onclick="if(event.target===this)fecharEdicao()">
+  <div class="modal-box">
+    <h2>Editar perfil</h2>
+    <p class="sub">Atualize suas informações pessoais.</p>
+    <label class="form-lbl">Nome completo</label>
+    <input id="fNome" class="form-inp" value=""/>
+    <label class="form-lbl">E-mail</label>
+    <input id="fEmail" class="form-inp" value=""/>
+    <label class="form-lbl">Descrição</label>
+    <textarea id="fDesc" rows="3" class="form-inp" style="resize:vertical;"></textarea>
+    <div class="modal-footer">
+      <button class="btn btn-sec" onclick="fecharEdicao()">Cancelar</button>
+      <button class="btn btn-prim" onclick="salvarEdicao()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ALTERAR SENHA -->
+<div id="modalSenha" class="modal-overlay" onclick="if(event.target===this)fecharTrocaSenha()">
+  <div class="modal-box">
+    <h2>🔑 Alterar senha</h2>
+    <p class="sub">Informe sua senha atual e escolha uma nova senha.</p>
+    <div id="senhaErro" class="msg-erro"></div>
+    <div id="senhaOk"  class="msg-ok"></div>
+    <label class="form-lbl">Senha atual</label>
+    <input id="senhaAtual" type="password" class="form-inp" placeholder="Digite sua senha atual"/>
+    <label class="form-lbl">Nova senha</label>
+    <input id="senhaNova" type="password" class="form-inp" placeholder="Mínimo 6 caracteres"/>
+    <label class="form-lbl">Confirmar nova senha</label>
+    <input id="senhaConfirm" type="password" class="form-inp" placeholder="Repita a nova senha"/>
+    <div class="modal-footer">
+      <button class="btn btn-sec" onclick="fecharTrocaSenha()">Cancelar</button>
+      <button class="btn btn-prim" id="btnSalvarSenha" onclick="confirmarTrocaSenhaPerfil()">Salvar senha</button>
+    </div>
+  </div>
+</div>
+
+<button id="toTop" aria-label="Voltar ao topo" onclick="window.scrollTo({top:0,behavior:'smooth'})"></button>
+<style>
+  #toTop{
+    position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:18px;
+    border:none;cursor:pointer;opacity:0;pointer-events:none;z-index:9999;
+    transition:opacity .25s,transform .18s,box-shadow .18s;font-size:0;line-height:0;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,.46), transparent 46%),
+      radial-gradient(circle at 70% 76%, rgba(0,0,0,.10), transparent 38%),
+      linear-gradient(155deg,#8de000 0%,#4ec900 48%,#2ea800 100%);
+    box-shadow:
+      0 7px 0 #1f6e00,
+      0 12px 22px rgba(0,0,0,.30),
+      inset 0 2px 3px rgba(255,255,255,.50),
+      inset 0 -5px 10px rgba(0,0,0,.10);
+  }
+  #toTop::before{
+    content:'';position:absolute;left:50%;top:50%;
+    width:30px;height:34px;transform:translate(-50%,-54%);
+    background:#fff;
+    clip-path:polygon(50% 0,100% 44%,72% 44%,72% 100%,28% 100%,28% 44%,0 44%);
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.22));
+  }
+  #toTop::after{
+    content:'';position:absolute;inset:5px;border-radius:13px;pointer-events:none;
+    box-shadow:inset 0 8px 12px rgba(255,255,255,.22),inset 0 -8px 10px rgba(255,255,255,.06);
+  }
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{transform:translateY(-3px) scale(1.04);}
+  #toTop:active{
+    transform:translateY(3px);
+    box-shadow:0 3px 0 #1f6e00,0 5px 10px rgba(0,0,0,.28),
+      inset 0 2px 3px rgba(255,255,255,.50),inset 0 -5px 10px rgba(0,0,0,.10);
+  }
+</style>
+
+<script>
+  const API         = 'api/sala.php';
+  const SESSION_KEY = 'ifba_session';
+  const DOCENTES_KEY = 'ifbaiano_docentes';
+
+  // ── back-to-top ──────────────────────────────────────────────────────────────
+  const _toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', () => _toTop.classList.toggle('show', scrollY > 400));
+
+  // ── sessão ───────────────────────────────────────────────────────────────────
+  let _usuario = null;
+
+  function carregarSessao() {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return;
+      const s = JSON.parse(raw);
+      if (s && s.id) _usuario = s;
+    } catch(e) {}
+  }
+
+  function renderPerfilHeader(u) {
+    if (!u) return;
+    const iniciais = (u.nome || '?').split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
+    document.getElementById('profAva').textContent      = iniciais;
+    document.getElementById('profNome').textContent     = u.nome || '—';
+    document.getElementById('breadNome').textContent    = u.nome || 'Perfil';
+    document.getElementById('profEmail').textContent    = u.email || '—';
+    document.getElementById('profTurma').textContent    = u.turma || u.role || '—';
+    document.getElementById('profMatricula').textContent = u.cpf ? 'CPF: ' + u.cpf : '—';
+    document.getElementById('dtNome').textContent       = u.nome || '—';
+    document.getElementById('dtEmail').innerHTML        = u.email ? `<a href="mailto:${escapeHtml(u.email)}">${escapeHtml(u.email)}</a>` : '—';
+    document.getElementById('dtRole').textContent       = (u.role||'').split(',').map(r=>({aluno:'Aluno(a)',prof:'Docente',adm_senio:'Administrador'}[r.trim()]||r.trim())).join(' + ') || '—';
+    document.getElementById('dtTurma').textContent      = u.turma || '—';
+    document.getElementById('fNome').value  = u.nome  || '';
+    document.getElementById('fEmail').value = u.email || '';
+  }
+
+  async function carregarUsuarioCompleto() {
+    if (!_usuario || !_usuario.id) return;
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({action:'find_by_id', id: _usuario.id})
+      });
+      if (!res.ok) return;
+      const u = await res.json();
+      if (u && u.id) { _usuario = {..._usuario, ...u}; renderPerfilHeader(_usuario); }
+    } catch(e) {}
+  }
+
+  // ── modal editar perfil ───────────────────────────────────────────────────────
+  function abrirEdicao()  { document.getElementById('modalEditar').classList.add('open'); }
+  function fecharEdicao() { document.getElementById('modalEditar').classList.remove('open'); }
+  function salvarEdicao() {
+    const n = document.getElementById('fNome').value.trim();
+    const e = document.getElementById('fEmail').value.trim();
+    if (!n) { alert('Informe o nome completo.'); return; }
+    document.querySelector('.prof-head-info h1').textContent = n.split(' ').slice(0,3).join(' ');
+    alert('Alterações salvas com sucesso!');
+    fecharEdicao();
+  }
+
+  // ── modal alterar senha ───────────────────────────────────────────────────────
+  function abrirTrocaSenha() {
+    document.getElementById('senhaAtual').value   = '';
+    document.getElementById('senhaNova').value    = '';
+    document.getElementById('senhaConfirm').value = '';
+    senhaMsg('', '');
+    document.getElementById('modalSenha').classList.add('open');
+    document.getElementById('senhaAtual').focus();
+  }
+  function fecharTrocaSenha() {
+    document.getElementById('modalSenha').classList.remove('open');
+  }
+  function senhaMsg(tipo, txt) {
+    const el = document.getElementById(tipo === 'ok' ? 'senhaOk' : 'senhaErro');
+    const outro = document.getElementById(tipo === 'ok' ? 'senhaErro' : 'senhaOk');
+    outro.style.display = 'none';
+    if (!txt) { el.style.display = 'none'; return; }
+    el.textContent = txt;
+    el.style.display = 'block';
+  }
+
+  async function confirmarTrocaSenhaPerfil() {
+    if (!_usuario || !_usuario.id) {
+      senhaMsg('erro', '❌ Você precisa estar logado para alterar a senha. Acesse a Sala de Aula primeiro.');
+      return;
+    }
+    const atual   = document.getElementById('senhaAtual').value;
+    const nova    = document.getElementById('senhaNova').value;
+    const confirm = document.getElementById('senhaConfirm').value;
+
+    if (!atual)        { senhaMsg('erro', '❌ Informe a senha atual.'); return; }
+    if (!nova)         { senhaMsg('erro', '❌ Informe a nova senha.'); return; }
+    if (nova.length < 6) { senhaMsg('erro', '❌ A nova senha precisa ter pelo menos 6 caracteres.'); return; }
+    if (nova !== confirm) { senhaMsg('erro', '❌ A nova senha e a confirmação não coincidem.'); return; }
+
+    const btn = document.getElementById('btnSalvarSenha');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+    senhaMsg('', '');
+
+    try {
+      // 1. verificar senha atual via API
+      const rFind = await fetch(API, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({action:'find_by_id', id: _usuario.id})
+      });
+      if (!rFind.ok) throw new Error('Erro ao consultar usuário.');
+      const uCompleto = await rFind.json();
+      if (!uCompleto || !uCompleto.id) throw new Error('Usuário não encontrado.');
+      if ((uCompleto.senha || '') !== atual) {
+        senhaMsg('erro', '❌ Senha atual incorreta.');
+        btn.disabled = false; btn.textContent = 'Salvar senha';
+        return;
+      }
+
+      // 2. atualizar senha
+      const rUp = await fetch(API, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({action:'update_user', id: _usuario.id, changes:{senha: nova, primeiro_acesso: 0}})
+      });
+      if (!rUp.ok) throw new Error('Erro ao salvar a senha.');
+      const respUp = await rUp.json();
+      if (!respUp.ok) throw new Error('Servidor recusou a alteração.');
+
+      senhaMsg('ok', '✅ Senha alterada com sucesso!');
+      document.getElementById('senhaAtual').value   = '';
+      document.getElementById('senhaNova').value    = '';
+      document.getElementById('senhaConfirm').value = '';
+      setTimeout(fecharTrocaSenha, 1800);
+
+    } catch(e) {
+      senhaMsg('erro', '❌ ' + (e.message || 'Erro de conexão com o servidor.'));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Salvar senha';
+    }
+  }
+
+  // ── helpers ───────────────────────────────────────────────────────────────────
+  function escapeHtml(txt) {
+    return String(txt||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function fotoEhUrl(v) {
+    return /^(https?:\/\/|data:image\/|uploads\/|assets\/|\.\/|\/)/i.test(String(v||'').trim());
+  }
+  function fotoHTML(foto, nome) {
+    const v = String(foto||'').trim();
+    if (fotoEhUrl(v)) return `<img src="${escapeHtml(v)}" alt="Foto de ${escapeHtml(nome||'')}" loading="lazy"/>`;
+    return escapeHtml(v || '🧑‍🏫');
+  }
+
+  // ── grade de trabalhos ────────────────────────────────────────────────────────
+  const docentesPerfil = JSON.parse(localStorage.getItem(DOCENTES_KEY) || '[]');
+  const listaDocentes  = Array.isArray(docentesPerfil) ? docentesPerfil : [];
+
+  function salvarDocentes() { localStorage.setItem(DOCENTES_KEY, JSON.stringify(listaDocentes)); }
+
+  function upsertDocente(prof) {
+    if (!prof) return;
+    const idx = listaDocentes.findIndex(d => d.id === prof.id || (d.email||'').toLowerCase() === (prof.email||'').toLowerCase());
+    const base = idx >= 0 ? listaDocentes[idx] : {
+      id: prof.id || ('p'+Date.now()), nome: prof.nome||'Professor(a)',
+      area:'Docente', titulacao:'Professor(a)', email:prof.email||'', foto:'🧑‍🏫', cor:'green', disciplinas:[]
+    };
+    const merged = {...base, id:prof.id||base.id, nome:prof.nome||base.nome, email:prof.email||base.email};
+    if (prof.foto) merged.foto = prof.foto;
+    if (!Array.isArray(merged.disciplinas)) merged.disciplinas = [];
+    if (idx >= 0) listaDocentes[idx] = merged; else listaDocentes.push(merged);
+  }
+
+  function renderFiltros(ativo) {
+    const el = document.getElementById('gradeFilters');
+    el.innerHTML = [
+      `<button class="grade-filter ${ativo==='todos'?'active':''}" data-prof="todos">👥 Todos</button>`,
+      ...listaDocentes.map((d,i) => `<button class="grade-filter ${ativo===String(d.id)?'active':''}" data-prof="${escapeHtml(String(d.id||'p'+i))}">${fotoHTML(d.foto,d.nome)} ${escapeHtml((d.nome||'Prof.').split(' ').slice(0,2).join(' '))}</button>`)
+    ].join('');
+    el.querySelectorAll('.grade-filter').forEach(b => b.addEventListener('click', () => {
+      renderFiltros(b.dataset.prof); renderGrade(b.dataset.prof);
+    }));
+  }
+
+  function renderGrade(profId) {
+    const grid = document.getElementById('gradeGrid');
+    const lista = [];
+    listaDocentes.forEach(d => {
+      if (profId !== 'todos' && String(d.id) !== String(profId)) return;
+      (Array.isArray(d.disciplinas)?d.disciplinas:[]).forEach(di => lista.push({...di, prof:d}));
+    });
+    if (!lista.length) {
+      grid.innerHTML = '<div class="grade-empty">Nenhuma disciplina encontrada.</div>'; return;
+    }
+    grid.innerHTML = lista.map(di => `
+      <div class="grade-item">
+        <div class="grade-item-head">
+          <div class="grade-doc-photo">${fotoHTML(di.prof?.foto, di.prof?.nome)}</div>
+          <div><b>${escapeHtml(di.nome||'Disciplina')}</b><small>${escapeHtml(di.prof?.nome||'Professor(a)')}</small></div>
+        </div>
+        <div class="grade-item-body">
+          <div class="grade-meta">${escapeHtml(di.periodo||'-')} · ${escapeHtml(di.carga||'60h')}</div>
+          <ul class="grade-list">${(Array.isArray(di.trabalhos)?di.trabalhos:['Sem trabalhos']).map(t=>`<li>${escapeHtml(t)}</li>`).join('')}</ul>
+        </div>
+      </div>`).join('');
+  }
+
+  async function sincronizarDocentes() {
+    try {
+      const res = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'get_profs'})});
+      if (!res.ok) return;
+      const profs = await res.json();
+      if (!Array.isArray(profs)) return;
+      profs.forEach(upsertDocente);
+      salvarDocentes();
+      const ativo = document.querySelector('#gradeFilters .grade-filter.active')?.dataset.prof || 'todos';
+      renderFiltros(ativo); renderGrade(ativo);
+    } catch(e) {}
+  }
+
+  // ── init ──────────────────────────────────────────────────────────────────────
+  carregarSessao();
+  renderPerfilHeader(_usuario);
+  carregarUsuarioCompleto();
+  renderFiltros('todos');
+  renderGrade('todos');
+  sincronizarDocentes();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n 'preg_replace\\\\|password_hash\\\\|$pdo\\\\|$row\\\\|$input\\\\|$user\\\\|$s\\\\b\\\\|->execute\\\\|->prepare\\\\|->fetch\\\\|->query\\\\|jsonErro\\\\|uid\\(\\)\\\\|checkAdm\\\\|verifyPwd' 'd:/00 - PROJETOS - GITHUB_2026/Moodle_Fase_03/sala-de-aula.html')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost/Moodle_Fase_03/api/sala.php\" --max-time 5)"
+    ]
+  }
+}

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<title>Moodle · Professor · IF Baiano Bonfim</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+:root{
+  --green:#1e7e34;--green-dark:#155d27;--green-deep:#0d4019;
+  --green-light:#4caf50;--green-soft:#e8f5e9;--green-accent:#81c784;
+  --orange:#e67e22;--orange-dark:#b85c00;--orange-soft:#fdf3e3;
+  --blue:#1976d2;--blue-soft:#e3f2fd;
+  --red:#c0392b;--red-soft:#fdecea;
+  --bg:#f0f2f1;--card:#fff;--ink:#1d2a1f;--muted:#66736a;--border:#d9e0db;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh;}
+
+/* ── TOPO ──────────────────────────────────────────────────────────────── */
+.inst-bar{background:linear-gradient(180deg,#0d3b6e 0%,#0a2d55 100%);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:20px;border-bottom:4px solid #071e38;}
+.inst-logo{font-size:28px;flex-shrink:0;}
+.inst-txt{flex:1;}
+.inst-txt .small{font-size:11px;opacity:.85;}
+.inst-txt strong{font-size:18px;font-weight:700;display:block;line-height:1.2;}
+.inst-tag{font-size:10px;letter-spacing:1.5px;opacity:.8;margin-top:2px;}
+.top-user{display:flex;align-items:center;gap:10px;}
+.top-avatar{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:16px;overflow:hidden;}
+.top-avatar img{width:100%;height:100%;object-fit:cover;}
+.top-name{font-size:13px;font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.top-role{font-size:10px;opacity:.8;}
+.btn-logout{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;padding:5px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s;}
+.btn-logout:hover{background:rgba(255,255,255,.28);}
+
+/* ── BREADCRUMB ─────────────────────────────────────────────────────────── */
+.breadcrumb{background:#e8eef5;padding:7px 24px;font-size:12px;color:#0d3b6e;border-bottom:1px solid #c5d3e0;}
+.breadcrumb a{color:#0d3b6e;text-decoration:none;}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────────────── */
+.layout{display:flex;min-height:calc(100vh - 120px);}
+
+/* ── SIDEBAR ────────────────────────────────────────────────────────────── */
+.sidebar{width:220px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);padding:16px 0;}
+.side-user{padding:12px 16px 16px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+.side-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#4a90d9,#0d3b6e);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;margin:0 auto 8px;overflow:hidden;}
+.side-avatar img{width:100%;height:100%;object-fit:cover;}
+.side-nome{text-align:center;font-size:13px;font-weight:700;color:var(--ink);}
+.side-role{text-align:center;font-size:11px;color:var(--muted);margin-top:2px;}
+.side-sec{padding:8px 0;}
+.side-sec h4{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:4px 16px 6px;font-weight:700;}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;color:var(--ink);text-decoration:none;border-left:3px solid transparent;transition:.15s;}
+.sidebar a:hover{background:#e8eef5;color:#0d3b6e;}
+.sidebar a.active{background:#e8eef5;color:#0d3b6e;border-left-color:#1976d2;font-weight:700;}
+.side-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
+
+/* ── CONTEÚDO ───────────────────────────────────────────────────────────── */
+.content{flex:1;padding:22px 24px;min-width:0;}
+.section{display:none;}
+.section.active{display:block;}
+
+/* ── CARDS ──────────────────────────────────────────────────────────────── */
+.card{background:#fff;border:1px solid var(--border);border-radius:6px;margin-bottom:18px;}
+.card-head{background:#e8eef5;padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.card-head h3{font-size:14px;color:#0d3b6e;font-weight:700;flex:1;}
+.card-body{padding:16px 18px;}
+
+/* ── STATS ──────────────────────────────────────────────────────────────── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;}
+.stat-card .s-ico{font-size:22px;margin-bottom:4px;}
+.stat-card .s-num{font-size:24px;font-weight:700;color:#0d3b6e;}
+.stat-card .s-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+
+/* ── WELCOME ────────────────────────────────────────────────────────────── */
+.welcome-banner{background:linear-gradient(135deg,#0d3b6e,#071e38);color:#fff;border-radius:8px;padding:20px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px;}
+.wb-icon{font-size:36px;flex-shrink:0;}
+.wb-title{font-size:17px;font-weight:700;margin-bottom:3px;}
+.wb-sub{font-size:12.5px;opacity:.85;}
+
+/* ── MATERIAIS ──────────────────────────────────────────────────────────── */
+.mat-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px;}
+.mat-icon{width:40px;height:40px;border-radius:8px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.mat-info{flex:1;min-width:0;}
+.mat-title{font-size:13px;font-weight:600;color:var(--ink);}
+.mat-meta{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.mat-actions{display:flex;gap:6px;flex-shrink:0;}
+.btn-dl{background:var(--green);color:#fff;padding:5px 10px;border-radius:4px;font-size:11.5px;font-weight:600;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;}
+.btn-dl:hover{background:var(--green-dark);}
+.btn-xs{padding:4px 10px;border-radius:4px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--ink);font-family:inherit;}
+.btn-xs.danger{background:var(--red-soft);border-color:var(--red);color:var(--red);}
+.btn-xs.success{background:var(--green-soft);border-color:var(--green);color:var(--green-dark);}
+
+/* ── UPLOAD ─────────────────────────────────────────────────────────────── */
+.upload-box{border:2px dashed var(--border);border-radius:6px;padding:24px;text-align:center;cursor:pointer;transition:.2s;background:#fafcfa;}
+.upload-box:hover{border-color:#1976d2;background:#e8eef5;}
+.upload-box .ub-ico{font-size:32px;margin-bottom:8px;}
+.upload-box .ub-txt{font-size:13px;color:var(--muted);}
+.upload-box .ub-file{font-size:12px;color:#0d3b6e;font-weight:600;margin-top:6px;}
+.form-row{margin-bottom:14px;}
+.form-lbl{display:block;font-size:12px;font-weight:700;color:#0d3b6e;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+.form-inp{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:5px;font-family:inherit;font-size:13px;}
+.form-inp:focus{outline:none;border-color:#1976d2;box-shadow:0 0 0 2px rgba(25,118,210,.12);}
+.btn-prim{background:#1976d2;color:#fff;padding:9px 18px;border-radius:5px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:.18s;}
+.btn-prim:hover{background:#1256a0;}
+.btn-prim:disabled{opacity:.6;cursor:not-allowed;}
+.btn-green{background:var(--green);color:#fff;padding:9px 18px;border-radius:5px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:.18s;}
+.btn-green:hover{background:var(--green-dark);}
+.prog-bar{display:none;height:6px;background:#e8eef5;border-radius:3px;overflow:hidden;margin:10px 0;}
+.prog-bar span{display:block;height:100%;background:#1976d2;transition:width .4s;}
+.alert-ok{color:#155724;background:#d4edda;border:1px solid #c3e6cb;border-radius:4px;padding:8px 12px;font-size:12.5px;display:none;margin:8px 0;}
+.alert-err{color:#721c24;background:#f8d7da;border:1px solid #f5c6cb;border-radius:4px;padding:8px 12px;font-size:12.5px;display:none;margin:8px 0;}
+.alert-ok.show,.alert-err.show{display:block;}
+
+/* ── TABELA ─────────────────────────────────────────────────────────────── */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{background:#e8eef5;color:#0d3b6e;padding:9px 12px;text-align:left;font-weight:700;border-bottom:2px solid var(--border);}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:#fafcfa;}
+.badge-nota{display:inline-block;padding:2px 8px;border-radius:10px;font-weight:700;font-size:11px;}
+.badge-ok{background:#d4edda;color:#155724;}
+.badge-pend{background:#fff3cd;color:#856404;}
+.badge-blue{background:#e3f2fd;color:#1565c0;}
+
+/* ── CALENDÁRIO ─────────────────────────────────────────────────────────── */
+.cal-nav{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.cal-nav h3{flex:1;text-align:center;font-size:15px;color:#0d3b6e;}
+.cal-nav button{background:#e8eef5;border:1px solid var(--border);color:#0d3b6e;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;font-family:inherit;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-dow{text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding:4px 0;}
+.cal-day{min-height:52px;background:#fff;border:1px solid var(--border);border-radius:4px;padding:4px 5px;font-size:12px;}
+.cal-day.today{background:#e8eef5;border-color:#1976d2;}
+.cal-day.other-month{background:#fafafa;border-color:#eee;}
+.day-num{font-weight:700;font-size:11px;margin-bottom:2px;}
+.cal-event{font-size:9.5px;padding:2px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cal-event.prova{background:#fdecea;color:#c0392b;}
+.cal-event.entrega{background:var(--orange-soft);color:var(--orange-dark);}
+.cal-event.aviso{background:var(--blue-soft);color:var(--blue);}
+.cal-event.aula{background:var(--green-soft);color:var(--green-dark);}
+.evt-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.evt-item:last-child{border-bottom:none;}
+.evt-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;margin-top:2px;}
+
+/* ── MODAL ──────────────────────────────────────────────────────────────── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(7,30,56,.65);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal-box{background:#fff;border-radius:8px;max-width:520px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto;}
+.modal-box h2{color:#0d3b6e;margin-bottom:6px;font-size:19px;}
+.modal-box p.sub{color:var(--muted);font-size:12.5px;margin-bottom:16px;}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:6px;}
+.btn-cancel{background:#fff;border:1px solid var(--border);color:var(--ink);padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-cancel:hover{background:#f5f5f5;}
+
+/* ── ALUNOS ─────────────────────────────────────────────────────────────── */
+.aluno-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.aluno-ava{width:40px;height:40px;border-radius:50%;background:var(--green-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.aluno-info{flex:1;}
+.aluno-nome{font-size:13px;font-weight:600;}
+.aluno-meta{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+/* ── FILTER TABS ────────────────────────────────────────────────────────── */
+.filter-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.filter-tab{border:1px solid var(--border);background:#fff;color:var(--muted);border-radius:16px;padding:5px 12px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.18s;}
+.filter-tab:hover{border-color:#1976d2;color:#0d3b6e;}
+.filter-tab.active{background:#1976d2;border-color:#1976d2;color:#fff;}
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────── */
+footer{background:#071e38;color:#7a9ab5;padding:16px 24px;text-align:center;font-size:12px;margin-top:auto;}
+footer a{color:#90caf9;text-decoration:none;}
+
+#avisoToast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(7,30,56,.92);color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;z-index:8888;display:none;max-width:400px;text-align:center;}
+
+@media(max-width:860px){
+  .sidebar{display:none;}
+  .stat-row{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPO -->
+<div class="inst-bar">
+  <div class="inst-logo">🏫</div>
+  <div class="inst-txt">
+    <div class="small">Instituto Federal de Educação, Ciência e Tecnologia Baiano</div>
+    <strong>Instituto Federal Baiano</strong>
+    <div class="inst-tag">CAMPUS SENHOR DO BONFIM · CURSO DE ADMINISTRAÇÃO</div>
+  </div>
+  <div class="top-user">
+    <div class="top-avatar" id="topAvatar">👨‍🏫</div>
+    <div>
+      <div class="top-name" id="topNome">Professor</div>
+      <div class="top-role">Docente · ADM</div>
+    </div>
+  </div>
+  <button class="btn-logout" onclick="logout()">Sair</button>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Início</a> ›
+  <a href="sala-de-aula.html">Sala de Aula</a> ›
+  <strong id="breadSec">Painel do Professor</strong>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="side-user">
+      <div class="side-avatar" id="sideAvatar">👨‍🏫</div>
+      <div class="side-nome" id="sideNome">Professor</div>
+      <div class="side-role">Docente · IF Baiano Bonfim</div>
+    </div>
+    <div class="side-sec">
+      <h4>Docente</h4>
+      <a href="#" data-sec="painel"      class="active" onclick="navSec('painel');return false;">🏠 Painel</a>
+      <a href="#" data-sec="materiais"   onclick="navSec('materiais');return false;">📚 Materiais</a>
+      <a href="#" data-sec="submissoes"  onclick="navSec('submissoes');return false;">📋 Submissões</a>
+      <a href="#" data-sec="calendario"  onclick="navSec('calendario');return false;">📅 Calendário</a>
+      <a href="#" data-sec="alunos"      onclick="navSec('alunos');return false;">👥 Alunos</a>
+    </div>
+    <hr class="side-divider"/>
+    <div class="side-sec">
+      <h4>Interação</h4>
+      <a href="forum-administracao.html">💬 Fórum</a>
+      <a href="perfil.html">👤 Perfil</a>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO -->
+  <main class="content">
+
+    <!-- ── PAINEL ── -->
+    <div id="sec-painel" class="section active">
+      <div class="welcome-banner">
+        <div class="wb-icon">👨‍🏫</div>
+        <div>
+          <div class="wb-title" id="wbNome">Olá, Professor(a)!</div>
+          <div class="wb-sub">Painel do Docente · Moodle · IF Baiano Bonfim</div>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="s-ico">📚</div><div class="s-num" id="statMats">—</div><div class="s-lbl">Materiais</div></div>
+        <div class="stat-card"><div class="s-ico">📋</div><div class="s-num" id="statSubmPend">—</div><div class="s-lbl">Pendentes avaliação</div></div>
+        <div class="stat-card"><div class="s-ico">✅</div><div class="s-num" id="statSubmAval">—</div><div class="s-lbl">Avaliadas</div></div>
+        <div class="stat-card"><div class="s-ico">📅</div><div class="s-num" id="statEvts">—</div><div class="s-lbl">Eventos criados</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div class="card">
+          <div class="card-head"><h3>📋 Submissões recentes</h3></div>
+          <div class="card-body" id="submRecentList">
+            <p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>📅 Próximos eventos</h3></div>
+          <div class="card-body" id="evtPainelList">
+            <p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-prim" onclick="navSec('materiais');abrirModalMaterial()">➕ Publicar material</button>
+        <button class="btn-green" onclick="navSec('calendario');abrirModalEvento()">📅 Criar evento</button>
+      </div>
+    </div>
+
+    <!-- ── MATERIAIS ── -->
+    <div id="sec-materiais" class="section">
+      <div class="card">
+        <div class="card-head">
+          <h3>📁 Meus materiais publicados</h3>
+          <button class="btn-prim" style="font-size:12px;padding:6px 12px;" onclick="abrirModalMaterial()">➕ Publicar</button>
+        </div>
+        <div class="card-body">
+          <div class="filter-tabs" id="matFilterTabs">
+            <button class="filter-tab active" data-disc="" onclick="filtrarMat(this,'')">Todos</button>
+          </div>
+          <div id="matList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUBMISSÕES ── -->
+    <div id="sec-submissoes" class="section">
+      <div class="card">
+        <div class="card-head"><h3>📋 Submissões dos alunos</h3></div>
+        <div class="card-body" style="padding:0;overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Aluno</th><th>Disciplina</th><th>Título</th><th>Enviado em</th><th>Arquivo</th><th>Nota</th><th>Ações</th></tr></thead>
+            <tbody id="submTbody">
+              <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CALENDÁRIO ── -->
+    <div id="sec-calendario" class="section">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+        <button class="btn-green" onclick="abrirModalEvento()">📅 Novo evento</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:18px;">
+        <div class="card">
+          <div class="card-body">
+            <div class="cal-nav">
+              <button onclick="navCal(-1)">‹</button>
+              <h3 id="calMesAno"></h3>
+              <button onclick="navCal(1)">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>📋 Próximos eventos</h3></div>
+          <div class="card-body" id="evtList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ALUNOS ── -->
+    <div id="sec-alunos" class="section">
+      <div class="card">
+        <div class="card-head"><h3>👥 Alunos matriculados</h3></div>
+        <div class="card-body">
+          <input id="buscarAluno" class="form-inp" style="max-width:320px;margin-bottom:14px;" placeholder="🔍 Buscar por nome ou CPF…" oninput="carregarAlunos(this.value)"/>
+          <div id="alunosList"><p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  © 2026 <strong>IF Baiano · Campus Senhor do Bonfim</strong> — Moodle · Painel do Professor
+  · <a href="sala-de-aula.html">Sala de Aula</a>
+</footer>
+
+<div id="avisoToast"></div>
+
+<!-- MODAL PUBLICAR MATERIAL -->
+<div id="modalMat" class="modal-bg" onclick="if(event.target===this)fecharModal('modalMat')">
+  <div class="modal-box">
+    <h2>📁 Publicar material</h2>
+    <p class="sub">O arquivo ficará disponível para todos os alunos da disciplina.</p>
+    <div class="alert-err" id="matErr"></div>
+    <form id="formMat" onsubmit="salvarMaterial(event)">
+      <div class="form-row">
+        <label class="form-lbl">Disciplina</label>
+        <select id="matDisc" class="form-inp">
+          <option value="">Selecione…</option>
+          <option>Gestão de Pessoas</option>
+          <option>Comportamento Organizacional</option>
+          <option>Matemática Financeira</option>
+          <option>Teoria Geral da Administração II</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Título</label>
+        <input id="matTitulo" class="form-inp" placeholder="Ex: Apostila Capítulo 3"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Descrição (opcional)</label>
+        <input id="matDesc" class="form-inp" placeholder="Breve descrição do conteúdo"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Arquivo</label>
+        <div class="upload-box" onclick="document.getElementById('matFile').click()">
+          <div class="ub-ico">📎</div>
+          <div class="ub-txt">Clique para selecionar o arquivo</div>
+          <div class="ub-file" id="matFileName">PDF, Word, Excel, ZIP — máx. 20 MB</div>
+        </div>
+        <input id="matFile" type="file" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.txt"/>
+      </div>
+      <div class="prog-bar" id="matProgBar"><span id="matProgFill" style="width:0%"></span></div>
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" onclick="fecharModal('modalMat')">Cancelar</button>
+        <button type="submit" class="btn-prim" id="btnSalvarMat">Publicar material</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CRIAR EVENTO -->
+<div id="modalEvt" class="modal-bg" onclick="if(event.target===this)fecharModal('modalEvt')">
+  <div class="modal-box">
+    <h2>📅 Criar evento no calendário</h2>
+    <p class="sub">O evento ficará visível para todos os alunos.</p>
+    <div class="alert-err" id="evtErr"></div>
+    <form id="formEvt" onsubmit="salvarEvento(event)">
+      <div class="form-row">
+        <label class="form-lbl">Tipo</label>
+        <select id="evtTipo" class="form-inp">
+          <option value="aviso">📢 Aviso</option>
+          <option value="prova">📝 Prova / Avaliação</option>
+          <option value="entrega">📋 Prazo de entrega</option>
+          <option value="aula">📚 Aula especial</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Título</label>
+        <input id="evtTitulo" class="form-inp" placeholder="Ex: Prova de Gestão de Pessoas"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Data</label>
+        <input id="evtData" type="date" class="form-inp"/>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Descrição (opcional)</label>
+        <input id="evtDesc" class="form-inp" placeholder="Detalhes do evento"/>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" onclick="fecharModal('modalEvt')">Cancelar</button>
+        <button type="submit" class="btn-prim" id="btnSalvarEvt">Publicar evento</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL AVALIAR -->
+<div id="modalAvaliar" class="modal-bg" onclick="if(event.target===this)fecharModal('modalAvaliar')">
+  <div class="modal-box">
+    <h2>✏️ Avaliar entrega</h2>
+    <p class="sub" id="avalNome"></p>
+    <input type="hidden" id="avalId"/>
+    <div class="form-row">
+      <label class="form-lbl">Nota (ex: 8.5)</label>
+      <input id="avalNota" class="form-inp" placeholder="0 a 10"/>
+    </div>
+    <div class="form-row">
+      <label class="form-lbl">Feedback / comentário</label>
+      <textarea id="avalFeedback" rows="3" class="form-inp" style="resize:vertical;" placeholder="Comentário opcional para o aluno"></textarea>
+    </div>
+    <div class="alert-ok" id="avalOk"></div>
+    <div class="alert-err" id="avalErr"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn-cancel" onclick="fecharModal('modalAvaliar')">Cancelar</button>
+      <button type="button" class="btn-prim" onclick="confirmarAvaliacao()">Salvar avaliação</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTÃO VOLTAR AO TOPO -->
+<button id="toTop" aria-label="Voltar ao topo" onclick="window.scrollTo({top:0,behavior:'smooth'})"></button>
+<style>
+  #toTop{position:fixed;right:24px;bottom:24px;width:58px;height:58px;border-radius:18px;border:none;cursor:pointer;opacity:0;pointer-events:none;z-index:9999;transition:opacity .25s,transform .18s,box-shadow .18s;font-size:0;line-height:0;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.46),transparent 46%),radial-gradient(circle at 70% 76%,rgba(0,0,0,.10),transparent 38%),linear-gradient(155deg,#8de000 0%,#4ec900 48%,#2ea800 100%);box-shadow:0 7px 0 #1f6e00,0 12px 22px rgba(0,0,0,.30),inset 0 2px 3px rgba(255,255,255,.50),inset 0 -5px 10px rgba(0,0,0,.10);}
+  #toTop::before{content:'';position:absolute;left:50%;top:50%;width:30px;height:34px;transform:translate(-50%,-54%);background:#fff;clip-path:polygon(50% 0,100% 44%,72% 44%,72% 100%,28% 100%,28% 44%,0 44%);filter:drop-shadow(0 2px 3px rgba(0,0,0,.22));}
+  #toTop::after{content:'';position:absolute;inset:5px;border-radius:13px;pointer-events:none;box-shadow:inset 0 8px 12px rgba(255,255,255,.22),inset 0 -8px 10px rgba(255,255,255,.06);}
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{transform:translateY(-3px) scale(1.04);}
+  #toTop:active{transform:translateY(3px);box-shadow:0 3px 0 #1f6e00,0 5px 10px rgba(0,0,0,.28),inset 0 2px 3px rgba(255,255,255,.50),inset 0 -5px 10px rgba(0,0,0,.10);}
+</style>
+
+<script>
+const API         = 'api/sala.php';
+const SESSION_KEY = 'ifba_session';
+
+let _u = null;
+let _calAno = new Date().getFullYear();
+let _calMes = new Date().getMonth();
+let _eventos = [];
+
+// ── helpers de papel ─────────────────────────────────────────────────────────
+function hasRole(r, role) { return (r||'').split(',').map(s=>s.trim()).includes(role); }
+
+// ── init ──────────────────────────────────────────────────────────────────────
+(function init() {
+  const raw = localStorage.getItem(SESSION_KEY);
+  if (!raw) { window.location.href = 'sala-de-aula.html'; return; }
+  try {
+    const s = JSON.parse(raw);
+    if (!s || (!hasRole(s.role,'prof') && !hasRole(s.role,'adm_senio'))) { window.location.href = 'sala-de-aula.html'; return; }
+    _u = s;
+  } catch(e) { window.location.href = 'sala-de-aula.html'; return; }
+
+  document.getElementById('topNome').textContent = (_u.nome||'').split(' ')[0];
+  document.getElementById('sideNome').textContent = _u.nome || 'Professor';
+  document.getElementById('wbNome').textContent   = 'Olá, Prof. ' + ((_u.nome||'').split(' ').slice(-1)[0]) + '!';
+  if (_u.foto && /^(https?:\/\/|data:|uploads\/)/.test(_u.foto)) {
+    ['topAvatar','sideAvatar'].forEach(id=>{document.getElementById(id).innerHTML=`<img src="${_u.foto}" alt="foto"/>`;});
+  } else {
+    ['topAvatar','sideAvatar'].forEach(id=>{document.getElementById(id).textContent=_u.foto||'👨‍🏫';});
+  }
+  document.getElementById('evtData').value = new Date().toISOString().split('T')[0];
+  carregarPainel();
+})();
+
+function logout() { localStorage.removeItem(SESSION_KEY); window.location.href = 'sala-de-aula.html'; }
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+function esc(t){return String(t||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function api(action,data={}){
+  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,...data})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'Erro HTTP '+res.status);}
+  return res.json();
+}
+function aviso(msg){const t=document.getElementById('avisoToast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+function abrirModal(id){document.getElementById(id).classList.add('open');}
+function fecharModal(id){document.getElementById(id).classList.remove('open');}
+
+// ── navegação ─────────────────────────────────────────────────────────────────
+const BREAD={painel:'Painel do Professor',materiais:'Materiais',submissoes:'Submissões dos Alunos',calendario:'Calendário',alunos:'Alunos'};
+function navSec(nome){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sidebar a[data-sec]').forEach(a=>a.classList.remove('active'));
+  document.getElementById('sec-'+nome).classList.add('active');
+  const lnk=document.querySelector(`.sidebar a[data-sec="${nome}"]`);
+  if(lnk) lnk.classList.add('active');
+  document.getElementById('breadSec').textContent=BREAD[nome]||nome;
+  if(nome==='materiais')  carregarMateriais('');
+  if(nome==='submissoes') carregarSubmissoes();
+  if(nome==='calendario') carregarCalendario();
+  if(nome==='alunos')     carregarAlunos('');
+}
+
+// ── painel ────────────────────────────────────────────────────────────────────
+async function carregarPainel(){
+  try{
+    const [mats,subms,evts]=await Promise.all([api('get_materiais'),api('get_entregas'),api('get_eventos')]);
+    _eventos=evts;
+    document.getElementById('statMats').textContent=mats.length||0;
+    const pend=subms.filter(s=>!s.nota).length;
+    const aval=subms.filter(s=>s.nota).length;
+    document.getElementById('statSubmPend').textContent=pend;
+    document.getElementById('statSubmAval').textContent=aval;
+    const hoje=new Date();hoje.setHours(0,0,0,0);
+    const proxEvts=evts.filter(e=>new Date(e.data+'T12:00:00')>=hoje);
+    document.getElementById('statEvts').textContent=proxEvts.length;
+
+    // submissões recentes
+    const rec=subms.slice(0,5);
+    document.getElementById('submRecentList').innerHTML=rec.length
+      ?rec.map(e=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <span style="font-size:16px;">${e.nota?'✅':'📋'}</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;">${esc(e.aluno_nome||'Aluno')}</div>
+            <div style="font-size:11.5px;color:var(--muted);">${esc(e.disciplina)} · ${esc(e.titulo)}</div>
+          </div>
+          <span class="badge-nota ${e.nota?'badge-ok':'badge-pend'}">${esc(e.nota||'Pendente')}</span>
+        </div>`).join('')
+      :'<p style="color:var(--muted);font-size:13px;">Nenhuma submissão recebida.</p>';
+
+    // eventos no painel
+    const prox=proxEvts.slice(0,5);
+    const icons={prova:'📝',entrega:'📋',aviso:'📢',aula:'📚'};
+    document.getElementById('evtPainelList').innerHTML=prox.length
+      ?prox.map(e=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <span>${icons[e.tipo]||'📢'}</span>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${esc(e.titulo)}</div>
+          <div style="font-size:11.5px;color:var(--muted);">${new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR')}</div></div>
+          <button class="btn-xs danger" onclick="excluirEvento('${esc(e.id)}')">🗑</button>
+        </div>`).join('')
+      :'<p style="color:var(--muted);font-size:13px;">Nenhum evento próximo.</p>';
+  }catch(e){}
+}
+
+// ── materiais ─────────────────────────────────────────────────────────────────
+async function carregarMateriais(disc){
+  const el=document.getElementById('matList');
+  el.innerHTML='<p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p>';
+  try{
+    const todos=await api('get_materiais');
+    const unicas=[...new Set(todos.map(m=>m.disciplina))];
+    const tabs=document.getElementById('matFilterTabs');
+    tabs.innerHTML=`<button class="filter-tab ${!disc?'active':''}" data-disc="" onclick="filtrarMat(this,'')">Todos</button>`
+      +unicas.map(d=>`<button class="filter-tab ${disc===d?'active':''}" data-disc="${esc(d)}" onclick="filtrarMat(this,'${esc(d)}')">${esc(d)}</button>`).join('');
+    const mats=disc?todos.filter(m=>m.disciplina===disc):todos;
+    if(!mats.length){el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhum material publicado ainda.</p>';return;}
+    el.innerHTML=mats.map(m=>{
+      const ext=(m.arquivo_original||'').split('.').pop().toUpperCase();
+      const url=`uploads/materiais/${m.arquivo_nome}`;
+      const dt=new Date(m.criado_em).toLocaleDateString('pt-BR');
+      const meu=m.prof_id===_u.id;
+      return `<div class="mat-card">
+        <div class="mat-icon">📄</div>
+        <div class="mat-info">
+          <div class="mat-title">${esc(m.titulo)} <small style="font-weight:400;color:var(--muted);">[${ext}]</small></div>
+          <div class="mat-meta">${esc(m.disciplina)} · ${esc(m.prof_nome||'Professor')} · ${dt}</div>
+          ${m.descricao?`<div class="mat-meta" style="margin-top:2px;">${esc(m.descricao)}</div>`:''}
+        </div>
+        <div class="mat-actions">
+          <a class="btn-dl" href="${url}" download="${esc(m.arquivo_original||m.titulo)}">⬇</a>
+          ${meu?`<button class="btn-xs danger" onclick="excluirMaterial('${esc(m.id)}')">🗑</button>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){el.innerHTML=`<p style="color:var(--red);">Erro: ${esc(e.message)}</p>`;}
+}
+function filtrarMat(btn,disc){
+  document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  carregarMateriais(disc);
+}
+async function excluirMaterial(id){
+  if(!confirm('Excluir este material?')) return;
+  try{await api('delete_material',{id});await carregarMateriais('');aviso('Material excluído.');}
+  catch(e){alert('Erro: '+e.message);}
+}
+
+function abrirModalMaterial(){
+  document.getElementById('matTitulo').value='';
+  document.getElementById('matDesc').value='';
+  document.getElementById('matFileName').textContent='PDF, Word, Excel, ZIP — máx. 20 MB';
+  document.getElementById('matErr').classList.remove('show');
+  document.getElementById('matProgBar').style.display='none';
+  document.getElementById('matFile').value='';
+  abrirModal('modalMat');
+}
+document.getElementById('matFile').addEventListener('change',e=>{
+  document.getElementById('matFileName').textContent=e.target.files[0]?.name||'PDF, Word, Excel — máx. 20 MB';
+});
+async function salvarMaterial(ev){
+  ev.preventDefault();
+  const btn=document.getElementById('btnSalvarMat');
+  const err=document.getElementById('matErr');
+  err.classList.remove('show');
+  const disc=document.getElementById('matDisc').value;
+  const titulo=document.getElementById('matTitulo').value.trim();
+  const file=document.getElementById('matFile').files[0];
+  if(!disc){err.textContent='❌ Selecione a disciplina.';err.classList.add('show');return;}
+  if(!titulo){err.textContent='❌ Informe o título.';err.classList.add('show');return;}
+  if(!file){err.textContent='❌ Selecione um arquivo.';err.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Enviando…';
+  const bar=document.getElementById('matProgBar');
+  const fill=document.getElementById('matProgFill');
+  bar.style.display='';fill.style.width='20%';
+  try{
+    const fd=new FormData();
+    fd.append('tipo','material');
+    fd.append('titulo',titulo);
+    fd.append('descricao',document.getElementById('matDesc').value.trim());
+    fd.append('disciplina',disc);
+    fd.append('prof_id',_u.id);
+    fd.append('arquivo',file);
+    const res=await fetch(API,{method:'POST',body:fd});
+    fill.style.width='100%';
+    const data=await res.json();
+    if(data.error) throw new Error(data.error);
+    fecharModal('modalMat');
+    aviso('✅ Material publicado com sucesso!');
+    await carregarMateriais('');
+  }catch(e){err.textContent='❌ '+e.message;err.classList.add('show');}
+  finally{btn.disabled=false;btn.textContent='Publicar material';bar.style.display='none';}
+}
+
+// ── submissões ────────────────────────────────────────────────────────────────
+async function carregarSubmissoes(){
+  const tbody=document.getElementById('submTbody');
+  tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">⏳ Carregando…</td></tr>';
+  try{
+    const ents=await api('get_entregas');
+    if(!ents.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">Nenhuma entrega recebida.</td></tr>';return;}
+    tbody.innerHTML=ents.map(e=>`<tr>
+      <td>${esc(e.aluno_nome||'—')}</td>
+      <td>${esc(e.disciplina)}</td>
+      <td>${esc(e.titulo)}</td>
+      <td>${new Date(e.enviado_em).toLocaleDateString('pt-BR')}</td>
+      <td><a class="btn-dl" style="font-size:11px;" href="uploads/entregas/${esc(e.arquivo_nome)}" download="${esc(e.arquivo_original)}">⬇ Baixar</a></td>
+      <td><span class="badge-nota ${e.nota?'badge-ok':'badge-pend'}">${esc(e.nota||'Pendente')}</span></td>
+      <td><button class="btn-xs success" onclick="abrirAvaliar('${esc(e.id)}','${esc(e.aluno_nome||'Aluno')}','${esc(e.titulo)}','${esc(e.nota||'')}','${esc(e.feedback||'')}')">✏️ Avaliar</button></td>
+    </tr>`).join('');
+  }catch(e){tbody.innerHTML=`<tr><td colspan="7" style="color:var(--red);padding:16px;">${esc(e.message)}</td></tr>`;}
+}
+function abrirAvaliar(id,aluno,titulo,nota,feedback){
+  document.getElementById('avalId').value=id;
+  document.getElementById('avalNome').textContent=`Aluno: ${aluno} — "${titulo}"`;
+  document.getElementById('avalNota').value=nota||'';
+  document.getElementById('avalFeedback').value=feedback||'';
+  document.getElementById('avalOk').classList.remove('show');
+  document.getElementById('avalErr').classList.remove('show');
+  abrirModal('modalAvaliar');
+}
+async function confirmarAvaliacao(){
+  const id=document.getElementById('avalId').value;
+  const nota=document.getElementById('avalNota').value.trim();
+  const feedback=document.getElementById('avalFeedback').value.trim();
+  const ok=document.getElementById('avalOk');
+  const err=document.getElementById('avalErr');
+  ok.classList.remove('show');err.classList.remove('show');
+  if(!nota){err.textContent='❌ Informe a nota.';err.classList.add('show');return;}
+  try{
+    await api('avaliar_entrega',{id,nota,feedback});
+    ok.textContent='✅ Avaliação salva com sucesso!';ok.classList.add('show');
+    setTimeout(()=>{fecharModal('modalAvaliar');carregarSubmissoes();carregarPainel();},1500);
+  }catch(e){err.textContent='❌ '+e.message;err.classList.add('show');}
+}
+
+// ── calendário ────────────────────────────────────────────────────────────────
+async function carregarCalendario(){try{_eventos=await api('get_eventos');}catch(e){}renderCal();renderEvtList();}
+function navCal(d){_calMes+=d;if(_calMes>11){_calMes=0;_calAno++;}if(_calMes<0){_calMes=11;_calAno--;}renderCal();}
+function renderCal(){
+  const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('calMesAno').textContent=`${meses[_calMes]} ${_calAno}`;
+  const grid=document.getElementById('calGrid');
+  const dias=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let html=dias.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const primeiro=new Date(_calAno,_calMes,1);
+  const ultimo=new Date(_calAno,_calMes+1,0).getDate();
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  for(let i=0;i<primeiro.getDay();i++) html+=`<div class="cal-day other-month"></div>`;
+  for(let d=1;d<=ultimo;d++){
+    const dt=new Date(_calAno,_calMes,d);dt.setHours(0,0,0,0);
+    const dtStr=`${_calAno}-${String(_calMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evts=_eventos.filter(e=>e.data===dtStr);
+    html+=`<div class="cal-day${dt.getTime()===hoje.getTime()?' today':''}">
+      <div class="day-num">${d}</div>
+      ${evts.map(e=>`<div class="cal-event ${esc(e.tipo)}" title="${esc(e.titulo)}">${esc(e.titulo)}</div>`).join('')}
+    </div>`;
+  }
+  grid.innerHTML=html;
+}
+function renderEvtList(){
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const prox=_eventos.filter(e=>new Date(e.data+'T12:00:00')>=hoje).slice(0,8);
+  const cores={prova:'background:#fdecea;color:#c0392b;',entrega:'background:var(--orange-soft);color:var(--orange-dark);',aviso:'background:var(--blue-soft);color:var(--blue);',aula:'background:var(--green-soft);color:var(--green-dark);'};
+  const icons={prova:'📝',entrega:'📋',aviso:'📢',aula:'📚'};
+  document.getElementById('evtList').innerHTML=prox.length
+    ?prox.map(e=>{
+        const dt=new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'});
+        return `<div class="evt-item">
+          <span class="evt-badge" style="${cores[e.tipo]||cores.aviso}">${icons[e.tipo]||'📢'} ${esc(e.tipo).toUpperCase()}</span>
+          <div style="flex:1;"><div style="font-weight:700;font-size:13.5px;">${esc(e.titulo)}</div>
+          <div style="font-size:12px;color:var(--muted);">${dt}${e.descricao?' — '+esc(e.descricao):''}</div></div>
+          <button class="btn-xs danger" onclick="excluirEvento('${esc(e.id)}')">🗑</button>
+        </div>`;
+      }).join('')
+    :'<p style="color:var(--muted);font-size:13px;">Nenhum evento próximo.</p>';
+}
+function abrirModalEvento(){
+  document.getElementById('evtTitulo').value='';
+  document.getElementById('evtDesc').value='';
+  document.getElementById('evtData').value=new Date().toISOString().split('T')[0];
+  document.getElementById('evtErr').classList.remove('show');
+  abrirModal('modalEvt');
+}
+async function salvarEvento(ev){
+  ev.preventDefault();
+  const btn=document.getElementById('btnSalvarEvt');
+  const err=document.getElementById('evtErr');
+  err.classList.remove('show');
+  const titulo=document.getElementById('evtTitulo').value.trim();
+  const data=document.getElementById('evtData').value;
+  if(!titulo){err.textContent='❌ Informe o título.';err.classList.add('show');return;}
+  if(!data){err.textContent='❌ Informe a data.';err.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Salvando…';
+  try{
+    await api('criar_evento',{titulo,descricao:document.getElementById('evtDesc').value.trim(),data,tipo:document.getElementById('evtTipo').value,prof_id:_u.id});
+    fecharModal('modalEvt');
+    aviso('✅ Evento publicado!');
+    await carregarCalendario();
+    await carregarPainel();
+  }catch(e){err.textContent='❌ '+e.message;err.classList.add('show');}
+  finally{btn.disabled=false;btn.textContent='Publicar evento';}
+}
+async function excluirEvento(id){
+  if(!confirm('Excluir este evento?')) return;
+  try{await api('delete_evento',{id});await carregarCalendario();await carregarPainel();aviso('Evento excluído.');}
+  catch(e){alert('Erro: '+e.message);}
+}
+
+// ── alunos ────────────────────────────────────────────────────────────────────
+async function carregarAlunos(busca){
+  const el=document.getElementById('alunosList');
+  el.innerHTML='<p style="color:var(--muted);font-size:13px;">⏳ Carregando…</p>';
+  try{
+    const todos=await api('get_users',{busca:busca||''});
+    const alunos=todos.filter(u=>hasRole(u.role,'aluno'));
+    if(!alunos.length){el.innerHTML='<p style="color:var(--muted);font-size:13px;">Nenhum aluno encontrado.</p>';return;}
+    el.innerHTML=alunos.map(a=>{
+      const ini=(a.nome||'A').split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+      return `<div class="aluno-card">
+        <div class="aluno-ava">${a.foto&&/^(https?:|data:|uploads\/)/.test(a.foto)?`<img src="${esc(a.foto)}" alt="foto" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`:esc(a.foto||ini)}</div>
+        <div class="aluno-info">
+          <div class="aluno-nome">${esc(a.nome)}</div>
+          <div class="aluno-meta">${esc(a.turma||'—')} · ${esc(a.email)}</div>
+        </div>
+        <span class="badge-nota badge-blue">${esc(a.cpf||'—')}</span>
+      </div>`;
+    }).join('');
+  }catch(e){el.innerHTML=`<p style="color:var(--red);">Erro: ${esc(e.message)}</p>`;}
+}
+
+// ── back-to-top ───────────────────────────────────────────────────────────────
+const _tt=document.getElementById('toTop');
+window.addEventListener('scroll',()=>_tt.classList.toggle('show',scrollY>300));
+</script>
+</body>
+</html>

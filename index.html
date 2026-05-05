@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IF Baiano · Bonfim — Moodle · Curso de Administração</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    /* Paleta IF Baiano — verde institucional dominante */
+    --green:#1e7e34;
+    --green-dark:#155d27;
+    --green-deep:#0d4019;
+    --green-light:#4caf50;
+    --green-soft:#e7f3ea;
+    --green-accent:#8bc34a;
+    --blue:#1565c0;         /* azul usado apenas como detalhe */
+    --blue-dark:#0d47a1;
+    --blue-soft:#e3f0fb;
+    --orange:#e67e22;
+    --orange-dark:#c0630f;
+    --orange-soft:#fdf2e6;
+    --ink:#1c2a1f;
+    --muted:#5c6b5f;
+    --bg:#f4f8f4;
+    --card:#ffffff;
+    --border:#d8e2d9;
+  }
+  html,body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+
+  /* ── FAIXA INSTITUCIONAL (logo grande, estilo site IF Baiano) ── */
+  .inst-bar{
+    background:linear-gradient(180deg,var(--green) 0%,var(--green-dark) 100%);
+    color:#fff;padding:18px 40px;display:flex;align-items:center;gap:26px;
+    border-bottom:4px solid var(--green-deep);
+  }
+  .inst-logo{background:#fff;padding:10px 14px;border-radius:4px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.12);}
+  .inst-logo img{height:72px;display:block;}
+  .inst-txt{flex:1;min-width:0;}
+  .inst-txt .small{font-size:12px;opacity:.9;margin-bottom:4px;letter-spacing:.3px;}
+  .inst-txt h1.inst-title{font-size:34px;font-weight:700;line-height:1.05;margin-bottom:6px;letter-spacing:-.3px;}
+  .inst-txt .tag{font-size:11px;opacity:.85;letter-spacing:2px;font-weight:700;}
+  .inst-search{background:#fff;border-radius:3px;padding:6px 10px;display:flex;align-items:center;width:240px;align-self:flex-start;margin-top:4px;}
+  .inst-search input{flex:1;border:none;outline:none;font-size:12px;font-family:inherit;color:#333;min-width:0;}
+  .inst-search button{background:none;border:none;cursor:pointer;color:var(--green);font-size:14px;}
+
+  /* ── NAV SECUNDÁRIA ── */
+  header.top{
+    background:var(--green-deep);
+    color:#fff;padding:0 40px;display:flex;align-items:center;justify-content:flex-end;
+    height:44px;
+  }
+  .logo{display:none;}
+  header.top nav{display:flex;align-items:center;gap:4px;}
+  header.top nav a{color:#fff;text-decoration:none;padding:6px 14px;border-radius:3px;font-size:13px;opacity:.88;transition:.2s;font-weight:600;}
+  header.top nav a:hover{opacity:1;background:rgba(255,255,255,.12);}
+  header.top nav a.active{background:var(--green);opacity:1;}
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb{background:#e4ecf5;padding:9px 28px;font-size:12px;color:#555;border-bottom:1px solid #cdd6e0;}
+  .breadcrumb a{color:var(--blue);text-decoration:none;}
+  .breadcrumb a:hover{text-decoration:underline;}
+
+  .hero-logo-side{
+    display:flex;align-items:center;justify-content:center;
+    background:#fff;padding:18px 14px;border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,.22);
+  }
+  .hero-logo-side img{width:150px;display:block;}
+  /* keep old box for fallback */
+  .hero-logo-box{display:none;}
+  /* ── HERO ── */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(circle at 80% 20%,rgba(139,195,74,.25),transparent 50%),
+      radial-gradient(circle at 15% 85%,rgba(230,126,34,.12),transparent 50%),
+      linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 55%,var(--green) 100%);
+    color:#fff;padding:60px 28px 70px;
+  }
+  .hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:180px 1.2fr .9fr;gap:40px;align-items:center;}
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+    color:#fff;font-size:12px;font-weight:700;letter-spacing:.8px;
+    padding:6px 14px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;
+  }
+  .hero h1{font-size:42px;line-height:1.15;margin-bottom:18px;font-weight:700;}
+  .hero h1 em{font-style:normal;color:#ffd166;}
+  .hero p.lead{font-size:16px;line-height:1.7;opacity:.92;max-width:560px;margin-bottom:26px;}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:6px;border:none;cursor:pointer;
+    font-size:13px;font-weight:600;transition:.2s;text-decoration:none;font-family:inherit;
+  }
+  .btn-green{background:var(--green-light);color:#fff;box-shadow:0 4px 12px rgba(76,175,80,.4);}
+  .btn-green:hover{background:var(--green);transform:translateY(-1px);}
+  .btn-orange{background:var(--orange);color:#fff;box-shadow:0 4px 12px rgba(230,126,34,.4);}
+  .btn-orange:hover{background:var(--orange-dark);transform:translateY(-1px);}
+  .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);}
+  .btn-ghost:hover{background:rgba(255,255,255,.22);}
+
+  /* Hero illustration — stylized AVA with orbiting icons */
+  .hero-art{position:relative;height:340px;}
+  .laptop{
+    position:absolute;top:60px;left:50%;transform:translateX(-50%);
+    width:340px;height:210px;
+    background:linear-gradient(180deg,#f7fbff,#e4ecf5);
+    border-radius:14px 14px 4px 4px;
+    border:3px solid #1b2f44;
+    padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+  }
+  .laptop-bar{display:flex;gap:5px;margin-bottom:10px;}
+  .laptop-bar span{width:9px;height:9px;border-radius:50%;}
+  .laptop-bar span:nth-child(1){background:#e74c3c;}
+  .laptop-bar span:nth-child(2){background:#f39c12;}
+  .laptop-bar span:nth-child(3){background:#27ae60;}
+  .laptop-screen{background:#fff;height:calc(100% - 19px);border-radius:4px;padding:10px;}
+  .ls-line{height:8px;border-radius:3px;background:#cbd6e2;margin-bottom:7px;}
+  .ls-line.w1{width:60%;background:var(--blue);}
+  .ls-line.w2{width:85%;}
+  .ls-line.w3{width:70%;}
+  .ls-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;}
+  .ls-card{height:28px;border-radius:4px;}
+  .ls-card.c1{background:var(--blue-soft);border-left:3px solid var(--blue);}
+  .ls-card.c2{background:var(--green-soft);border-left:3px solid var(--green);}
+  .ls-card.c3{background:var(--orange-soft);border-left:3px solid var(--orange);}
+  .laptop-base{
+    position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+    width:400px;height:12px;background:#1b2f44;border-radius:0 0 10px 10px;
+  }
+  /* Orbiting icons */
+  .orb{
+    position:absolute;width:60px;height:60px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:26px;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+    animation:float 4s ease-in-out infinite;
+  }
+  .orb-1{top:20px;left:20px;background:#fff;color:var(--blue);animation-delay:0s;}
+  .orb-2{top:10px;right:30px;background:var(--green);color:#fff;animation-delay:.6s;}
+  .orb-3{bottom:40px;left:0;background:var(--orange);color:#fff;animation-delay:1.2s;}
+  .orb-4{bottom:20px;right:10px;background:#fff;color:var(--orange);animation-delay:1.8s;}
+  .orb-5{top:140px;right:-10px;background:#fff;color:var(--green);animation-delay:2.4s;width:48px;height:48px;font-size:20px;}
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section{max-width:1200px;margin:0 auto;padding:64px 28px;}
+  .sec-head{text-align:center;margin-bottom:44px;}
+  .sec-kicker{
+    display:inline-block;font-size:22px;font-weight:800;letter-spacing:2px;
+    text-transform:uppercase;color:var(--orange);margin-bottom:10px;
+    text-shadow:0 2px 10px rgba(13,64,25,.18);
+    position:relative;
+  }
+  .sec-kicker::after{
+    content:'';display:block;width:58%;height:2px;margin:6px auto 0;
+    background:currentColor;border-radius:3px;opacity:.72;
+    box-shadow:0 0 10px currentColor;
+  }
+  .sec-kicker.blue{color:var(--blue);}
+  .sec-kicker.green{color:var(--green);}
+  .sec-title{
+    font-size:36px;color:var(--ink);margin-bottom:12px;font-weight:800;
+    letter-spacing:.3px;text-shadow:0 3px 14px rgba(13,64,25,.14);
+  }
+  .sec-sub{font-size:15px;color:var(--muted);max-width:620px;margin:0 auto;line-height:1.6;}
+
+  /* ── DEFINITION CARDS (3 colunas) ── */
+  .def-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .def-card{
+    background:var(--card);border-radius:14px;padding:28px 24px 26px;
+    border:1px solid var(--border);border-top:4px solid var(--blue);
+    transition:.25s;position:relative;overflow:hidden;
+  }
+  .def-card.green{border-top-color:var(--green);}
+  .def-card.orange{border-top-color:var(--orange);}
+  .def-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(15,108,191,.12);}
+  .def-icon{
+    width:56px;height:56px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;
+    margin-bottom:18px;
+    background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  }
+  .def-icon img{width:100%;height:100%;object-fit:cover;border-radius:14px;display:block;}
+  .def-card.green .def-icon{background:linear-gradient(135deg,var(--green),var(--green-dark));}
+  .def-card.orange .def-icon{background:linear-gradient(135deg,var(--orange),var(--orange-dark));}
+  .def-card h3{font-size:17px;margin-bottom:10px;color:var(--ink);}
+  .def-card p{font-size:14px;color:var(--muted);line-height:1.65;}
+  .def-card .pill{
+    display:inline-block;margin-top:14px;font-size:11px;font-weight:700;
+    background:var(--blue-soft);color:var(--blue);padding:4px 11px;border-radius:12px;
+  }
+  .def-card.green .pill{background:var(--green-soft);color:var(--green-dark);}
+  .def-card.orange .pill{background:var(--orange-soft);color:var(--orange-dark);}
+
+  /* ── INTERFACE ANATOMY ── */
+  .anatomy-section{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .anatomy-layout{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;}
+  .anatomy-list{display:flex;flex-direction:column;gap:16px;}
+  .anatomy-item{
+    display:flex;gap:16px;align-items:flex-start;padding:16px;
+    background:var(--bg);border-radius:10px;border-left:4px solid var(--blue);
+    transition:.2s;cursor:default;
+  }
+  .anatomy-item:hover{background:#eaf1f9;transform:translateX(4px);}
+  .anatomy-item.green{border-left-color:var(--green);}
+  .anatomy-item.orange{border-left-color:var(--orange);}
+  .anatomy-num{
+    width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+    flex-shrink:0;
+  }
+  .anatomy-item.green .anatomy-num{background:var(--green);}
+  .anatomy-item.orange .anatomy-num{background:var(--orange);}
+  .anatomy-txt h4{font-size:14px;margin-bottom:4px;color:var(--ink);}
+  .anatomy-txt p{font-size:13px;color:var(--muted);line-height:1.55;}
+
+  /* Mock AVA layout preview */
+  .mock-ava{
+    background:#fff;border:1px solid var(--border);border-radius:12px;
+    box-shadow:0 20px 50px rgba(15,108,191,.12);overflow:hidden;
+  }
+  .mock-topbar{background:var(--blue);height:36px;display:flex;align-items:center;padding:0 14px;gap:8px;}
+  .mock-topbar .dot{width:9px;height:9px;border-radius:50%;}
+  .mock-topbar .dot.r{background:#ff6b6b;}
+  .mock-topbar .dot.y{background:#ffd93d;}
+  .mock-topbar .dot.g{background:#6ed198;}
+  .mock-topbar .title{color:#fff;font-size:11px;margin-left:8px;font-weight:600;letter-spacing:.5px;}
+  .mock-body{display:grid;grid-template-columns:130px 1fr;min-height:280px;}
+  .mock-sidebar{background:#eef4fa;padding:14px 10px;border-right:1px solid var(--border);}
+  .mock-sb-title{font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px;letter-spacing:.5px;}
+  .mock-sb-item{
+    background:#fff;border-radius:5px;padding:7px 10px;font-size:10px;color:#444;
+    margin-bottom:5px;border-left:3px solid transparent;display:flex;align-items:center;gap:6px;
+  }
+  .mock-sb-item.active{border-left-color:var(--orange);font-weight:600;color:var(--ink);}
+  .mock-main{padding:16px;}
+  .mock-banner{
+    background:linear-gradient(135deg,var(--green),var(--blue));
+    height:60px;border-radius:8px;margin-bottom:14px;
+    display:flex;align-items:center;padding:0 16px;color:#fff;font-weight:700;font-size:14px;
+    position:relative;overflow:hidden;
+  }
+  .mock-banner::after{
+    content:'';position:absolute;right:-20px;top:-20px;width:90px;height:90px;
+    border-radius:50%;background:rgba(255,255,255,.08);
+  }
+  .mock-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .mock-tile{
+    background:var(--bg);border-radius:6px;padding:10px 8px;text-align:center;
+    border:1px solid var(--border);
+  }
+  .mock-tile-ic{font-size:18px;margin-bottom:4px;display:block;}
+  .mock-tile-lbl{font-size:9px;color:var(--muted);font-weight:600;}
+
+  /* ── ROLES ── */
+  .roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .role-card{
+    background:var(--card);border-radius:16px;overflow:hidden;
+    border:1px solid var(--border);transition:.25s;
+  }
+  .role-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(0,0,0,.08);}
+  .role-head{
+    padding:28px;color:#fff;display:flex;align-items:center;gap:18px;
+    background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  }
+  .role-card.student .role-head{background:linear-gradient(135deg,var(--green),var(--green-dark));}
+  .role-avatar{
+    width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.22);
+    display:flex;align-items:center;justify-content:center;font-size:32px;
+    border:3px solid rgba(255,255,255,.4);
+  }
+  .role-head h3{font-size:22px;margin-bottom:4px;}
+  .role-head .role-sub{font-size:13px;opacity:.85;}
+  .role-body{padding:24px 28px 28px;}
+  .role-body ul{list-style:none;}
+  .role-body li{
+    display:flex;align-items:flex-start;gap:11px;padding:10px 0;
+    font-size:14px;color:#4a5968;border-bottom:1px dashed #e4e9ef;
+  }
+  .role-body li:last-child{border-bottom:none;}
+  .role-check{
+    width:22px;height:22px;border-radius:50%;flex-shrink:0;margin-top:2px;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+    background:var(--blue-soft);color:var(--blue);
+  }
+  .role-card.student .role-check{background:var(--green-soft);color:var(--green-dark);}
+
+  /* ── FEATURES TABLE ── */
+  .feat-section{background:linear-gradient(180deg,#fff 0%,#f4f7fb 100%);}
+  .feat-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:30px;}
+  .feat-tab{
+    padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;
+    background:#fff;border:1px solid var(--border);color:var(--muted);cursor:pointer;
+    transition:.2s;font-family:inherit;
+  }
+  .feat-tab:hover{color:var(--blue);border-color:var(--blue);}
+  .feat-tab.active.ativ{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 4px 12px rgba(39,174,96,.3);}
+  .feat-tab.active.rec{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 4px 12px rgba(230,126,34,.3);}
+
+  .feat-panel{display:none;}
+  .feat-panel.active{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .feat-desc{
+    text-align:center;font-size:14px;color:var(--muted);
+    max-width:680px;margin:0 auto 28px;line-height:1.7;
+  }
+  .feat-desc strong{color:var(--ink);}
+
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .feat-card{
+    background:#fff;border-radius:12px;padding:22px 18px;text-align:center;
+    border:1px solid var(--border);transition:.25s;cursor:default;position:relative;
+  }
+  .feat-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.07);border-color:transparent;}
+  .feat-card .fc-ic{
+    width:52px;height:52px;border-radius:14px;margin:0 auto 12px;
+    display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;
+  }
+  .feat-card .fc-ic.b1{background:linear-gradient(135deg,#2980b9,#1abc9c);}
+  .feat-card .fc-ic.b2{background:linear-gradient(135deg,#27ae60,#16a085);}
+  .feat-card .fc-ic.b3{background:linear-gradient(135deg,#e67e22,#f39c12);}
+  .feat-card .fc-ic.b4{background:linear-gradient(135deg,#3498db,#2980b9);}
+  .feat-card .fc-ic.b5{background:linear-gradient(135deg,#16a085,#27ae60);}
+  .feat-card .fc-ic.b6{background:linear-gradient(135deg,#d35400,#e67e22);}
+  .feat-card .fc-ic.b7{background:linear-gradient(135deg,#2c3e50,#34495e);}
+  .feat-card .fc-ic.b8{background:linear-gradient(135deg,#f39c12,#e67e22);}
+
+  .feat-card h4{font-size:14px;margin-bottom:6px;color:var(--ink);}
+  .feat-card p{font-size:12px;color:var(--muted);line-height:1.5;}
+  .feat-card .fc-tag{
+    position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;
+    padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.5px;
+  }
+  .feat-card .fc-tag.a{background:var(--green-soft);color:var(--green-dark);}
+  .feat-card .fc-tag.r{background:var(--orange-soft);color:var(--orange-dark);}
+
+  /* ── BENEFITS (comparison-style with icon bar) ── */
+  .ben-section{background:linear-gradient(135deg,var(--green-deep),var(--green-dark));color:#fff;}
+  .ben-section .sec-title{color:#fff;text-shadow:0 4px 16px rgba(0,0,0,.34);}
+  .ben-section .sec-sub{color:rgba(255,255,255,.75);}
+  .ben-section .sec-kicker{color:#ffd166;text-shadow:0 2px 12px rgba(0,0,0,.32);}
+
+  .ben-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:10px;}
+  .ben-card{
+    background:rgba(255,255,255,.07);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:30px 26px;
+    transition:.25s;
+  }
+  .ben-card:hover{background:rgba(255,255,255,.12);transform:translateY(-4px);}
+  .ben-ic{
+    width:58px;height:58px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    font-size:26px;margin-bottom:18px;color:#fff;
+  }
+  .ben-card.flex .ben-ic{background:linear-gradient(135deg,var(--green),#2ecc71);}
+  .ben-card.colab .ben-ic{background:linear-gradient(135deg,var(--orange),#f39c12);}
+  .ben-card.com .ben-ic{background:linear-gradient(135deg,#3498db,#2980b9);}
+  .ben-card h3{font-size:19px;margin-bottom:10px;}
+  .ben-card p{font-size:14px;line-height:1.65;color:rgba(255,255,255,.82);}
+  .ben-card .ben-ex{
+    display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;
+  }
+  .ben-card .ben-ex span{
+    font-size:11px;background:rgba(255,255,255,.12);
+    padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.2);
+  }
+
+  /* ── CTA BANNER ── */
+  .cta{
+    max-width:1200px;margin:0 auto;padding:0 28px 64px;
+  }
+  .cta-inner{
+    background:linear-gradient(135deg,var(--orange) 0%,#d35400 100%);
+    border-radius:20px;padding:46px 44px;color:#fff;
+    display:grid;grid-template-columns:2fr 1fr;align-items:center;gap:30px;
+    box-shadow:0 24px 60px rgba(230,126,34,.3);
+    position:relative;overflow:hidden;
+  }
+  .cta-inner::before{
+    content:'';position:absolute;top:-50px;right:-50px;width:220px;height:220px;
+    border-radius:50%;background:rgba(255,255,255,.1);
+  }
+  .cta-inner::after{
+    content:'';position:absolute;bottom:-60px;left:30%;width:180px;height:180px;
+    border-radius:50%;background:rgba(255,255,255,.07);
+  }
+  .cta-txt{position:relative;z-index:1;}
+  .cta-txt h3{font-size:26px;margin-bottom:8px;}
+  .cta-txt p{font-size:14px;opacity:.92;line-height:1.6;}
+  .cta-btn{position:relative;z-index:1;text-align:right;}
+  .cta-btn .btn{
+    background:#fff;color:var(--orange-dark);font-size:14px;padding:14px 28px;
+    box-shadow:0 6px 16px rgba(0,0,0,.15);
+  }
+  .cta-btn .btn:hover{transform:translateY(-2px);}
+
+  /* ── FOOTER ── */
+  footer.bottom{
+    background:var(--green-deep);color:#aac4ad;padding:40px 28px 24px;
+  }
+  .foot-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;}
+  .foot-brand .logo{color:#fff;margin-bottom:14px;}
+  .foot-brand p{font-size:13px;line-height:1.6;}
+  .foot-col h5{color:#fff;font-size:13px;margin-bottom:12px;letter-spacing:.5px;}
+  .foot-col ul{list-style:none;}
+  .foot-col li{margin-bottom:7px;font-size:12px;}
+  .foot-col a{color:#8ea4b9;text-decoration:none;transition:.2s;}
+  .foot-col a:hover{color:var(--green-accent);}
+  .foot-bottom{
+    max-width:1200px;margin:30px auto 0;padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.1);
+    display:flex;justify-content:space-between;font-size:12px;color:#8aa58d;
+  }
+  .foot-flags span{
+    display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;
+  }
+  .foot-flags .fb{background:var(--blue);}
+  .foot-flags .fg{background:var(--green);}
+  .foot-flags .fo{background:var(--orange);}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:960px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-logo-side{width:130px;margin:0 auto;}
+    .hero-art{display:none;}
+    .hero h1{font-size:32px;}
+    .def-grid,.feat-grid,.ben-grid{grid-template-columns:1fr 1fr;}
+    .roles-grid,.anatomy-layout{grid-template-columns:1fr;}
+    .cta-inner{grid-template-columns:1fr;}
+    .cta-btn{text-align:left;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:560px){
+    .def-grid,.feat-grid,.ben-grid{grid-template-columns:1fr;}
+    .inst-bar{flex-wrap:wrap;padding:14px 16px;gap:14px;}
+    .inst-logo img{height:54px;}
+    .inst-txt h1.inst-title{font-size:24px;}
+    .inst-search{width:100%;}
+    header.top{padding:0 14px;}
+    header.top nav{overflow-x:auto;justify-content:flex-start;}
+    .section{padding:44px 16px;}
+    .foot-grid{grid-template-columns:1fr;}
+    .sec-kicker{font-size:17px;}
+    .sec-title{font-size:28px;}
+  }
+
+  /* ── CARDS DE PROFESSORES — 4 colunas ── */
+  #docentesGrid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  .prof-card{
+    background:var(--card);border-radius:12px;padding:18px 14px 16px;
+    border:1px solid var(--border);border-top:4px solid var(--blue);
+    transition:.25s;cursor:default;position:relative;
+  }
+  .prof-card.green{border-top-color:var(--green);}
+  .prof-card.orange{border-top-color:var(--orange);}
+  .prof-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(15,108,191,.1);}
+  .prof-icon{
+    width:44px;height:44px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;color:#fff;margin-bottom:12px;
+    background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  }
+  .prof-icon img{width:100%;height:100%;object-fit:cover;border-radius:11px;display:block;}
+  .prof-card.green .prof-icon{background:linear-gradient(135deg,var(--green),var(--green-dark));}
+  .prof-card.orange .prof-icon{background:linear-gradient(135deg,var(--orange),var(--orange-dark));}
+  .prof-card h3{font-size:13px;margin-bottom:5px;color:var(--ink);line-height:1.35;}
+  .prof-card .pill{
+    display:inline-block;margin-top:6px;font-size:10px;font-weight:700;
+    background:var(--blue-soft);color:var(--blue);padding:3px 8px;border-radius:10px;
+  }
+  .prof-card.green .pill{background:var(--green-soft);color:var(--green-dark);}
+  .prof-card.orange .pill{background:var(--orange-soft);color:var(--orange-dark);}
+  @media(max-width:1100px){#docentesGrid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:760px){#docentesGrid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:420px){#docentesGrid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- FAIXA INSTITUCIONAL -->
+<div class="inst-bar" style="font-family:Arial">
+  <div class="inst-logo">
+    <img src="assets/logo.png" alt="IF Baiano · Campus Senhor do Bonfim"/>
+  </div>
+  <div class="inst-txt">
+    <div class="small">Instituto Federal de Educação, Ciência e Tecnologia Baiano</div>
+    <h1 class="inst-title">Instituto Federal Baiano</h1>
+    <div class="tag">CAMPUS SENHOR DO BONFIM · CURSO DE ADMINISTRAÇÃO</div>
+  </div>
+  <div class="inst-search">
+    <input type="text" placeholder="Digite sua pesquisa"/>
+    <button type="button" aria-label="Buscar">🔍</button>
+  </div>
+</div>
+
+<!-- NAVEGAÇÃO -->
+<header class="top" style="font-family:Arial">
+  <nav>
+    <a href="#o-que-e">Conceito</a>
+    <a href="#interface">Interface</a>
+    <a href="#papeis">Papéis</a>
+    <a href="#funcionalidades">Funcionalidade</a>
+    <a href="#beneficios">Benefícios</a>
+    <a href="#corpo-docente">Docentes</a>
+    <a href="sala-de-aula.html">Sala de Aula</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="sala-de-aula.html">Início</a> › <a href="#">Curso de Administração</a> › <strong>Moodle · Página Principal</strong>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-logo-side">
+      <img src="assets/logo.png" alt="Instituto Federal Baiano · Campus Senhor do Bonfim"/>
+    </div>
+    <div class="hero-txt">
+      <span class="hero-tag">📘 IF Baiano · Campus Senhor do Bonfim — BA</span>
+      <h1>Moodle no <em>Curso de Administração</em>: um ambiente virtual para aprender, interagir e produzir.</h1>
+      <p class="lead">
+        Esta página reúne informações sobre o Ambiente Virtual de Aprendizagem utilizado
+        pelos estudantes e professores do Curso de Administração do IF Baiano — Campus
+        Senhor do Bonfim. Conheça o conceito, o corpo docente e acesse no perfil do aluno
+        a grade com os trabalhos publicados.
+      </p>
+      <div class="hero-cta">
+        <a href="#corpo-docente" class="btn btn-green">👨‍🏫 Corpo Docente</a>
+        <a href="perfil.html#grade-trabalhos" class="btn btn-orange">📚 Grade e Trabalhos</a>
+        <a href="sala-de-aula.html" class="btn btn-ghost">🚀 Ir para a Sala</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="laptop">
+        <div class="laptop-bar"><span></span><span></span><span></span></div>
+        <div class="laptop-screen">
+          <div class="ls-line w1"></div>
+          <div class="ls-line w2"></div>
+          <div class="ls-line w3"></div>
+          <div class="ls-cards">
+            <div class="ls-card c1"></div>
+            <div class="ls-card c2"></div>
+            <div class="ls-card c3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="laptop-base"></div>
+      <div class="orb orb-1">📚</div>
+      <div class="orb orb-2">💬</div>
+      <div class="orb orb-3">📝</div>
+      <div class="orb orb-4">🎥</div>
+      <div class="orb orb-5">📊</div>
+    </div>
+  </div>
+</section>
+
+<!-- 1 · O QUE É -->
+<section class="section" id="o-que-e">
+  <div class="sec-head">
+    <span class="sec-kicker blue">Conceito</span>
+    <h2 class="sec-title">O que é o Moodle?</h2>
+    <p class="sec-sub">
+      Três ideias fundamentais definem o conceito do Moodle como ambiente educacional aberto.
+    </p>
+  </div>
+  <div class="def-grid">
+    <div class="def-card">
+      <div class="def-icon">🌍</div>
+      <h3>Definição</h3>
+      <p>
+        É um <strong>software livre</strong> criado por uma comunidade colaborativa
+        global — programadores, designers e educadores trabalhando juntos
+        para evoluir a plataforma.
+      </p>
+      <span class="pill">Comunidade aberta</span>
+    </div>
+
+    <div class="def-card green">
+      <div class="def-icon">🏫</div>
+      <h3>Proposta</h3>
+      <p>
+        Um <strong>Ambiente Virtual de Aprendizagem (AVA)</strong> que permite
+        ministrar disciplinas à distância, disponibilizar conteúdos e
+        interagir com alunos em tempo real ou assíncrono.
+      </p>
+      <span class="pill">Ensino a distância</span>
+    </div>
+
+    <div class="def-card orange">
+      <div class="def-icon">🔓</div>
+      <h3>Diferencial</h3>
+      <p>
+        Pode ser <strong>copiado, modificado e redistribuído gratuitamente</strong>,
+        o que dá autonomia para instituições adaptarem a plataforma à sua
+        realidade pedagógica.
+      </p>
+      <span class="pill">Livre e gratuito</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · ESTRUTURA E INTERFACE -->
+<section class="anatomy-section" id="interface">
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-kicker green">Interface</span>
+      <h2 class="sec-title">Como se organiza a tela de um AVA</h2>
+      <p class="sec-sub">
+        O layout do usuário divide a informação em zonas bem definidas, facilitando
+        a navegação entre administração, conteúdo e participantes.
+      </p>
+    </div>
+
+    <div class="anatomy-layout">
+      <div class="anatomy-list">
+        <div class="anatomy-item">
+          <div class="anatomy-num">1</div>
+          <div class="anatomy-txt">
+            <h4>📁 Bloco individual</h4>
+            <p>Área personalizada por usuário, com notificações, mensagens recentes e atalhos.</p>
+          </div>
+        </div>
+        <div class="anatomy-item green">
+          <div class="anatomy-num">2</div>
+          <div class="anatomy-txt">
+            <h4>⚙️ Área de configurações</h4>
+            <p>Menu administrativo do curso: relatórios, usuários, backup, competências e notas.</p>
+          </div>
+        </div>
+        <div class="anatomy-item orange">
+          <div class="anatomy-num">3</div>
+          <div class="anatomy-txt">
+            <h4>📚 Área do curso</h4>
+            <p>Conteúdo central organizado por tópicos — aulas, materiais, atividades e avaliações.</p>
+          </div>
+        </div>
+        <div class="anatomy-item">
+          <div class="anatomy-num">4</div>
+          <div class="anatomy-txt">
+            <h4>🧭 Barra de navegação</h4>
+            <p>Breadcrumbs e atalhos que mostram a posição atual e permitem voltar rapidamente.</p>
+          </div>
+        </div>
+        <div class="anatomy-item green">
+          <div class="anatomy-num">5</div>
+          <div class="anatomy-txt">
+            <h4>💬 Mensagens e participantes</h4>
+            <p>Lista de colegas, professores e canais de comunicação ativos na disciplina.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-ava" aria-label="Exemplo de interface AVA">
+        <div class="mock-topbar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="title">AMBIENTE VIRTUAL DE APRENDIZAGEM</span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sidebar">
+            <div class="mock-sb-title">NAVEGAÇÃO</div>
+            <div class="mock-sb-item active">🏠 Início</div>
+            <div class="mock-sb-item">📚 Cursos</div>
+            <div class="mock-sb-item">📊 Notas</div>
+            <div class="mock-sb-item">💬 Mensagens</div>
+            <div class="mock-sb-title" style="margin-top:14px;">ADMIN</div>
+            <div class="mock-sb-item">⚙️ Configurar</div>
+            <div class="mock-sb-item">👥 Usuários</div>
+          </div>
+          <div class="mock-main">
+            <div class="mock-banner">ÁREA DO CURSO</div>
+            <div class="mock-tiles">
+              <div class="mock-tile">
+                <span class="mock-tile-ic">📝</span>
+                <div class="mock-tile-lbl">TAREFA</div>
+              </div>
+              <div class="mock-tile">
+                <span class="mock-tile-ic">💬</span>
+                <div class="mock-tile-lbl">FÓRUM</div>
+              </div>
+              <div class="mock-tile">
+                <span class="mock-tile-ic">📄</span>
+                <div class="mock-tile-lbl">MATERIAL</div>
+              </div>
+              <div class="mock-tile">
+                <span class="mock-tile-ic">❓</span>
+                <div class="mock-tile-lbl">QUIZ</div>
+              </div>
+              <div class="mock-tile">
+                <span class="mock-tile-ic">📖</span>
+                <div class="mock-tile-lbl">LIVRO</div>
+              </div>
+              <div class="mock-tile">
+                <span class="mock-tile-ic">🔗</span>
+                <div class="mock-tile-lbl">URL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · PAPÉIS -->
+<section class="section" id="papeis">
+  <div class="sec-head">
+    <span class="sec-kicker">Papéis</span>
+    <h2 class="sec-title">Dois perfis, duas experiências</h2>
+    <p class="sec-sub">
+      As funcionalidades do AVA são divididas por tipo de acesso, garantindo que
+      cada usuário veja apenas o que é relevante à sua função.
+    </p>
+  </div>
+
+  <div class="roles-grid">
+    <div class="role-card teacher">
+      <div class="role-head">
+        <div class="role-avatar">👨‍🏫</div>
+        <div>
+          <h3>Professor</h3>
+          <div class="role-sub">Conduz a disciplina e avalia o aprendizado</div>
+        </div>
+      </div>
+      <div class="role-body">
+        <ul>
+          <li><div class="role-check">✓</div> Insere conteúdos — PDFs, vídeos, páginas e livros digitais</li>
+          <li><div class="role-check">✓</div> Cria atividades e projetos com prazos personalizados</li>
+          <li><div class="role-check">✓</div> Aplica avaliações e fornece feedback individual</li>
+          <li><div class="role-check">✓</div> Configura o curso, define critérios e gera relatórios</li>
+          <li><div class="role-check">✓</div> Gerencia emblemas, competências e livro de notas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-card student">
+      <div class="role-head">
+        <div class="role-avatar">👩‍🎓</div>
+        <div>
+          <h3>Aluno</h3>
+          <div class="role-sub">Acessa materiais e constrói conhecimento</div>
+        </div>
+      </div>
+      <div class="role-body">
+        <ul>
+          <li><div class="role-check">✓</div> Acessa materiais e assiste às videoaulas publicadas</li>
+          <li><div class="role-check">✓</div> Realiza as tarefas e entrega dentro do prazo</li>
+          <li><div class="role-check">✓</div> Participa de fóruns, chats e discussões colaborativas</li>
+          <li><div class="role-check">✓</div> Acompanha notas, progresso e próximos prazos</li>
+          <li><div class="role-check">✓</div> Recebe notificações, mensagens e retorno do professor</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · FUNCIONALIDADES -->
+<section class="feat-section" id="funcionalidades">
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-kicker orange">Funcionalidades</span>
+      <h2 class="sec-title">Atividades vs. Recursos</h2>
+      <p class="sec-sub">
+        O AVA separa claramente o que é <strong>produção do aluno</strong> do que é
+        <strong>conteúdo disponibilizado pelo professor</strong>. Alterne as abas para conhecer.
+      </p>
+    </div>
+
+    <div class="feat-tabs" role="tablist">
+      <button class="feat-tab active ativ" data-panel="panel-ativ" onclick="switchTab(this)">⚡ Atividades</button>
+      <button class="feat-tab rec" data-panel="panel-rec" onclick="switchTab(this)">📦 Recursos</button>
+    </div>
+
+    <!-- ATIVIDADES -->
+    <div class="feat-panel active" id="panel-ativ">
+      <p class="feat-desc">
+        <strong>Atividades</strong> são ferramentas em que o aluno tem <strong>papel ativo</strong>
+        na produção do conhecimento — ele responde, escreve, colabora, discute.
+      </p>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b1">💬</div>
+          <h4>Fórum</h4>
+          <p>Debate assíncrono sobre temas da disciplina.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b2">🧩</div>
+          <h4>Wiki</h4>
+          <p>Texto colaborativo editado em grupo.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b3">❓</div>
+          <h4>Questionário</h4>
+          <p>Perguntas objetivas com correção automática.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b4">📝</div>
+          <h4>Tarefa</h4>
+          <p>Envio de arquivos para avaliação individual.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b5">📖</div>
+          <h4>Glossário</h4>
+          <p>Dicionário de termos construído pela turma.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b6">💭</div>
+          <h4>Chat</h4>
+          <p>Conversa em tempo real entre participantes.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b7">🗳️</div>
+          <h4>Enquete</h4>
+          <p>Pesquisa rápida de opinião para orientar a aula.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag a">Ativa</span>
+          <div class="fc-ic b8">🔬</div>
+          <h4>Laboratório</h4>
+          <p>Avaliação entre pares com rubricas definidas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECURSOS -->
+    <div class="feat-panel" id="panel-rec">
+      <p class="feat-desc">
+        <strong>Recursos</strong> são ferramentas para o <strong>professor disponibilizar
+        conteúdos</strong> — materiais estáticos ou links que os alunos consultam.
+      </p>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b3">📄</div>
+          <h4>Arquivo</h4>
+          <p>Envio direto de PDFs, documentos e planilhas.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b1">📘</div>
+          <h4>Livro</h4>
+          <p>Material paginado com capítulos e sumário.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b4">🗒️</div>
+          <h4>Página</h4>
+          <p>Texto rico editado diretamente na plataforma.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b8">🔗</div>
+          <h4>URL</h4>
+          <p>Link externo curado pelo professor.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b5">📁</div>
+          <h4>Pasta</h4>
+          <p>Conjunto organizado de múltiplos arquivos.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b6">🏷️</div>
+          <h4>Rótulo</h4>
+          <p>Separador visual com texto ou imagem.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b2">🎬</div>
+          <h4>Mídia</h4>
+          <p>Vídeos e áudios embarcados ou por link.</p>
+        </div>
+        <div class="feat-card">
+          <span class="fc-tag r">Recurso</span>
+          <div class="fc-ic b7">📦</div>
+          <h4>Pacote</h4>
+          <p>Conteúdo estruturado no padrão SCORM.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · BENEFÍCIOS -->
+<section class="ben-section" id="beneficios">
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-kicker">Benefícios</span>
+      <h2 class="sec-title">Por que escolher um AVA?</h2>
+      <p class="sec-sub">
+        Três argumentos centrais explicam o impacto do Moodle na prática educativa contemporânea.
+      </p>
+    </div>
+
+    <div class="ben-grid">
+      <div class="ben-card flex">
+        <div class="ben-ic">🕒</div>
+        <h3>Flexibilidade</h3>
+        <p>
+          Permite realizar atividades fora da instituição e em horários alternativos,
+          adaptando-se à rotina de cada aluno.
+        </p>
+        <div class="ben-ex">
+          <span>⏱ Tempo</span>
+          <span>🌎 Espaço</span>
+          <span>📱 Dispositivos</span>
+        </div>
+      </div>
+
+      <div class="ben-card colab">
+        <div class="ben-ic">🤝</div>
+        <h3>Colaboração</h3>
+        <p>
+          Ferramentas como Wiki e Fóruns promovem a construção coletiva do
+          conhecimento, com visibilidade das produções para toda a turma.
+        </p>
+        <div class="ben-ex">
+          <span>🧩 Wiki</span>
+          <span>💬 Fórum</span>
+          <span>👥 Grupos</span>
+        </div>
+      </div>
+
+      <div class="ben-card com">
+        <div class="ben-ic">✍️</div>
+        <h3>Comunicação</h3>
+        <p>
+          Incentiva o desenvolvimento da escrita como principal forma de
+          interação, qualificando a expressão e o raciocínio dos participantes.
+        </p>
+        <div class="ben-ex">
+          <span>📝 Escrita</span>
+          <span>📬 Mensagens</span>
+          <span>🔔 Avisos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · CORPO DOCENTE -->
+<section class="section" id="corpo-docente">
+  <div class="sec-head">
+    <span class="sec-kicker green">Docentes</span>
+    <h2 class="sec-title">Professores do Curso de Administração</h2>
+    <p class="sec-sub">
+      Conheça os docentes responsáveis pelas disciplinas do curso, com suas áreas
+      de atuação e trabalhos publicados no AVA.
+    </p>
+  </div>
+
+  <div id="docentesGrid">
+    <!-- professor cards injected via JS -->
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="cta-txt">
+      <h3>Pronto para entrar na sua disciplina?</h3>
+      <p>
+        Acesse a Sala de Aula Virtual do Curso de Administração, alterne entre os
+        perfis de <strong>aluno</strong> e <strong>professor</strong> e confira a
+        grade com os trabalhos publicados no perfil do aluno.
+      </p>
+    </div>
+    <div class="cta-btn">
+      <a href="sala-de-aula.html" class="btn">🚀 Entrar na Sala de Aula</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bottom">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <div class="logo">
+        <div class="logo-mark">🎓</div>
+        EduVirtual
+      </div>
+      <p>
+        Ambiente Virtual de Aprendizagem do <strong>Curso de Administração</strong> do
+        IF Baiano — Campus Senhor do Bonfim — BA.
+      </p>
+      <div class="foot-flags" style="margin-top:12px;">
+        <span class="fb"></span><span class="fg"></span><span class="fo"></span>
+        <small style="color:#6b7d8f;font-size:11px;margin-left:4px;">Azul · Verde · Laranja</small>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h5>Plataforma</h5>
+      <ul>
+        <li><a href="index.html">Sobre o AVA</a></li>
+        <li><a href="sala-de-aula.html">Sala de Aula</a></li>
+        <li><a href="meus-cursos/aluno-cursos.html">Meus Cursos</a></li>
+        <li><a href="forum.html">Fórum</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Usuário</h5>
+      <ul>
+        <li><a href="perfil.html">Meu Perfil</a></li>
+        <li><a href="perfil.html#notas">Minhas Notas</a></li>
+        <li><a href="perfil.html#calendario">Calendário</a></li>
+        <li><a href="perfil.html#mensagens">Mensagens</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Admin</h5>
+      <ul>
+        <li><a href="meus-cursos/admin-cadastro.html">Cadastros</a></li>
+        <li><a href="#">Relatórios</a></li>
+        <li><a href="#">Configurações</a></li>
+        <li><a href="#">Suporte</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 IF Baiano · Campus Senhor do Bonfim — Curso de Administração</span>
+    <span>Moodle · Ambiente Virtual de Aprendizagem</span>
+  </div>
+</footer>
+
+<!-- BOTÃO VOLTAR AO TOPO -->
+<button id="toTop" aria-label="Voltar ao topo" onclick="window.scrollTo({top:0,behavior:'smooth'})"></button>
+<style>
+  #toTop{
+    position:fixed;right:24px;bottom:28px;width:64px;height:64px;border-radius:18px;
+    background:linear-gradient(145deg,var(--green-light),var(--green-dark));
+    color:#fff;border:none;cursor:pointer;z-index:999;
+    box-shadow:0 8px 24px rgba(13,64,25,.45),inset 0 1px 1px rgba(255,255,255,.3);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s,transform .25s,box-shadow .25s;
+  }
+  #toTop::before{
+    content:'';display:block;margin:auto;
+    width:22px;height:26px;
+    background:#fff;
+    clip-path:polygon(50% 0%,100% 45%,72% 45%,72% 100%,28% 100%,28% 45%,0% 45%);
+  }
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 14px 32px rgba(13,64,25,.5);}
+  #toTop:active{transform:translateY(0) scale(.97);}
+</style>
+<script>
+  const toTop=document.getElementById('toTop');
+  window.addEventListener('scroll',()=>{toTop.classList.toggle('show',scrollY>400);});
+</script>
+
+<!-- ===== DADOS · Docentes e Disciplinas ===== -->
+<script>
+  const API = 'api/sala.php';
+  const DOCENTES_KEY = 'ifbaiano_docentes';
+  const docentes = JSON.parse(localStorage.getItem(DOCENTES_KEY) || 'null') || [
+    {
+      id:'p1', nome:'Prof. Dr. Carlos Menezes', area:'Administração Geral',
+      titulacao:'Doutor em Administração',
+      email:'carlos.menezes@ifbaiano.edu.br',
+      foto:'👨‍🏫', cor:'blue',
+      disciplinas:[
+        {nome:'Introdução à Administração', periodo:'1º Período', carga:'60h',
+         trabalhos:['Artigo: Fundamentos da Teoria Administrativa','Estudo de Caso — PMEs do Sertão']},
+        {nome:'Teoria Geral da Administração', periodo:'2º Período', carga:'80h',
+         trabalhos:['Apostila TGA – Edição 2026','Seminário: Escolas Administrativas']}
+      ]
+    },
+    {
+      id:'p2', nome:'Profa. Ma. Ana Lúcia Ribeiro', area:'Gestão de Pessoas',
+      titulacao:'Mestra em Gestão',
+      email:'ana.ribeiro@ifbaiano.edu.br',
+      foto:'👩‍🏫', cor:'green',
+      disciplinas:[
+        {nome:'Gestão de Pessoas', periodo:'3º Período', carga:'60h',
+         trabalhos:['Manual de Recrutamento e Seleção','Oficina: Liderança no Setor Público']},
+        {nome:'Comportamento Organizacional', periodo:'4º Período', carga:'60h',
+         trabalhos:['Pesquisa: Clima Organizacional no IF Baiano']}
+      ]
+    },
+    {
+      id:'p3', nome:'Prof. Esp. Roberto Silva', area:'Finanças e Contabilidade',
+      titulacao:'Especialista em Controladoria',
+      email:'roberto.silva@ifbaiano.edu.br',
+      foto:'👨‍💼', cor:'orange',
+      disciplinas:[
+        {nome:'Matemática Financeira', periodo:'2º Período', carga:'60h',
+         trabalhos:['Planilha: Juros Compostos e VPL','Lista de Exercícios 01 a 05']},
+        {nome:'Contabilidade Geral', periodo:'3º Período', carga:'80h',
+         trabalhos:['Caderno de Exercícios Contábeis','Projeto: Balanço Patrimonial Simulado']}
+      ]
+    }
+  ];
+
+  function escapeHtml(txt=''){
+    return String(txt).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+  }
+  function fotoEhUrl(valor=''){
+    return /^(https?:\/\/|data:image\/|uploads\/|assets\/|\.\/|\/)/i.test(String(valor || '').trim());
+  }
+  function fotoDocenteHTML(foto,nome){
+    const v = String(foto || '').trim();
+    if (fotoEhUrl(v)) return `<img src="${escapeHtml(v)}" alt="Foto de ${escapeHtml(nome || 'docente')}" loading="lazy"/>`;
+    return escapeHtml(v || '🧑‍🏫');
+  }
+  function saveDocentes(){ localStorage.setItem(DOCENTES_KEY, JSON.stringify(docentes)); }
+  function corPadrao(idx){ return ['blue','green','orange'][idx % 3]; }
+
+  function upsertDocenteApi(prof){
+    if(!prof) return;
+    const idx = docentes.findIndex(d => d.id === prof.id || ((d.email || '').toLowerCase() === (prof.email || '').toLowerCase()));
+    const base = idx >= 0 ? docentes[idx] : {
+      id: prof.id || ('p' + Date.now() + Math.floor(Math.random()*100)),
+      nome: prof.nome || 'Professor(a)',
+      area: 'Docente do Curso de Administração',
+      titulacao: 'Professor(a)',
+      email: prof.email || '',
+      foto: '🧑‍🏫',
+      cor: corPadrao(docentes.length),
+      disciplinas: []
+    };
+    const merged = {
+      ...base,
+      id: prof.id || base.id,
+      nome: prof.nome || base.nome,
+      email: prof.email || base.email
+    };
+    if (prof.foto) merged.foto = prof.foto;
+    if (!Array.isArray(merged.disciplinas)) merged.disciplinas = [];
+    if (idx >= 0) docentes[idx] = merged; else docentes.push(merged);
+  }
+
+  function garantirDocenteSandro(){
+    const sandro = {
+      id:'p-sandro-lima',
+      nome:'Prof. Esp. Sandro Lima',
+      area:'Metodologia de Ensino da Matemática',
+      titulacao:'Especialista em Metodologia de Ensino da Matemática',
+      email:'sandro.lim@ifbaiano.edu.br',
+      foto:'🧑‍🏫',
+      cor:'green',
+      disciplinas:[
+        {nome:'Matemática Básica', periodo:'1º Período', carga:'60h',
+         trabalhos:['Roteiro de Estudos — Operações e Razão','Lista de Exercícios — Matemática Básica']},
+        {nome:'Matemática Financeira', periodo:'2º Período', carga:'60h',
+         trabalhos:['Planilha de Juros Simples e Compostos','Estudo de Caso — VPL e TMA']}
+      ]
+    };
+    const idx = docentes.findIndex(d =>
+      (d.email || '').toLowerCase() === sandro.email.toLowerCase() ||
+      String(d.nome || '').toLowerCase().includes('sandro lima')
+    );
+    if (idx >= 0) {
+      const atual = docentes[idx];
+      const disciplinas = [...sandro.disciplinas];
+      if (Array.isArray(atual.disciplinas)) {
+        atual.disciplinas.forEach(di => {
+          if (!disciplinas.some(item => item.nome === di.nome)) disciplinas.push(di);
+        });
+      }
+      docentes[idx] = { ...atual, ...sandro, id: atual.id || sandro.id, foto: atual.foto || sandro.foto, disciplinas };
+      return;
+    }
+    docentes.unshift(sandro);
+  }
+
+  function renderDocentes(){
+    const grid = document.getElementById('docentesGrid');
+    grid.innerHTML = docentes.map((d,i) => {
+      const cor = d.cor === 'blue' ? '' : (d.cor || corPadrao(i));
+      return `
+      <div class="prof-card ${cor}">
+        <div class="prof-icon">${fotoDocenteHTML(d.foto,d.nome)}</div>
+        <h3>${escapeHtml(d.nome || 'Professor(a)')}</h3>
+        <p style="font-size:11px;margin-bottom:3px;"><strong>${escapeHtml(d.titulacao || 'Professor(a)')}</strong></p>
+        <p style="font-size:10px;color:var(--muted);margin-bottom:5px;">${escapeHtml(d.area || 'Docente do Curso de Administração')}</p>
+        <p style="font-size:10px;color:var(--muted);">✉️ ${escapeHtml(d.email || '-')}</p>
+        <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;">
+          ${(Array.isArray(d.disciplinas)?d.disciplinas:[]).map(di=>`<span class="pill">${escapeHtml(di.nome || 'Disciplina')}</span>`).join('')}
+        </div>
+        <div style="margin-top:10px;">
+          <button class="btn btn-ghost" style="background:var(--bg);color:var(--ink);font-size:10px;padding:5px 10px;width:100%;" onclick='verDisciplinas(${JSON.stringify(d.id || "")})'>📚 Ver disciplinas</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function verDisciplinas(profId){
+    window.location.href = `perfil.html?prof=${encodeURIComponent(profId || 'todos')}#grade-trabalhos`;
+  }
+
+  function openDocenteForm(){
+    const nome = prompt('Nome completo do(a) professor(a):');
+    if(!nome) return;
+    const titulacao = prompt('Titulação (ex: Mestre em Administração):') || '';
+    const area = prompt('Área de atuação:') || '';
+    const email = prompt('Email institucional:') || '';
+    const foto = prompt('Foto (URL da imagem ou emoji):') || '🧑‍🏫';
+    const disciplinaNome = prompt('Primeira disciplina (nome):') || 'Disciplina';
+    const periodo = prompt('Período (ex: 3º Período):') || '-';
+    const carga = prompt('Carga horária (ex: 60h):') || '60h';
+    docentes.push({
+      id:'p'+Date.now(),
+      nome, titulacao, area, email, foto,
+      cor:corPadrao(docentes.length),
+      disciplinas:[{nome:disciplinaNome, periodo, carga, trabalhos:[]}]
+    });
+    saveDocentes();
+    renderDocentes();
+  }
+
+  async function sincronizarDocentesComAPI(){
+    try{
+      const res = await fetch(API,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({action:'get_profs'})
+      });
+      if(!res.ok) return;
+      const profs = await res.json();
+      if(!Array.isArray(profs)) return;
+      profs.forEach(upsertDocenteApi);
+      garantirDocenteSandro();
+      saveDocentes();
+      renderDocentes();
+    }catch(e){}
+  }
+
+  garantirDocenteSandro();
+  saveDocentes();
+  renderDocentes();
+  sincronizarDocentesComAPI();
+</script>
+
+<script>
+  function switchTab(btn){
+    const panel = btn.dataset.panel;
+    document.querySelectorAll('.feat-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.feat-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panel).classList.add('active');
+  }
+
+  /* Smooth scroll for internal anchors */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id = a.getAttribute('href');
+      if(id.length>1){
+        const el = document.querySelector(id);
+        if(el){
+          e.preventDefault();
+          const top = el.getBoundingClientRect().top + window.scrollY - 16;
+          window.scrollTo({top, behavior:'smooth'});
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
